@@ -8,13 +8,16 @@ import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
 import org.andengine.engine.options.WakeLockOptions;
+import org.andengine.engine.options.resolutionpolicy.FillResolutionPolicy;
 import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
 import org.andengine.entity.scene.Scene;
 import org.andengine.ui.activity.BaseGameActivity;
 
 
 import android.graphics.Point;
+import android.util.DisplayMetrics;
 import android.view.Display;
+import android.view.KeyEvent;
 
 public class GameActivity extends BaseGameActivity {
 	
@@ -22,22 +25,28 @@ public class GameActivity extends BaseGameActivity {
 
 	private Camera camera;
 	private ResourcesManager resourcesManager;
+	private int CAMERA_WIDTH = 480;
+	private int CAMERA_HEIGHT = 800;
 
 	@Override
 	public EngineOptions onCreateEngineOptions() {
 		// TODO Auto-generated method stub
 		
 		//Get Display Device Information 
+		
 		Display display = getWindowManager().getDefaultDisplay();
 		Point size = new Point();
 		display.getSize(size);
 		
-		Camera camera = new Camera(0, 0, 800, 480);
+		this.camera = new Camera(0, 0, CAMERA_WIDTH, CAMERA_HEIGHT);
+		
+		
 		EngineOptions engineOptions = new EngineOptions(true,
-				ScreenOrientation.LANDSCAPE_FIXED, new RatioResolutionPolicy(
-						800, 480), camera);
+				ScreenOrientation.PORTRAIT_FIXED,  new FillResolutionPolicy(), camera);
 		engineOptions.getAudioOptions().setNeedsMusic(true).setNeedsSound(true);
 		engineOptions.setWakeLockOptions(WakeLockOptions.SCREEN_ON);
+		
+	
 		return engineOptions;
 	}
 	
@@ -83,5 +92,23 @@ public class GameActivity extends BaseGameActivity {
 		pOnPopulateSceneCallback.onPopulateSceneFinished();
 		
 	}
+	@Override
+	protected void onDestroy(){
+	    super.onDestroy();
+	        
+	    if (this.isGameLoaded()) {
+	        System.exit(0);    
+	    }
+	}
+	
+	
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event){  
+	    if (keyCode == KeyEvent.KEYCODE_BACK){
+	        SceneManager.getInstance().getCurrentScene().onBackKeyPressed();
+	    }
+	    return false; 
+	}
+
 
 }

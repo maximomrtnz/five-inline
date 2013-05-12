@@ -9,6 +9,8 @@ import org.andengine.entity.sprite.Sprite;
 import org.andengine.engine.camera.Camera;
 import org.andengine.opengl.util.GLState;
 
+import android.util.Log;
+
 import com.example.fivecircles.SceneManager.SceneType;
 
 public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener{
@@ -48,7 +50,7 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 	
 	private void createBackground(){
 		
-		Sprite gameMenu = new Sprite(400, 240, super.getResourcesManager().getMenuBackgroundRegion(), super.getResourcesManager().getVbom())
+		Sprite gameMenu = new Sprite(0,0, super.getResourcesManager().getMenuBackgroundRegion(), super.getVbom())
 	    {
 	        @Override
 	        //We will override this method to enabled dithering
@@ -62,20 +64,19 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 	}
 	
 	private void createMenuChildScene(){
-	    menuChildScene = new MenuScene(super.getCamera());
-	    menuChildScene.setPosition(400, 240);
-	    
-	    final IMenuItem playMenuItem = new ScaleMenuItemDecorator(new SpriteMenuItem(MENU_PLAY, super.getResourcesManager().getPlayRegion(), super.getResourcesManager().getVbom()), 1.2f, 1);
-	    final IMenuItem optionsMenuItem = new ScaleMenuItemDecorator(new SpriteMenuItem(MENU_OPTIONS, super.getResourcesManager().getOptionsRegion(), super.getResourcesManager().getVbom()), 1.2f, 1);
+		menuChildScene = new MenuScene(super.getResourcesManager().getCamera());
+		menuChildScene.setPosition(0, 0);
+	  
+		final IMenuItem playMenuItem = new ScaleMenuItemDecorator(new SpriteMenuItem(MENU_PLAY, super.getResourcesManager().getPlayRegion(), super.getVbom()), 1.2f, 1);
+	    final IMenuItem optionsMenuItem = new ScaleMenuItemDecorator(new SpriteMenuItem(MENU_OPTIONS, super.getResourcesManager().getOptionsRegion(), super.getVbom()), 1.2f, 1);
 	    
 	    menuChildScene.addMenuItem(playMenuItem);
 	    menuChildScene.addMenuItem(optionsMenuItem);
-	    
 	    menuChildScene.buildAnimations();
 	    menuChildScene.setBackgroundEnabled(false);
 	    
 	    playMenuItem.setPosition(playMenuItem.getX(), playMenuItem.getY() + 10);
-	    optionsMenuItem.setPosition(optionsMenuItem.getX(), optionsMenuItem.getY() - 110);
+	    optionsMenuItem.setPosition(optionsMenuItem.getX(), optionsMenuItem.getY()+30);
 	    
 	    menuChildScene.setOnMenuItemClickListener(this);
 	    
@@ -87,12 +88,12 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 			float pMenuItemLocalX, float pMenuItemLocalY) {
 		// TODO Auto-generated method stub
 		switch(pMenuItem.getID()){
-        case MENU_PLAY:
-            return true;
-        case MENU_OPTIONS:
-            return true;
-        default:
-            return false;
+        	case MENU_PLAY:
+        		return true;
+        	case MENU_OPTIONS:
+        		return true;
+        	default:
+        		return false;
 		}
 	}
 

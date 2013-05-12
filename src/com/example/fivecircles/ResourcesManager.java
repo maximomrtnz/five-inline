@@ -2,6 +2,9 @@ package com.example.fivecircles;
 
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.Camera;
+import org.andengine.opengl.font.Font;
+import org.andengine.opengl.font.FontFactory;
+import org.andengine.opengl.texture.ITexture;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
@@ -11,7 +14,10 @@ import org.andengine.opengl.texture.atlas.buildable.builder.BlackPawnTextureAtla
 import org.andengine.opengl.texture.atlas.buildable.builder.ITextureAtlasBuilder.TextureAtlasBuilderException;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
+
 import org.andengine.util.debug.Debug;
+
+import android.graphics.Color;
 
 public class ResourcesManager {
 	//+---------------------------------------------+
@@ -25,6 +31,12 @@ public class ResourcesManager {
     private GameActivity activity;
     private Camera camera;
     private VertexBufferObjectManager vbom;
+    
+    //---------------------------------------------
+    // FONTS
+    //---------------------------------------------
+    
+    private Font font;
     
     //---------------------------------------------
     // TEXTURES & TEXTURE REGIONS
@@ -52,6 +64,7 @@ public class ResourcesManager {
     public void loadMenuResources(){
         loadMenuGraphics();
         loadMenuAudio();
+        loadMenuFonts();
     }
     
     public void loadGameResources(){
@@ -90,13 +103,23 @@ public class ResourcesManager {
         
     }
     
+    
+
+    private void loadMenuFonts(){
+    	 FontFactory.setAssetBasePath("font/");
+    	 final ITexture mainFontTexture = new BitmapTextureAtlas(activity.getTextureManager(), 256, 256, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+    	 font = FontFactory.createStrokeFromAsset(activity.getFontManager(), mainFontTexture, activity.getAssets(), "Roboto-Thin.ttf", 50, true, Color.WHITE, 2, Color.BLACK);
+    	 font.load();
+    }
+
+    
     private void loadGameAudio(){
         
     }
     
     public void loadSplashScreen(){
     	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
-    	splashTextureAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 256, 256, TextureOptions.BILINEAR);
+    	splashTextureAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 512, 1024, TextureOptions.BILINEAR);
     	splashRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(splashTextureAtlas, activity, "splash.png", 0, 0);
     	splashTextureAtlas.load();
     }
@@ -207,6 +230,14 @@ public class ResourcesManager {
 
 	public void setMenuTextureAtlas(BuildableBitmapTextureAtlas menuTextureAtlas) {
 		this.menuTextureAtlas = menuTextureAtlas;
+	}
+
+	public Font getFont() {
+		return font;
+	}
+
+	public void setFont(Font font) {
+		this.font = font;
 	}   
 	
 	
