@@ -48,6 +48,14 @@ public class ResourcesManager {
     private ITextureRegion playRegion;
     private ITextureRegion optionsRegion;
     private ITextureRegion splashRegion;
+    
+    
+    // Game Texture
+    private BuildableBitmapTextureAtlas gameTextureAtlas;
+        
+    // Game Texture Regions
+    private ITextureRegion square;
+    
         
     private BuildableBitmapTextureAtlas menuTextureAtlas;
     
@@ -96,7 +104,17 @@ public class ResourcesManager {
     }
 
     private void loadGameGraphics(){
+    	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
+        gameTextureAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024, TextureOptions.BILINEAR);
         
+        square = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "square.png");
+        
+        try{
+            this.gameTextureAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 1, 0));
+            this.gameTextureAtlas.load();
+        }catch (final TextureAtlasBuilderException e){
+            Debug.e(e);
+        }
     }
     
     private void loadGameFonts(){
@@ -127,6 +145,20 @@ public class ResourcesManager {
     public void unloadSplashScreen(){
     	splashTextureAtlas.unload();
     	splashRegion = null;
+    }
+    
+    //This method will help us to free some memory 
+    //while texture is currently not needed
+    public void unloadMenuTextures(){
+        menuTextureAtlas.unload();
+    }
+        
+    public void loadMenuTextures(){
+        menuTextureAtlas.load();
+    }
+    
+    public void unloadGameTextures(){
+        // TODO (Since we did not create any textures for game scene yet)
     }
     
     /**
@@ -238,7 +270,16 @@ public class ResourcesManager {
 
 	public void setFont(Font font) {
 		this.font = font;
+	}
+
+	public ITextureRegion getSquare() {
+		return square;
+	}
+
+	public void setSquare(ITextureRegion square) {
+		this.square = square;
 	}   
+	
 	
 	
 	

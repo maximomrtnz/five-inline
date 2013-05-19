@@ -1,6 +1,8 @@
 package com.example.fivecircles;
 
 import org.andengine.engine.Engine;
+import org.andengine.engine.handler.timer.ITimerCallback;
+import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.ui.IGameInterface.OnCreateSceneCallback;
 
 public class SceneManager {
@@ -84,6 +86,42 @@ public class SceneManager {
         SceneManager.getInstance().setScene(menuScene);
         disposeSplashScene();
     }
+    
+    
+    //This method is responsible for displaying loading scene, 
+    //while initializing game scene and loading its resources, 
+    //and unloading menu texture.
+    public void loadGameScene(final Engine mEngine){
+        setScene(loadingScene);
+        ResourcesManager.getInstance().unloadMenuTextures();
+        mEngine.registerUpdateHandler(new TimerHandler(0.1f, new ITimerCallback() 
+        {
+            public void onTimePassed(final TimerHandler pTimerHandler) 
+            {
+                mEngine.unregisterUpdateHandler(pTimerHandler);
+                ResourcesManager.getInstance().loadGameResources();
+                gameScene = new GameScene();
+                setScene(gameScene);
+            }
+        }));
+    }
+    
+    
+    //This method is responsible for 
+    //loading menu scene and displaying loading scene
+    public void loadMenuScene(final Engine mEngine){
+        setScene(loadingScene);
+        gameScene.disposeScene();
+        ResourcesManager.getInstance().unloadGameTextures();
+        mEngine.registerUpdateHandler(new TimerHandler(0.1f, new ITimerCallback(){
+            public void onTimePassed(final TimerHandler pTimerHandler){
+                mEngine.unregisterUpdateHandler(pTimerHandler);
+                ResourcesManager.getInstance().loadMenuTextures();
+                setScene(menuScene);
+            }
+        }));
+    }
+    
     
     //---------------------------------------------
     // GETTERS AND SETTERS

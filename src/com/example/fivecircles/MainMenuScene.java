@@ -50,7 +50,7 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 	
 	private void createBackground(){
 		
-		Sprite gameMenu = new Sprite(0,0, super.getResourcesManager().getMenuBackgroundRegion(), super.getVbom())
+		Sprite gameMenu = new Sprite(240,400, super.getResourcesManager().getMenuBackgroundRegion(), super.getVbom())
 	    {
 	        @Override
 	        //We will override this method to enabled dithering
@@ -76,7 +76,7 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 	    menuChildScene.setBackgroundEnabled(false);
 	    
 	    playMenuItem.setPosition(playMenuItem.getX(), playMenuItem.getY() + 10);
-	    optionsMenuItem.setPosition(optionsMenuItem.getX(), optionsMenuItem.getY()+30);
+	    optionsMenuItem.setPosition(optionsMenuItem.getX(), optionsMenuItem.getY()-30);
 	    
 	    menuChildScene.setOnMenuItemClickListener(this);
 	    
@@ -89,6 +89,8 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 		// TODO Auto-generated method stub
 		switch(pMenuItem.getID()){
         	case MENU_PLAY:
+        		 //Load Game Scene!
+                SceneManager.getInstance().loadGameScene(super.getEngine());
         		return true;
         	case MENU_OPTIONS:
         		return true;

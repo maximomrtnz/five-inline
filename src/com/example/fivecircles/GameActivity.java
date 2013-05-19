@@ -57,8 +57,7 @@ public class GameActivity extends BaseGameActivity {
 
 	@Override
 	public void onCreateResources(
-			OnCreateResourcesCallback pOnCreateResourcesCallback)
-			throws Exception {
+			OnCreateResourcesCallback pOnCreateResourcesCallback) {
 		// TODO Auto-generated method stub
 		
 		ResourcesManager.prepareManager(mEngine, this, camera, getVertexBufferObjectManager());
@@ -68,8 +67,7 @@ public class GameActivity extends BaseGameActivity {
 	}
 
 	@Override
-	public void onCreateScene(OnCreateSceneCallback pOnCreateSceneCallback)
-			throws Exception {
+	public void onCreateScene(OnCreateSceneCallback pOnCreateSceneCallback) {
 		// TODO Auto-generated method stub
 		//First We will start the splash scene
 		SceneManager.getInstance().createSplashScene(pOnCreateSceneCallback);
@@ -77,7 +75,7 @@ public class GameActivity extends BaseGameActivity {
 
 	@Override
 	public void onPopulateScene(Scene pScene,
-			OnPopulateSceneCallback pOnPopulateSceneCallback) throws Exception {
+			OnPopulateSceneCallback pOnPopulateSceneCallback) {
 		// TODO Auto-generated method stub
 		//mEngine.registerUpdateHandler(new TimerHandler(2f,new GameTimeCallback(mEngine)));
 		 mEngine.registerUpdateHandler(new TimerHandler(2f, new ITimerCallback() 
