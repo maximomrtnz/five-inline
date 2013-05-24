@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <level width="480" height="800">
     
+   
 	<!-- First Row -->
 	<entity x="30.875" y="30.875" width="57.75" height="57.75" type="square"/>
 	<entity x="90.625" y="30.875" width="57.75" height="57.75" type="square"/>
@@ -81,10 +82,11 @@
 	<entity x="389.375" y="449.125" width="57.75" height="57.75" type="square"/>
 	<entity x="449.125" y="449.125" width="57.75" height="57.75" type="square"/>
 	
-	<!-- Initial Players -->
-	<entity x="269.875" y="449.125" width="57.75" height="57.75" color="1"   type="player"/>
-	<entity x="150.375" y="329.625" width="57.75" height="57.75" color="3" type="player"/>
-	<entity x="150.375" y="150.375" width="57.75" height="57.75" color="2"    type="player"/>
-	<entity x="449.125" y="30.875" width="57.75"  height="57.75" color="5"  type="player"/>
+	<!--Players -->
+	<entity x="30.875" y="449.125" width="57.75" height="57.75" type="player"/>
+	<entity x="449.125" y="90.625" width="57.75" height="57.75" type="player"/>
+	<entity x="30.875" y="30.875"  width="57.75" height="57.75" type="player"/>
+	<entity x="150.375" y="90.625" width="57.75" height="57.75" type="player"/>
+	<entity x="210.125" y="389.375" width="57.75" height="57.75" type="player"/>
 	
 </level>

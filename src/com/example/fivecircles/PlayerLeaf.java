@@ -4,10 +4,11 @@ import org.andengine.entity.primitive.Rectangle;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
-public class PlayerLeaf extends Rectangle implements Player{
+public class PlayerLeaf extends Rectangle implements IPlayer{
 	
 	private boolean isTouched;
-		
+	private IBackgroundRectangle rectangle;
+	
 	public PlayerLeaf(float pX, float pY, float pWidth, float pHeight,
 			VertexBufferObjectManager pVertexBufferObjectManager) {
 		super(pX, pY, pWidth, pHeight, pVertexBufferObjectManager);
@@ -15,13 +16,13 @@ public class PlayerLeaf extends Rectangle implements Player{
 	}
 
 	@Override
-	public void addPlayer(Player player) {
+	public void addPlayer(IPlayer player) {
 		// TODO Auto-generated method stub
 		//We don't implement it
 	}
 
 	@Override
-	public void removePlayer(Player player) {
+	public void removePlayer(IPlayer player) {
 		// TODO Auto-generated method stub
 		//We don't implement it
 	}
@@ -52,6 +53,24 @@ public class PlayerLeaf extends Rectangle implements Player{
 	public void paint() {
 		// TODO Auto-generated method stub
 		setScale(1.2f);
+	}
+
+	@Override
+	public void addIBackgroundRectabgle(IBackgroundRectangle rectangle) {
+		// TODO Auto-generated method stub
+		this.rectangle = rectangle;
+	}
+
+	@Override
+	public void removeIBackgroundRectabgle() {
+		// TODO Auto-generated method stub
+		this.rectangle = null;
+	}
+
+	@Override
+	public int getPlayerNumber() {
+		// TODO Auto-generated method stub
+		return 1;
 	}
 
 }

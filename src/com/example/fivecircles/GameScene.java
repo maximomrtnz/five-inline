@@ -13,6 +13,7 @@ import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 import org.andengine.entity.text.TextOptions;
 import org.andengine.input.touch.TouchEvent;
+import org.andengine.util.MailUtils;
 import org.andengine.util.SAXUtils;
 import org.andengine.util.adt.align.HorizontalAlign;
 import org.andengine.util.adt.color.Color;
@@ -23,9 +24,11 @@ import org.andengine.util.level.LevelLoader;
 import org.andengine.util.level.constants.LevelConstants;
 import org.andengine.util.level.simple.SimpleLevelEntityLoaderData;
 import org.andengine.util.level.simple.SimpleLevelLoader;
+import org.andengine.util.math.MathUtils;
 import org.xml.sax.Attributes;
 
 
+import android.graphics.Matrix;
 import android.util.Log;
 
 import com.example.fivecircles.SceneManager.SceneType;
@@ -44,7 +47,11 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
 	//Furst we can select a player
 	private int state = 0;
 	
-	private Player player;
+	private IPlayer player;
+	
+	private int idBackgroundRectangle = 0;
+	
+	private ArrayList<IBackgroundRectangle> rectangles;
 	
 	
 	//----------------------------------------------------
@@ -56,7 +63,6 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
 	private static final String TAG_ENTITY_ATTRIBUTE_Y = "y";
 	private static final String TAG_ENTITY_ATTRIBUTE_WIDTH = "width";
 	private static final String TAG_ENTITY_ATTRIBUTE_HEIGHT = "height";
-	private static final String TAG_ENTITY_ATTRIBUTE_COLOR = "color";
 	private static final String TAG_ENTITY_ATTRIBUTE_TYPE = "type";
 	    
 	private static final Object TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_SQUARE = "square";
@@ -73,8 +79,10 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
 		createBackground();
 	    createHUD();
 	    loadLevel(1);
+	    setBackgroundRectanglesNeighbors();
 	    //Enable Touch Listener
 	    setOnSceneTouchListener(this);
+	    
 	}
 
 	@Override
@@ -135,6 +143,8 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
 		
 		this.player = new PlayerContainer();
 		
+		this.rectangles = new ArrayList<IBackgroundRectangle>();
+		
 		levelLoader.registerEntityLoader(new EntityLoader<SimpleLevelEntityLoaderData>(LevelConstants.TAG_LEVEL){
 		public IEntity onLoadEntity(final String pEntityName, final IEntity pParent, final Attributes pAttributes, final SimpleLevelEntityLoaderData pSimpleLevelEntityLoaderData) throws IOException {
 	            final int width = SAXUtils.getIntAttributeOrThrow(pAttributes, LevelConstants.TAG_LEVEL_ATTRIBUTE_WIDTH);
@@ -155,10 +165,9 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
 		            
 		            IEntity entity = null;
 		            if(type.equals(TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_SQUARE)) {
-		            	entity = addShape(GameScene.this, x, y,width,height, type);	
+		            	entity = addShape(GameScene.this, x, y,width,height, type);
 		            }else if(type.equals(TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_PLAYER)){
-		            	final int color = SAXUtils.getIntAttributeOrThrow(pAttributes, TAG_ENTITY_ATTRIBUTE_COLOR);
-		            	entity = addPlayer(GameScene.this, x, y, width, height, type, color);
+		            	entity = addPlayer(GameScene.this, x, y, width, height, type);
 		            }
 		            return entity;
 		        }
@@ -169,18 +178,21 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
 	
 	private IEntity addShape(BaseScene scene, float posX, float posY,float width,float height, String type){
 		
-		IEntity iEntity = new Rectangle(posX, posY, width, height, super.getVbom());
-		iEntity.setColor(0.1f,0.1f,0.1f,0.1f);
-		
-		return iEntity;
+		IBackgroundRectangle rectangle = new BackgroundRectangle(posX, posY, width, height, super.getVbom());	
+		rectangle.setId(this.idBackgroundRectangle);
+		this.idBackgroundRectangle++;
+		this.rectangles.add(rectangle);
+		return (Rectangle)rectangle;
 	}
 	
-	private IEntity addPlayer(BaseScene scene, float posX, float posY,float width,float height, String type, int color){
+	private IEntity addPlayer(BaseScene scene, float posX, float posY,float width,float height, String type){
 		
+		int color = MathUtils.random(1, 5);
 		PlayerFactory playerFactory = new PlayerFactoryHoloColors();
 		IEntity iEntity = playerFactory.createPlayer(scene, posX, posY, width, height, super.getVbom(), color);
 		registerTouchArea(iEntity);
 		this.player.addPlayer((PlayerLeaf)iEntity);
+		setPlayerToBackgroundRectangle((PlayerLeaf)iEntity);
 		return iEntity;
 	}
 	
@@ -194,6 +206,64 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
 	    	}
 	    }
 	    return false;
+	}
+	
+	private void setBackgroundRectanglesNeighbors(){
+		
+		for(IBackgroundRectangle rectangle : this.rectangles){
+			
+			int id = rectangle.getId();
+			int leftNeighbor = id-1;
+			int rigthNeighbor = id+1;
+			int bottomNeighbor	= id+8;
+			int topNeighbor = id-8;
+			
+			
+			if(topNeighbor > 0){
+				rectangle.addNeighbor(this.rectangles.get(topNeighbor));
+			}
+			
+			if(bottomNeighbor < 63){
+				rectangle.addNeighbor(this.rectangles.get(bottomNeighbor));
+			}
+			
+			//Test special cases (with less than four neighbor)
+			
+			if(id%8==0){
+				//Rectangles on the left	
+				rectangle.addNeighbor(this.rectangles.get(rigthNeighbor));	
+			}else if(id%7==0){
+				//Rectangles on the right
+				rectangle.addNeighbor(this.rectangles.get(leftNeighbor));
+			}else{
+				//The common case with four neighbor
+				rectangle.addNeighbor(this.rectangles.get(rigthNeighbor));	
+				rectangle.addNeighbor(this.rectangles.get(leftNeighbor));
+			}
+			
+			
+		}
+		
+	}
+	
+	private void setPlayerToBackgroundRectangle(IPlayer player){
+		
+		ArrayList<IBackgroundRectangle> emptyRectangles = new ArrayList<IBackgroundRectangle>();
+		
+		for(IBackgroundRectangle rectangle : this.rectangles){
+			if(!rectangle.isTaken()){
+				emptyRectangles.add(rectangle);
+			}
+		}
+		
+		int next = MathUtils.random(0,emptyRectangles.size()-1);
+		
+		Debug.d("Next", Integer.toString(next));
+		
+		IBackgroundRectangle rectangle = emptyRectangles.get(next);
+		
+		rectangle.addIPlayer(player);
+		
 	}
 	
 }
