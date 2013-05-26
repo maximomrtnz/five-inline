@@ -202,28 +202,33 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
 	    	if(this.state == GAME_STATE_MOVE_PLAYER && this.player.selectedPlayer()){
 	    		this.player.paint();
 	    		this.player.deselectPlayers();
+	    		paintPath();
 	    		this.state = GAME_STATE_SELECT_PLAYER;
+	    	}
+	    	
+	    	if(this.state == GAME_STATE_SELECT_PLAYER){
+	    		
 	    	}
 	    }
 	    return false;
 	}
 	
-	private void setBackgroundRectanglesNeighbors(){
+	private synchronized void setBackgroundRectanglesNeighbors(){
 		
 		for(IBackgroundRectangle rectangle : this.rectangles){
 			
 			int id = rectangle.getId();
 			int leftNeighbor = id-1;
 			int rigthNeighbor = id+1;
-			int bottomNeighbor	= id+8;
-			int topNeighbor = id-8;
+			int bottomNeighbor	= id-8;
+			int topNeighbor = id+8;
 			
 			
-			if(topNeighbor > 0){
+			if(topNeighbor < 63){
 				rectangle.addNeighbor(this.rectangles.get(topNeighbor));
 			}
 			
-			if(bottomNeighbor < 63){
+			if(bottomNeighbor > 0){
 				rectangle.addNeighbor(this.rectangles.get(bottomNeighbor));
 			}
 			
@@ -232,7 +237,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
 			if(id%8==0){
 				//Rectangles on the left	
 				rectangle.addNeighbor(this.rectangles.get(rigthNeighbor));	
-			}else if(id%7==0){
+			}else if((id+1)%8==0){
 				//Rectangles on the right
 				rectangle.addNeighbor(this.rectangles.get(leftNeighbor));
 			}else{
@@ -244,9 +249,17 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
 			
 		}
 		
+		for(IBackgroundRectangle rectangle : this.rectangles){
+			
+			Debug.d("Id",Integer.toString(rectangle.getId()));
+			rectangle.printNeighborInfo();
+			
+		}
+		
+		
 	}
 	
-	private void setPlayerToBackgroundRectangle(IPlayer player){
+	private synchronized void setPlayerToBackgroundRectangle(IPlayer player){
 		
 		ArrayList<IBackgroundRectangle> emptyRectangles = new ArrayList<IBackgroundRectangle>();
 		
@@ -258,12 +271,23 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
 		
 		int next = MathUtils.random(0,emptyRectangles.size()-1);
 		
-		Debug.d("Next", Integer.toString(next));
-		
 		IBackgroundRectangle rectangle = emptyRectangles.get(next);
 		
 		rectangle.addIPlayer(player);
 		
+	}
+	
+	private synchronized void paintPath(){
+		for(IBackgroundRectangle rectangle : this.rectangles){
+				rectangle.drawCross();
+		}
+	}
+	
+	private boolean isBackgroundRectangleTouched(){
+		int i = 0;
+		while(i<this.rectangles.size() && !this.rectangles.){
+			
+		}
 	}
 	
 }

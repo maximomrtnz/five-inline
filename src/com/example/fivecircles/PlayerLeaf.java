@@ -53,6 +53,7 @@ public class PlayerLeaf extends Rectangle implements IPlayer{
 	public void paint() {
 		// TODO Auto-generated method stub
 		setScale(1.2f);
+		this.rectangle.initToCheckPath();
 	}
 
 	@Override

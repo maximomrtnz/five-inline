@@ -3,8 +3,15 @@ package com.example.fivecircles;
 import java.util.ArrayList;
 
 import org.andengine.entity.primitive.Rectangle;
+import org.andengine.entity.text.Text;
+import org.andengine.entity.text.TextOptions;
+import org.andengine.opengl.font.Font;
+import org.andengine.opengl.font.FontLibrary;
+import org.andengine.opengl.font.FontUtils;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
+import org.andengine.util.adt.align.HorizontalAlign;
 import org.andengine.util.adt.color.Color;
+import org.andengine.util.debug.Debug;
 
 
 
@@ -25,7 +32,7 @@ public class BackgroundRectangle extends Rectangle implements IBackgroundRectang
 	}
 
 	@Override
-	public void addNeighbor(IBackgroundRectangle rectangle) {
+	public synchronized void addNeighbor(IBackgroundRectangle rectangle) {
 		// TODO Auto-generated method stub
 		this.neighbors.add(rectangle);
 	}
@@ -37,17 +44,24 @@ public class BackgroundRectangle extends Rectangle implements IBackgroundRectang
 	}
 
 	@Override
-	public void checkPath() {
+	public synchronized void checkPath() {
 		// TODO Auto-generated method stub
-		if(!this.isChecked && this.player !=null){
+		Debug.d("Me Avisaron",Integer.toString(id));
+		if(this.player == null){
+			isChecked = true;
+			Debug.d("Checkeado",Integer.toString(id)+" "+Boolean.toString(this.isChecked == true));
 			for(IBackgroundRectangle rectangle : this.neighbors){
-				rectangle.checkPath();
+				if(!rectangle.isChecked()){
+					Debug.d("Avisando",Integer.toString(id)+" -> "+Integer.toString(rectangle.getId()));
+					rectangle.checkPath();	
+				}	
 			}
+			
 		}
 	}
 
 	@Override
-	public void disable() {
+	public synchronized void disable() {
 		// TODO Auto-generated method stub
 		if(this.player == null){
 			this.setScale(0.8f);
@@ -56,25 +70,22 @@ public class BackgroundRectangle extends Rectangle implements IBackgroundRectang
 	}
 
 	@Override
-	public void addIPlayer(IPlayer iPlayer) {
+	public synchronized void addIPlayer(IPlayer iPlayer) {
 		// TODO Auto-generated method stub
 		this.player = iPlayer;
 		
 		//Set its position and height and width to player inside its
 		//We need cast it
 		((Rectangle)this.player).setX(getX());
-		((Rectangle)this.player).setX(getY());
-		((Rectangle)this.player).setX(getY());
-		((Rectangle)this.player).setX(getY());
-		((Rectangle)this.player).setWidth(getWidth());
-		((Rectangle)this.player).setHeight(getHeight());
+		((Rectangle)this.player).setY(getY());
+		this.player.addIBackgroundRectabgle(this);
 		
-		
+		Debug.d("Tengo Hijo", Integer.toString(id));
 		
 	}
 
 	@Override
-	public void removeIPlayer(IPlayer iPlayer) {
+	public synchronized void removeIPlayer(IPlayer iPlayer) {
 		// TODO Auto-generated method stub
 		this.player = null;
 	}
@@ -86,7 +97,7 @@ public class BackgroundRectangle extends Rectangle implements IBackgroundRectang
 	}
 
 	@Override
-	public void setId(int id) {
+	public synchronized void setId(int id) {
 		// TODO Auto-generated method stub
 		this.id = id;
 	}
@@ -98,7 +109,39 @@ public class BackgroundRectangle extends Rectangle implements IBackgroundRectang
 		//Return true if it has a player in it.
 		return this.player != null;
 	}
-	
+
+	@Override
+	public synchronized void initToCheckPath() {
+		// TODO Auto-generated method stub
+		this.isChecked = true;
+		for(IBackgroundRectangle rectangle : this.neighbors){
+			rectangle.checkPath();	
+		}
+	}
+
+	@Override
+	public boolean isChecked() {
+		// TODO Auto-generated method stub
+		return this.isChecked;
+	}
+
+	@Override
+	public void printNeighborInfo() {
+		// TODO Auto-generated method stub
+		for(IBackgroundRectangle rectangle : this.neighbors){
+			Debug.d("N",Integer.toString(rectangle.getId()));
+		}
+	}
+
+	@Override
+	public synchronized void drawCross() {
+		// TODO Auto-generated method stub
+	   if(!this.isChecked){
+		   Debug.d("Reviso",Integer.toString(id)+" "+Boolean.toString(this.isChecked == false));
+		   setScale(0.8f);
+		   setColor(Color.ABGR_PACKED_RED_CLEAR);
+	   }
+	}
 	
 	
 	

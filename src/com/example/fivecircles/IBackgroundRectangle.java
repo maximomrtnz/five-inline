@@ -20,4 +20,12 @@ public interface IBackgroundRectangle{
 	
 	public boolean isTaken();
 	
+	public void initToCheckPath();
+	
+	public boolean isChecked();
+	
+	public void printNeighborInfo();
+	
+	public void drawCross();
+	
 }
