@@ -6,11 +6,9 @@ public interface IPlayer {
 
 	public void removePlayer(IPlayer player);
 	
-	public boolean selectedPlayer();
-	
-	public void deselectPlayers();
-	
 	public void paint();
+	
+	public void unPaint();
 	
 	public void addIBackgroundRectabgle(IBackgroundRectangle rectangle);
 	

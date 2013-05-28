@@ -32,8 +32,10 @@ import android.graphics.Matrix;
 import android.util.Log;
 
 import com.example.fivecircles.SceneManager.SceneType;
+import com.example.fivecircles.gamestates.GameState;
+import com.example.fivecircles.gamestates.SelectPlayer;
 
-public class GameScene extends BaseScene implements IOnSceneTouchListener{
+public class GameScene extends BaseScene implements IOnSceneTouchListener, Observer{
 	
 	//--------------------------------------------------
     // 				VARIABLES					
@@ -44,8 +46,9 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
 	//Our Score
 	private int score = 0;
 	
-	//Furst we can select a player
-	private int state = 0;
+	//First we can select a player
+	
+	private GameState state;
 	
 	private IPlayer player;
 	
@@ -53,6 +56,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
 	
 	private ArrayList<IBackgroundRectangle> rectangles;
 	
+	private IPlayer selectedPlayer;
 	
 	//----------------------------------------------------
 	// CONSTANTS
@@ -82,7 +86,8 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
 	    setBackgroundRectanglesNeighbors();
 	    //Enable Touch Listener
 	    setOnSceneTouchListener(this);
-	    
+	    //Set Game State
+	    setGameState(new SelectPlayer());
 	}
 
 	@Override
@@ -167,7 +172,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
 		            if(type.equals(TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_SQUARE)) {
 		            	entity = addShape(GameScene.this, x, y,width,height, type);
 		            }else if(type.equals(TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_PLAYER)){
-		            	entity = addPlayer(GameScene.this, x, y, width, height, type);
+		            	entity = addPlayer(GameScene.this, x, y, width, height);
 		            }
 		            return entity;
 		        }
@@ -182,10 +187,12 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
 		rectangle.setId(this.idBackgroundRectangle);
 		this.idBackgroundRectangle++;
 		this.rectangles.add(rectangle);
+		((Observable)rectangle).addObserver(this);
+		registerTouchArea((IEntity)rectangle);
 		return (Rectangle)rectangle;
 	}
 	
-	private IEntity addPlayer(BaseScene scene, float posX, float posY,float width,float height, String type){
+	public IEntity addPlayer(BaseScene scene, float posX, float posY,float width,float height){
 		
 		int color = MathUtils.random(1, 5);
 		PlayerFactory playerFactory = new PlayerFactoryHoloColors();
@@ -193,23 +200,11 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
 		registerTouchArea(iEntity);
 		this.player.addPlayer((PlayerLeaf)iEntity);
 		setPlayerToBackgroundRectangle((PlayerLeaf)iEntity);
+		((Observable)iEntity).addObserver(this);
 		return iEntity;
 	}
 	
 	public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent){
-	   
-		if (pSceneTouchEvent.isActionDown()){
-	    	if(this.state == GAME_STATE_MOVE_PLAYER && this.player.selectedPlayer()){
-	    		this.player.paint();
-	    		this.player.deselectPlayers();
-	    		paintPath();
-	    		this.state = GAME_STATE_SELECT_PLAYER;
-	    	}
-	    	
-	    	if(this.state == GAME_STATE_SELECT_PLAYER){
-	    		
-	    	}
-	    }
 	    return false;
 	}
 	
@@ -249,17 +244,9 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
 			
 		}
 		
-		for(IBackgroundRectangle rectangle : this.rectangles){
-			
-			Debug.d("Id",Integer.toString(rectangle.getId()));
-			rectangle.printNeighborInfo();
-			
-		}
-		
-		
 	}
 	
-	private synchronized void setPlayerToBackgroundRectangle(IPlayer player){
+	public synchronized void setPlayerToBackgroundRectangle(IPlayer player){
 		
 		ArrayList<IBackgroundRectangle> emptyRectangles = new ArrayList<IBackgroundRectangle>();
 		
@@ -282,12 +269,40 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
 				rectangle.drawCross();
 		}
 	}
-	
-	private boolean isBackgroundRectangleTouched(){
-		int i = 0;
-		while(i<this.rectangles.size() && !this.rectangles.){
-			
+
+	@Override
+	public void update(Observable observable, Object object) {
+		// TODO Auto-generated method stub
+		if(observable instanceof IPlayer){
+			if(String.valueOf(object).equals("TOUCHED")){
+				//Player is touched pass the action to the GameState
+				this.state.selectPlayer(this,(IPlayer)observable);
+			}
+
+		}else if(observable instanceof IBackgroundRectangle){
+			if(String.valueOf(object).equals("TOUCHED")){
+				//Player is touched pass the action to the GameState
+				this.state.movePlayer(this, (IBackgroundRectangle)observable);
+			}
 		}
+
 	}
+	
+	public void setGameState(GameState gameState){
+		this.state = gameState;
+	}
+	
+	public IPlayer getPlayer(){
+		return this.player;
+	}
+
+	public IPlayer getSelectedPlayer() {
+		return selectedPlayer;
+	}
+
+	public void setSelectedPlayer(IPlayer selectedPlayer) {
+		this.selectedPlayer = selectedPlayer;
+	}
+	
 	
 }

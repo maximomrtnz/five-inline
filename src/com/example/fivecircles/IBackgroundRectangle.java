@@ -12,7 +12,7 @@ public interface IBackgroundRectangle{
 	
 	public void addIPlayer(IPlayer iPlayer);
 	
-	public void removeIPlayer(IPlayer iPlayer);
+	public void removeIPlayer();
 	
 	public int getId();
 	
@@ -23,8 +23,6 @@ public interface IBackgroundRectangle{
 	public void initToCheckPath();
 	
 	public boolean isChecked();
-	
-	public void printNeighborInfo();
 	
 	public void drawCross();
 	

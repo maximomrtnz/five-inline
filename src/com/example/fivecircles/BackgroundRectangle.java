@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.text.Text;
 import org.andengine.entity.text.TextOptions;
+import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.font.Font;
 import org.andengine.opengl.font.FontLibrary;
 import org.andengine.opengl.font.FontUtils;
@@ -15,12 +16,13 @@ import org.andengine.util.debug.Debug;
 
 
 
-public class BackgroundRectangle extends Rectangle implements IBackgroundRectangle{
+public class BackgroundRectangle extends Rectangle implements IBackgroundRectangle, Observable{
 	
 	private boolean isChecked = false;
 	private ArrayList<IBackgroundRectangle> neighbors;
 	private IPlayer player;
 	private int id;
+	private ArrayList<Observer> observers;
 	
 	public BackgroundRectangle(float pX, float pY, float pWidth, float pHeight,
 			VertexBufferObjectManager pVertexBufferObjectManager) {
@@ -29,6 +31,7 @@ public class BackgroundRectangle extends Rectangle implements IBackgroundRectang
 		
 		this.neighbors = new ArrayList<IBackgroundRectangle>();
 		this.setColor(0.1f,0.1f,0.1f,0.1f);
+		this.observers = new ArrayList<Observer>();
 	}
 
 	@Override
@@ -46,13 +49,10 @@ public class BackgroundRectangle extends Rectangle implements IBackgroundRectang
 	@Override
 	public synchronized void checkPath() {
 		// TODO Auto-generated method stub
-		Debug.d("Me Avisaron",Integer.toString(id));
 		if(this.player == null){
 			isChecked = true;
-			Debug.d("Checkeado",Integer.toString(id)+" "+Boolean.toString(this.isChecked == true));
 			for(IBackgroundRectangle rectangle : this.neighbors){
 				if(!rectangle.isChecked()){
-					Debug.d("Avisando",Integer.toString(id)+" -> "+Integer.toString(rectangle.getId()));
 					rectangle.checkPath();	
 				}	
 			}
@@ -78,14 +78,15 @@ public class BackgroundRectangle extends Rectangle implements IBackgroundRectang
 		//We need cast it
 		((Rectangle)this.player).setX(getX());
 		((Rectangle)this.player).setY(getY());
-		this.player.addIBackgroundRectabgle(this);
+		((Rectangle)this.player).setWidth(getWidth());
+		((Rectangle)this.player).setHeight(getHeight());
 		
-		Debug.d("Tengo Hijo", Integer.toString(id));
+		this.player.addIBackgroundRectabgle(this);
 		
 	}
 
 	@Override
-	public synchronized void removeIPlayer(IPlayer iPlayer) {
+	public synchronized void removeIPlayer() {
 		// TODO Auto-generated method stub
 		this.player = null;
 	}
@@ -126,21 +127,42 @@ public class BackgroundRectangle extends Rectangle implements IBackgroundRectang
 	}
 
 	@Override
-	public void printNeighborInfo() {
+	public synchronized void drawCross() {
 		// TODO Auto-generated method stub
-		for(IBackgroundRectangle rectangle : this.neighbors){
-			Debug.d("N",Integer.toString(rectangle.getId()));
+	   if(!this.isChecked){
+		   setScale(0.8f);
+		   setColor(Color.ABGR_PACKED_RED_CLEAR);
+	   }
+	}
+	
+	@Override
+	public boolean onAreaTouched(TouchEvent pSceneTouchEvent,
+			float pTouchAreaLocalX, float pTouchAreaLocalY) {
+		// TODO Auto-generated method stub
+		if(pSceneTouchEvent.isActionUp()){
+			notifyObservers("TOUCHED");
+		}
+		return false;
+	}
+	
+	@Override
+	public void notifyObservers(Object object) {
+		// TODO Auto-generated method stub
+		for(Observer observer : this.observers){
+			observer.update(this, object);
 		}
 	}
 
 	@Override
-	public synchronized void drawCross() {
+	public void removeObservers(Observer observer) {
 		// TODO Auto-generated method stub
-	   if(!this.isChecked){
-		   Debug.d("Reviso",Integer.toString(id)+" "+Boolean.toString(this.isChecked == false));
-		   setScale(0.8f);
-		   setColor(Color.ABGR_PACKED_RED_CLEAR);
-	   }
+		this.observers.remove(observer);
+	}
+
+	@Override
+	public void addObserver(Observer observer) {
+		// TODO Auto-generated method stub
+		this.observers.add(observer);
 	}
 	
 	

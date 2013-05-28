@@ -19,33 +19,8 @@ public class PlayerContainer implements IPlayer{
 	}
 
 	@Override
-	public boolean selectedPlayer() {
-		// TODO Auto-generated method stub
-		int i = 0;
-		while(i<this.players.size() && !this.players.get(i).selectedPlayer()){
-			i++;
-		}
-		return i<this.players.size() && this.players.get(i).selectedPlayer();
-	}
-
-	@Override
-	public void deselectPlayers() {
-		// TODO Auto-generated method stub
-		for(IPlayer player : this.players){
-			player.deselectPlayers();
-		}
-	}
-
-	@Override
 	public void paint() {
 		// TODO Auto-generated method stub
-		int i = 0;
-		while(i<this.players.size() && !this.players.get(i).selectedPlayer()){
-			i++;
-		}
-		if(i<this.players.size() && this.players.get(i).selectedPlayer()){
-			this.players.get(i).paint();
-		}
 	}
 
 	@Override
@@ -68,6 +43,12 @@ public class PlayerContainer implements IPlayer{
 			count += iPlayer.getPlayerNumber();
 		}
 		return count;
+	}
+
+	@Override
+	public void unPaint() {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	
