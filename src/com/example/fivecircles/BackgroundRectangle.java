@@ -15,6 +15,8 @@ import org.andengine.util.adt.align.HorizontalAlign;
 import org.andengine.util.adt.color.Color;
 import org.andengine.util.debug.Debug;
 
+import android.util.Log;
+
 
 
 public class BackgroundRectangle extends Rectangle implements IBackgroundRectangle, Observable{
@@ -33,6 +35,7 @@ public class BackgroundRectangle extends Rectangle implements IBackgroundRectang
 		this.neighbors = new ArrayList<IBackgroundRectangle>();
 		this.setColor(0.1f,0.1f,0.1f,0.1f);
 		this.observers = new ArrayList<Observer>();
+		setZIndex(0);
 	}
 
 	@Override
@@ -183,6 +186,7 @@ public class BackgroundRectangle extends Rectangle implements IBackgroundRectang
 	public ArrayList<IBackgroundRectangle> checkColorNeighbors() {
 		// TODO Auto-generated method stub
 		Color color = ((Rectangle)this.player).getColor();
+		Log.d("Beginner Color", color.toString());
 		ArrayList<IBackgroundRectangle> sameColoRectangles = new ArrayList<IBackgroundRectangle>();
 		ArrayList<IBackgroundRectangle> checkedRectangles = new ArrayList<IBackgroundRectangle>();
 		Stack<IBackgroundRectangle> stack = new Stack<IBackgroundRectangle>();
@@ -191,7 +195,8 @@ public class BackgroundRectangle extends Rectangle implements IBackgroundRectang
 			checkedRectangles.add(rectangle);
 			IPlayer player = rectangle.getIPlayer();
 			if(player != null){
-				if(((Rectangle)this.player).getColor().equals(color)){
+				Log.d("Other Color", ((Rectangle)player).getColor().toString());
+				if(((Rectangle)player).getColor().equals(color)){
 					sameColoRectangles.add(rectangle);
 					ArrayList<IBackgroundRectangle> neighbors = rectangle.getNeighbors();
 					for(IBackgroundRectangle neighbor : neighbors){

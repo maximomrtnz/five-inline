@@ -14,6 +14,8 @@ public class SelectPlayer extends GameState{
 		
 		player.paint();
 		
+		gameScene.sortChildren();
+		
 		paintForbidden(gameScene);
 		
 		//Store selected Player

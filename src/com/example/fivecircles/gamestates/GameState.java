@@ -47,10 +47,21 @@ public abstract class GameState {
 				gameScene.addToScore(10*rectangles.size());
 				for(IBackgroundRectangle rectangle2 : rectangles){
 					IPlayer iPlayer = rectangle2.getIPlayer();
-					rectangle.removeIPlayer();
-					gameScene.detachChild((IEntity)iPlayer);
+					rectangle2.removeIPlayer();
+					gameScene.removePlayer(iPlayer);
 				}
 			}
+		}
+	}
+	
+	protected void checkGameOver(GameScene gameScene){
+		ArrayList<IBackgroundRectangle> rectangles = gameScene.getRectangles();
+		int i = 0;
+		while(i<rectangles.size() && rectangles.get(i).isTaken()){
+			i++;
+		}
+		if(i==rectangles.size()){
+			gameScene.displayGameOverText();
 		}
 	}
 }

@@ -40,6 +40,8 @@ import com.example.fivecircles.PlayerContainer;
 import com.example.fivecircles.PlayerFactory;
 import com.example.fivecircles.PlayerFactoryHoloColors;
 import com.example.fivecircles.PlayerLeaf;
+import com.example.fivecircles.PlayerRemover;
+import com.example.fivecircles.ResourcesManager;
 import com.example.fivecircles.SceneManager;
 import com.example.fivecircles.SceneManager.SceneType;
 import com.example.fivecircles.gamestates.GameState;
@@ -56,7 +58,9 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, Obser
 	//Our Score
 	private int score = 0;
 	
-	//First we can select a player
+	private Text gameOverText;
+	
+	private boolean gameOverDisplayed = false;
 	
 	private GameState state;
 	
@@ -66,7 +70,11 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, Obser
 	
 	private ArrayList<IBackgroundRectangle> rectangles;
 	
+	private ArrayList<IPlayer> playersToRemove;
+	
 	private IPlayer selectedPlayer;
+	
+	private boolean isGameRunning = true;
 	
 	//----------------------------------------------------
 	// CONSTANTS
@@ -94,10 +102,14 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, Obser
 	    createHUD();
 	    loadLevel(1);
 	    setBackgroundRectanglesNeighbors();
+	    createGameOverText();
 	    //Enable Touch Listener
 	    setOnSceneTouchListener(this);
 	    //Set Game State
 	    setGameState(new SelectPlayer());
+	    
+	    this.playersToRemove = new ArrayList<IPlayer>();
+	    registerUpdateHandler(new PlayerRemover(this.playersToRemove,this));
 	}
 
 	@Override
@@ -189,6 +201,18 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, Obser
 		 });
 		
 		levelLoader.loadLevelFromAsset(super.getActivity().getAssets(), "level/" + "level" +levelID + ".xml");
+	}
+	
+	private void createGameOverText(){
+	    this.gameOverText = new Text(0, 0, ResourcesManager.getInstance().getFont(), "Game Over!", super.getVbom());
+	}
+
+	public void displayGameOverText(){
+		super.getCamera().setChaseEntity(null);
+	    this.gameOverText.setPosition(super.getCamera().getCenterX(), super.getCamera().getCenterY());
+	    this.attachChild(gameOverText);
+	    this.gameOverDisplayed = true;
+	    this.isGameRunning = false;
 	}
 	
 	private IEntity addShape(BaseScene scene, float posX, float posY,float width,float height, String type){
@@ -283,20 +307,25 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, Obser
 	
 	@Override
 	public void update(Observable observable, Object object) {
-		// TODO Auto-generated method stub
-		if(observable instanceof IPlayer){
-			if(String.valueOf(object).equals("TOUCHED")){
-				//Player is touched pass the action to the GameState
-				this.state.playerTouched(this,(IPlayer)observable);
+		
+		if(this.isGameRunning){
+			// TODO Auto-generated method stub
+			if(observable instanceof IPlayer){
+				if(String.valueOf(object).equals("TOUCHED")){
+					//Player is touched pass the action to the GameState
+					this.state.playerTouched(this,(IPlayer)observable);
+				}
+
+			}else if(observable instanceof IBackgroundRectangle){
+				if(String.valueOf(object).equals("TOUCHED")){
+					//Player is touched pass the action to the GameState
+					this.state.backgroundTouched(this, (IBackgroundRectangle)observable);
+				}
 			}
 
-		}else if(observable instanceof IBackgroundRectangle){
-			if(String.valueOf(object).equals("TOUCHED")){
-				//Player is touched pass the action to the GameState
-				this.state.backgroundTouched(this, (IBackgroundRectangle)observable);
-			}
 		}
-
+		
+		
 	}
 	
 	public void setGameState(GameState gameState){
@@ -319,4 +348,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, Obser
 		return this.rectangles;
 	}
 	
+	public void removePlayer(IPlayer player){
+		this.playersToRemove.add(player);
+	}
 }

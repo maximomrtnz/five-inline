@@ -100,7 +100,7 @@ public class PlayerLeaf extends Rectangle implements IPlayer,Observable{
 	public void unPaint() {
 		// TODO Auto-generated method stub
 		setScale(1f);
-		this.setZIndex(2);
+		this.setZIndex(1);
 	}
 
 	public IBackgroundRectangle getRectangle(){

@@ -13,11 +13,12 @@ public class MovedPlayer extends GameState{
 	public void playerTouched(GameScene gameScene, IPlayer player) {
 		// TODO Auto-generated method stub
 		player.unPaint();
-		addNewPlayers(gameScene, 4);
-		gameScene.setGameState(new SelectPlayer());
+		addNewPlayers(gameScene, 3);
 		unCheckBackgroundRectangles(gameScene);
 		unPaintForbidden(gameScene);
 		checkFive(gameScene);
+		checkGameOver(gameScene);
+		gameScene.setGameState(new SelectPlayer());
 	}
 
 	@Override
