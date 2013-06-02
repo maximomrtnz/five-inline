@@ -1,6 +1,7 @@
 package com.example.fivecircles;
 
 import java.util.ArrayList;
+import java.util.Stack;
 
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.text.Text;
@@ -163,6 +164,62 @@ public class BackgroundRectangle extends Rectangle implements IBackgroundRectang
 	public void addObserver(Observer observer) {
 		// TODO Auto-generated method stub
 		this.observers.add(observer);
+	}
+
+	@Override
+	public void unChecked() {
+		// TODO Auto-generated method stub
+		this.isChecked = false;
+	}
+
+	@Override
+	public void eraseCross() {
+		// TODO Auto-generated method stub
+		this.setColor(0.1f,0.1f,0.1f,0.1f);
+		this.setScale(1f);
+	}
+
+	@Override
+	public ArrayList<IBackgroundRectangle> checkColorNeighbors() {
+		// TODO Auto-generated method stub
+		Color color = ((Rectangle)this.player).getColor();
+		ArrayList<IBackgroundRectangle> sameColoRectangles = new ArrayList<IBackgroundRectangle>();
+		ArrayList<IBackgroundRectangle> checkedRectangles = new ArrayList<IBackgroundRectangle>();
+		Stack<IBackgroundRectangle> stack = new Stack<IBackgroundRectangle>();
+		IBackgroundRectangle rectangle = this; 
+		while(rectangle != null){
+			checkedRectangles.add(rectangle);
+			IPlayer player = rectangle.getIPlayer();
+			if(player != null){
+				if(((Rectangle)this.player).getColor().equals(color)){
+					sameColoRectangles.add(rectangle);
+					ArrayList<IBackgroundRectangle> neighbors = rectangle.getNeighbors();
+					for(IBackgroundRectangle neighbor : neighbors){
+						if(!checkedRectangles.contains(neighbor)){
+							stack.push(neighbor);
+						}
+					}
+				}
+			}
+			rectangle = null;
+			if(!stack.empty()){
+				rectangle = stack.pop();
+			}
+			
+		}
+		return sameColoRectangles;
+	}
+
+	@Override
+	public IPlayer getIPlayer() {
+		// TODO Auto-generated method stub
+		return this.player;
+	}
+
+	@Override
+	public ArrayList<IBackgroundRectangle> getNeighbors() {
+		// TODO Auto-generated method stub
+		return this.neighbors;
 	}
 	
 	

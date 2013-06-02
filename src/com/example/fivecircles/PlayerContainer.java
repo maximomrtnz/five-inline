@@ -50,6 +50,12 @@ public class PlayerContainer implements IPlayer{
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public IBackgroundRectangle getIBackgroundRectabgle() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 	
 

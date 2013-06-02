@@ -2,6 +2,8 @@ package com.example.fivecircles;
 
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
+import com.example.fivecircles.gamescenes.BaseScene;
+
 public class PlayerFactoryHoloColors implements PlayerFactory{
 
 	@Override

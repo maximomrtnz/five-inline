@@ -5,18 +5,20 @@ import java.util.ArrayList;
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
+import org.andengine.util.debug.Debug;
 
 public class PlayerLeaf extends Rectangle implements IPlayer,Observable{
 	
-	private boolean isTouched;
 	private IBackgroundRectangle rectangle;
 	private ArrayList<Observer> observers;
+	
 	
 	public PlayerLeaf(float pX, float pY, float pWidth, float pHeight,
 			VertexBufferObjectManager pVertexBufferObjectManager) {
 		super(pX, pY, pWidth, pHeight, pVertexBufferObjectManager);
 		// TODO Auto-generated constructor stub
 		this.observers = new ArrayList<Observer>();
+		this.setZIndex(1);
 	}
 
 	@Override
@@ -46,6 +48,7 @@ public class PlayerLeaf extends Rectangle implements IPlayer,Observable{
 		// TODO Auto-generated method stub
 		setScale(1.2f);
 		this.rectangle.initToCheckPath();
+		setZIndex(2);
 	}
 
 	@Override
@@ -97,8 +100,17 @@ public class PlayerLeaf extends Rectangle implements IPlayer,Observable{
 	public void unPaint() {
 		// TODO Auto-generated method stub
 		setScale(1f);
+		this.setZIndex(2);
 	}
 
-	
+	public IBackgroundRectangle getRectangle(){
+		return this.rectangle;
+	}
+
+	@Override
+	public IBackgroundRectangle getIBackgroundRectabgle() {
+		// TODO Auto-generated method stub
+		return this.rectangle;
+	}
 
 }

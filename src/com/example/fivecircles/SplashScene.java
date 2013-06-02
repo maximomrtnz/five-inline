@@ -5,6 +5,7 @@ import org.andengine.opengl.util.GLState;
 import org.andengine.engine.camera.Camera;
 
 import com.example.fivecircles.SceneManager.SceneType;
+import com.example.fivecircles.gamescenes.BaseScene;
 
 public class SplashScene extends BaseScene{
 	

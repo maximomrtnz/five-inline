@@ -14,6 +14,8 @@ public interface IPlayer {
 	
 	public void removeIBackgroundRectabgle();
 	
+	public IBackgroundRectangle getIBackgroundRectabgle();
+	
 	public int getPlayerNumber();
 
 }

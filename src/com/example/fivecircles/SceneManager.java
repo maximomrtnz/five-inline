@@ -5,6 +5,11 @@ import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.ui.IGameInterface.OnCreateSceneCallback;
 
+import com.example.fivecircles.gamescenes.BaseScene;
+import com.example.fivecircles.gamescenes.GameScene;
+import com.example.fivecircles.gamescenes.LoadingScene;
+import com.example.fivecircles.gamescenes.MainMenuScene;
+
 public class SceneManager {
 	 //---------------------------------------------
     // SCENES

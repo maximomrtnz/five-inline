@@ -1,39 +1,37 @@
 package com.example.fivecircles.gamestates;
 
-import org.andengine.entity.IEntity;
-import org.andengine.util.debug.Debug;
-
-import com.example.fivecircles.GameScene;
 import com.example.fivecircles.IBackgroundRectangle;
 import com.example.fivecircles.IPlayer;
+import com.example.fivecircles.PlayerLeaf;
+import com.example.fivecircles.gamescenes.GameScene;
 
-public class MovePlayer implements GameState{
-
+public class MovePlayer extends GameState{
 
 	@Override
-	public void selectPlayer(GameScene gameScene, IPlayer player) {
+	public void playerTouched(GameScene gameScene, IPlayer player) {
 		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
-	public void movePlayer(GameScene gameScene, IBackgroundRectangle rectangle) {
+	public void backgroundTouched(GameScene gameScene,
+			IBackgroundRectangle rectangle) {
 		// TODO Auto-generated method stub
-		if(rectangle.isChecked()){
-			IPlayer player = gameScene.getSelectedPlayer();
+
+		IPlayer player = gameScene.getSelectedPlayer();
+		
+		if(((PlayerLeaf)player).getRectangle().equals(rectangle)){
+			
+			gameScene.setGameState(new CancelMovePlayer());
+		
+		}else if(rectangle.isChecked()){
+		
 			rectangle.addIPlayer(player);
-			player.unPaint();
-			addNewPlayers(gameScene, 4);
-			//gameScene.setGameState(new SelectPlayer());
+			gameScene.setGameState(new MovedPlayer());
+		
 		}
+		
 	}
 	
-	private void addNewPlayers(GameScene gameScene,int numberOfPlayer){
-		int i = 0;
-		while(i<numberOfPlayer){
-			IEntity player = gameScene.addPlayer(gameScene, 0, 0, 0, 0);
-			gameScene.attachChild(player);
-			gameScene.setPlayerToBackgroundRectangle((IPlayer)player);
-			i++;
-		}
-	}
+	
 }

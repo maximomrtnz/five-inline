@@ -34,10 +34,10 @@ public class GameActivity extends BaseGameActivity {
 		
 		//Get Display Device Information 
 		
-		Display display = getWindowManager().getDefaultDisplay();
+		/*Display display = getWindowManager().getDefaultDisplay();
 		Point size = new Point();
 		display.getSize(size);
-		
+		*/
 		this.camera = new Camera(0, 0, CAMERA_WIDTH, CAMERA_HEIGHT);
 		
 		
