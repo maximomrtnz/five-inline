@@ -13,10 +13,10 @@ public class MovedPlayer extends GameState{
 	public void playerTouched(GameScene gameScene, IPlayer player) {
 		// TODO Auto-generated method stub
 		player.unPaint();
-		addNewPlayers(gameScene, 3);
 		unCheckBackgroundRectangles(gameScene);
 		unPaintForbidden(gameScene);
-		checkFive(gameScene);
+		checkFive(gameScene,player);
+		addNewPlayers(gameScene, 3);
 		checkGameOver(gameScene);
 		gameScene.setGameState(new SelectPlayer());
 	}
@@ -34,6 +34,7 @@ public class MovedPlayer extends GameState{
 			IEntity player = gameScene.addPlayer(gameScene, 0, 0, 0, 0);
 			gameScene.attachChild(player);
 			gameScene.setPlayerToBackgroundRectangle((IPlayer)player);
+			checkFive(gameScene, (IPlayer)player);
 			i++;
 		}
 	}

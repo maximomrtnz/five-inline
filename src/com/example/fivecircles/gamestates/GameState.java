@@ -37,9 +37,7 @@ public abstract class GameState {
 		}
 	}
 	
-	protected  void checkFive(GameScene gameScene) {
-		
-		IPlayer player = gameScene.getSelectedPlayer();
+	protected  void checkFive(GameScene gameScene, IPlayer player) {
 		IBackgroundRectangle rectangle = player.getIBackgroundRectabgle();
 		if(rectangle != null){
 			ArrayList<IBackgroundRectangle> rectangles = rectangle.checkColorNeighbors();

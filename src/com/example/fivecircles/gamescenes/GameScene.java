@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import org.andengine.engine.camera.hud.HUD;
 import org.andengine.entity.IEntity;
+import org.andengine.entity.modifier.ScaleModifier;
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
@@ -47,7 +48,7 @@ import com.example.fivecircles.SceneManager.SceneType;
 import com.example.fivecircles.gamestates.GameState;
 import com.example.fivecircles.gamestates.SelectPlayer;
 
-public class GameScene extends BaseScene implements IOnSceneTouchListener, Observer{
+public class GameScene extends BaseScene implements Observer{
 	
 	//--------------------------------------------------
     // 				VARIABLES					
@@ -103,8 +104,6 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, Obser
 	    loadLevel(1);
 	    setBackgroundRectanglesNeighbors();
 	    createGameOverText();
-	    //Enable Touch Listener
-	    setOnSceneTouchListener(this);
 	    //Set Game State
 	    setGameState(new SelectPlayer());
 	    
@@ -295,6 +294,8 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, Obser
 			int next = MathUtils.random(0,emptyRectangles.size()-1);
 			
 			IBackgroundRectangle rectangle = emptyRectangles.get(next);
+			
+			((IEntity)player).registerEntityModifier(new ScaleModifier(1, 0.0f, 1.0f));
 			
 			rectangle.addIPlayer(player);
 			
