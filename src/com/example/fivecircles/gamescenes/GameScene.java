@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import org.andengine.engine.camera.hud.HUD;
 import org.andengine.entity.IEntity;
+import org.andengine.entity.modifier.RotationModifier;
 import org.andengine.entity.modifier.ScaleModifier;
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.IOnSceneTouchListener;
@@ -29,10 +30,12 @@ import org.andengine.util.math.MathUtils;
 import org.xml.sax.Attributes;
 
 
+import android.content.SharedPreferences;
 import android.graphics.Matrix;
 import android.util.Log;
 
 import com.example.fivecircles.BackgroundRectangle;
+import com.example.fivecircles.GameActivity;
 import com.example.fivecircles.IBackgroundRectangle;
 import com.example.fivecircles.IPlayer;
 import com.example.fivecircles.Observable;
@@ -56,6 +59,7 @@ public class GameScene extends BaseScene implements Observer{
 	
 	private HUD gameHUD;
 	private Text scoreText;
+	private Text maxScoreText;
 	//Our Score
 	private int score = 0;
 	
@@ -91,9 +95,7 @@ public class GameScene extends BaseScene implements Observer{
 	private static final Object TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_SQUARE = "square";
 	private static final Object TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_PLAYER = "player";
 	
-	//Game States
-	private static final int GAME_STATE_SELECT_PLAYER = 1;
-	private static final int GAME_STATE_MOVE_PLAYER = 0;
+	public static final String PREFS_NAME = "FiveNeighborPreferences";
 	
 	
 	@Override
@@ -148,10 +150,20 @@ public class GameScene extends BaseScene implements Observer{
 	    gameHUD = new HUD();
 	    
 	    // CREATE SCORE TEXT
-	    scoreText = new Text(220, 700, super.getResourcesManager().getFont(), "Score: 0123456789", new TextOptions(HorizontalAlign.LEFT), super.getVbom());
+	    scoreText = new Text(100,700, super.getResourcesManager().getFont(), "Score: 0123456789", new TextOptions(HorizontalAlign.LEFT), super.getVbom());
+	    scoreText.setScale(0.8f);
+	    
+	    maxScoreText = new Text(160,600, super.getResourcesManager().getFont(), "High Score: 0123456789", new TextOptions(HorizontalAlign.LEFT), super.getVbom());
+	    maxScoreText.setScale(0.8f);
+	    
+	    
+	    
 	    scoreText.setSkewCenter(0, 0);    
 	    scoreText.setText("Score: 0");
+	    maxScoreText.setSkew(0, 0);
+	    maxScoreText.setText("High Score:"+getHighScore());
 	    gameHUD.attachChild(scoreText);
+	    gameHUD.attachChild(maxScoreText);
 	    
 	    super.getCamera().setHUD(gameHUD);
 	}
@@ -209,6 +221,8 @@ public class GameScene extends BaseScene implements Observer{
 	public void displayGameOverText(){
 		super.getCamera().setChaseEntity(null);
 	    this.gameOverText.setPosition(super.getCamera().getCenterX(), super.getCamera().getCenterY());
+	    this.gameOverText.registerEntityModifier(new ScaleModifier(3, 0.1f, 1.5f));
+		this.gameOverText.registerEntityModifier(new RotationModifier(3, 0, 720));
 	    this.attachChild(gameOverText);
 	    this.gameOverDisplayed = true;
 	    this.isGameRunning = false;
@@ -251,12 +265,13 @@ public class GameScene extends BaseScene implements Observer{
 			int bottomNeighbor	= id-8;
 			int topNeighbor = id+8;
 			
-			
-			if(topNeighbor < 63){
+			Log.d("Id",Integer.toString(id));
+		
+			if(topNeighbor <= 63){
 				rectangle.addNeighbor(this.rectangles.get(topNeighbor));
 			}
 			
-			if(bottomNeighbor > 0){
+			if(bottomNeighbor >= 0){
 				rectangle.addNeighbor(this.rectangles.get(bottomNeighbor));
 			}
 			
@@ -352,4 +367,26 @@ public class GameScene extends BaseScene implements Observer{
 	public void removePlayer(IPlayer player){
 		this.playersToRemove.add(player);
 	}
+	
+	public void saveHighScore(){
+		
+		int highScore = getHighScore();
+		if(highScore < this.score){
+			GameActivity gameActivity = ResourcesManager.getInstance().getActivity();
+			SharedPreferences settings = gameActivity.getSharedPreferences(PREFS_NAME, 0);
+		    SharedPreferences.Editor editor = settings.edit();
+		    editor.putInt("highScore", this.score);
+		    editor.commit();
+		}
+	
+	}
+	
+	public int getHighScore(){
+		GameActivity gameActivity = ResourcesManager.getInstance().getActivity();
+		SharedPreferences settings = gameActivity .getSharedPreferences(PREFS_NAME, 0);
+		int highScore = settings.getInt("highScore", 0);
+		return highScore;
+	}
+	
+	
 }

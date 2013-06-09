@@ -13,13 +13,11 @@ import com.example.fivecircles.gamescenes.GameScene;
 public class PlayerRemover implements IUpdateHandler{
 	
 	private ArrayList<IPlayer> playersToRemove;
-	private ArrayList<IPlayer> playersToDetach;
 	private GameScene gameScene;
 	
 	public PlayerRemover(ArrayList<IPlayer> playersToRemove, GameScene gameScene){
 		this.playersToRemove = playersToRemove;
 		this.gameScene = gameScene;
-		this.playersToDetach = new ArrayList<IPlayer>();
 	}
 	
 	@Override
@@ -29,41 +27,10 @@ public class PlayerRemover implements IUpdateHandler{
 		while(iterator.hasNext()){
 			final IPlayer player = iterator.next();
 			this.gameScene.unregisterTouchArea((IEntity)player);
-			iterator.remove();
-			
-			
-			
-			ScaleModifier scaleModifier = new ScaleModifier(1, 1.0f, 0.0f){
-				 @Override
-			        protected void onModifierStarted(IEntity pItem)
-			        {
-			                super.onModifierStarted(pItem);
-			                // Your action after starting modifier
-			        }
-			       
-			        @Override
-			        protected void onModifierFinished(IEntity pItem)
-			        {
-			                super.onModifierFinished(pItem);
-			                // Your action after finishing modifier
-			                playersToRemove.add(player);
-			        }
-			};
-			
-			
-			//this.gameScene.detachChild((IEntity)player);
-			((IEntity)player).registerEntityModifier(scaleModifier);
-			
-			
-		}
-		
-		Iterator<IPlayer> iteratorDetach = playersToDetach.iterator();
-		while(iteratorDetach.hasNext()){
-			this.gameScene.detachChild((IEntity)iteratorDetach.next());
-			iteratorDetach.remove();
+			this.gameScene.detachChild((IEntity)player);
+			iterator.remove();	
 			System.gc();
 		}
-		
 	}
 
 	@Override

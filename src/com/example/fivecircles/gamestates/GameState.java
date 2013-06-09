@@ -60,6 +60,7 @@ public abstract class GameState {
 		}
 		if(i==rectangles.size()){
 			gameScene.displayGameOverText();
+			gameScene.saveHighScore();
 		}
 	}
 }

@@ -14,6 +14,7 @@ import org.andengine.entity.scene.Scene;
 import org.andengine.ui.activity.BaseGameActivity;
 
 
+import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.util.DisplayMetrics;
 import android.view.Display;
@@ -28,16 +29,13 @@ public class GameActivity extends BaseGameActivity {
 	private int CAMERA_WIDTH = 480;
 	private int CAMERA_HEIGHT = 800;
 
+
 	@Override
 	public EngineOptions onCreateEngineOptions() {
 		// TODO Auto-generated method stub
 		
 		//Get Display Device Information 
-		
-		/*Display display = getWindowManager().getDefaultDisplay();
-		Point size = new Point();
-		display.getSize(size);
-		*/
+
 		this.camera = new Camera(0, 0, CAMERA_WIDTH, CAMERA_HEIGHT);
 		
 		
@@ -107,6 +105,6 @@ public class GameActivity extends BaseGameActivity {
 	    }
 	    return false; 
 	}
-
-
+	
+	
 }

@@ -54,5 +54,6 @@ public final class R {
  All customizations that are NOT specific to a particular API-level can go here. 
          */
         public static final int AppTheme=0x7f050001;
+        public static final int Theme_NoBackground=0x7f050002;
     }
 }
