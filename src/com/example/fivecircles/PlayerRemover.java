@@ -5,8 +5,11 @@ import java.util.Iterator;
 
 import org.andengine.engine.handler.IUpdateHandler;
 import org.andengine.entity.IEntity;
+import org.andengine.entity.modifier.AlphaModifier;
 import org.andengine.entity.modifier.RotationModifier;
 import org.andengine.entity.modifier.ScaleModifier;
+
+import android.util.Log;
 
 import com.example.fivecircles.gamescenes.GameScene;
 
@@ -27,7 +30,35 @@ public class PlayerRemover implements IUpdateHandler{
 		while(iterator.hasNext()){
 			final IPlayer player = iterator.next();
 			this.gameScene.unregisterTouchArea((IEntity)player);
-			this.gameScene.detachChild((IEntity)player);
+			//this.gameScene.detachChild((IEntity)player);
+			
+			AlphaModifier alphaModifier = new AlphaModifier(3,1f,0f){
+				@Override
+		        protected void onModifierStarted(IEntity pItem)
+		        {
+		                super.onModifierStarted(pItem);
+		                // Your action after starting modifier
+		        }
+		       
+		        @Override
+		        protected void onModifierFinished(final IEntity pItem)
+		        {
+		                super.onModifierFinished(pItem);
+		                // Your action after finishing modifier
+		                ResourcesManager.getInstance().getEngine().runOnUpdateThread(new Runnable(){
+                            @Override
+                            public void run(){
+                            	try{
+                                    pItem.detachSelf();
+                            	}catch(Exception exception){
+                            		Log.d("Error On Remove Player", exception.getMessage());
+                            	}
+                            }});
+		        }
+			};
+			
+			((IEntity)player).registerEntityModifier(alphaModifier);
+			
 			iterator.remove();	
 			System.gc();
 		}
