@@ -56,6 +56,14 @@ public class ResourcesManager {
     // Game Texture Regions
     private ITextureRegion square;
     
+    //Game Texture Region (Pause Scene)
+    private ITextureRegion pause;
+    private ITextureRegion play;
+    private ITextureRegion soundOn;
+    private ITextureRegion soundOff;
+    private ITextureRegion reload;
+    private ITextureRegion back;
+    
         
     private BuildableBitmapTextureAtlas menuTextureAtlas;
     
@@ -107,7 +115,12 @@ public class ResourcesManager {
     	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
         gameTextureAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024, TextureOptions.BILINEAR);
         
-        square = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "square.png");
+        pause = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "pause.png");
+        play = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "play.png");
+        soundOff = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "soundoff.png");
+        soundOn = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "soundon.png");
+        reload = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "reload.png");
+        back = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "back.png");
         
         try{
             this.gameTextureAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 1, 0));
@@ -117,7 +130,39 @@ public class ResourcesManager {
         }
     }
     
-    private void loadGameFonts(){
+    public ITextureRegion getPlay() {
+		return play;
+	}
+
+	public void setPlay(ITextureRegion play) {
+		this.play = play;
+	}
+
+	public ITextureRegion getSoundOn() {
+		return soundOn;
+	}
+
+	public void setSoundOn(ITextureRegion soundOn) {
+		this.soundOn = soundOn;
+	}
+
+	public ITextureRegion getSoundOff() {
+		return soundOff;
+	}
+
+	public void setSoundOff(ITextureRegion soundOff) {
+		this.soundOff = soundOff;
+	}
+
+	public ITextureRegion getReload() {
+		return reload;
+	}
+
+	public void setReload(ITextureRegion reload) {
+		this.reload = reload;
+	}
+
+	private void loadGameFonts(){
         
     }
     
@@ -278,6 +323,22 @@ public class ResourcesManager {
 
 	public void setSquare(ITextureRegion square) {
 		this.square = square;
+	}
+
+	public ITextureRegion getPause() {
+		return pause;
+	}
+
+	public void setPause(ITextureRegion pause) {
+		this.pause = pause;
+	}
+
+	public ITextureRegion getBack() {
+		return back;
+	}
+
+	public void setBack(ITextureRegion back) {
+		this.back = back;
 	}   
 	
 	

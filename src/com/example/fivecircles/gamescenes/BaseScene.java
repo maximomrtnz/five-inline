@@ -49,6 +49,12 @@ public abstract class BaseScene extends Scene{
     public abstract void disposeScene();
     
     //---------------------------------------------
+    //	COMMON METHOD
+    //---------------------------------------------
+    
+    //Method to Manage Sounds
+    
+    //---------------------------------------------
     // GETTERS AND SETTERS
     //---------------------------------------------
     
