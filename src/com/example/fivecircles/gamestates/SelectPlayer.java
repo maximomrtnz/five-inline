@@ -3,6 +3,7 @@ package com.example.fivecircles.gamestates;
 import com.example.fivecircles.IBackgroundRectangle;
 import com.example.fivecircles.IPlayer;
 import com.example.fivecircles.gamescenes.GameScene;
+import com.example.fivecircles.utilities.AudioManager;
 
 public class SelectPlayer extends GameState{
 
@@ -13,6 +14,10 @@ public class SelectPlayer extends GameState{
 		//Mark the path where player can not move
 		
 		player.paint();
+		
+		//Play select player sound
+		AudioManager.getInstance().soundSelectPlayer();
+		
 		
 		gameScene.sortChildren();
 		

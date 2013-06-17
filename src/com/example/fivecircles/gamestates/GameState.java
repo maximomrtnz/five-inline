@@ -7,6 +7,7 @@ import org.andengine.entity.IEntity;
 import com.example.fivecircles.IBackgroundRectangle;
 import com.example.fivecircles.IPlayer;
 import com.example.fivecircles.gamescenes.GameScene;
+import com.example.fivecircles.utilities.AudioManager;
 
 public abstract class GameState {
 	
@@ -48,6 +49,7 @@ public abstract class GameState {
 					rectangle2.removeIPlayer();
 					gameScene.removePlayer(iPlayer);
 				}
+				AudioManager.getInstance().soundRemovePlayers();
 			}
 		}
 	}

@@ -1,5 +1,11 @@
 package com.example.fivecircles;
 
+import java.io.IOException;
+
+import org.andengine.audio.music.Music;
+import org.andengine.audio.music.MusicFactory;
+import org.andengine.audio.sound.Sound;
+import org.andengine.audio.sound.SoundFactory;
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.Camera;
 import org.andengine.opengl.font.Font;
@@ -33,6 +39,15 @@ public class ResourcesManager {
     private VertexBufferObjectManager vbom;
     
     //---------------------------------------------
+    // SOUND
+    //---------------------------------------------
+    
+    private Sound selectPlayerSound; 
+    private Sound removePlayersSound; 
+    
+    
+    
+    //---------------------------------------------
     // FONTS
     //---------------------------------------------
     
@@ -59,6 +74,7 @@ public class ResourcesManager {
     //Game Texture Region (Pause Scene)
     private ITextureRegion pause;
     private ITextureRegion play;
+    private ITextureRegion sound;
     private ITextureRegion soundOn;
     private ITextureRegion soundOff;
     private ITextureRegion reload;
@@ -108,7 +124,13 @@ public class ResourcesManager {
     }
     
     private void loadMenuAudio(){
-    	
+   
+    	try{
+    		 this.selectPlayerSound = SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "sound/pick_up.wav");
+    		 this.removePlayersSound = SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "sound/remove.wav");
+    	}catch (IOException e){
+    	    e.printStackTrace();
+    	}
     }
 
     private void loadGameGraphics(){
@@ -117,6 +139,7 @@ public class ResourcesManager {
         
         pause = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "pause.png");
         play = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "play.png");
+        sound = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "button_green_background.png");
         soundOff = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "soundoff.png");
         soundOn = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "soundon.png");
         reload = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "reload.png");
@@ -313,36 +336,29 @@ public class ResourcesManager {
 		return font;
 	}
 
-	public void setFont(Font font) {
-		this.font = font;
-	}
-
 	public ITextureRegion getSquare() {
 		return square;
 	}
-
-	public void setSquare(ITextureRegion square) {
-		this.square = square;
-	}
-
+	
 	public ITextureRegion getPause() {
 		return pause;
-	}
-
-	public void setPause(ITextureRegion pause) {
-		this.pause = pause;
 	}
 
 	public ITextureRegion getBack() {
 		return back;
 	}
+	
+	
+	public ITextureRegion getSound() {
+		return sound;
+	}
 
-	public void setBack(ITextureRegion back) {
-		this.back = back;
-	}   
+	public Sound getSelectPlayerSound() {
+		return selectPlayerSound;
+	}
+
+	public Sound getRemovePlayersSound() {
+		return removePlayersSound;
+	}	
 	
-	
-	
-	
-    
 }

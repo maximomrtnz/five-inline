@@ -61,6 +61,11 @@ import com.example.fivecircles.SceneManager;
 import com.example.fivecircles.SceneManager.SceneType;
 import com.example.fivecircles.gamestates.GameState;
 import com.example.fivecircles.gamestates.SelectPlayer;
+import com.example.fivecircles.utilities.AudioManager;
+import com.example.fivecircles.utilities.SoundButtonStateOff;
+import com.example.fivecircles.utilities.SoundButtonStateOn;
+import com.example.fivecircles.utilities.ToggleButtonMenu;
+import com.example.fivecircles.utilities.ToggleButtonState;
 
 public class GameScene extends BaseScene implements Observer,IOnMenuItemClickListener {
 
@@ -100,8 +105,7 @@ public class GameScene extends BaseScene implements Observer,IOnMenuItemClickLis
 	
 	private SpriteMenuItem btnPlay;
 	private SpriteMenuItem btnReload;
-	private SpriteMenuItem btnSoundOn;
-	private SpriteMenuItem btnSoundOff;
+	private SpriteMenuItem btnSound;
 	private SpriteMenuItem btnBack;
 	
 	// ----------------------------------------------------
@@ -225,9 +229,29 @@ public class GameScene extends BaseScene implements Observer,IOnMenuItemClickLis
 		
 		this.btnReload = new SpriteMenuItem(2,super.getResourcesManager().getReload(), super.getVbom());
 		
-		this.btnSoundOn = new SpriteMenuItem(3,super.getResourcesManager().getSoundOn(), super.getVbom());
+		Sprite soundOn = new Sprite(0, 0, super.getResourcesManager().getSoundOn(), super.getVbom());
 		
-		this.btnSoundOff = new SpriteMenuItem(4,super.getResourcesManager().getSoundOff(), super.getVbom());
+		Sprite soundOff = new Sprite(0, 0, super.getResourcesManager().getSoundOff(), super.getVbom());
+		
+		ToggleButtonState toggleButtonState = new SoundButtonStateOn();
+		
+		
+		if(!AudioManager.getInstance().isSoundEnable()){
+			toggleButtonState = new SoundButtonStateOff();
+		}
+		
+		this.btnSound = new ToggleButtonMenu(3, super.getResourcesManager().getSound(), soundOn, soundOff,super.getVbom() ,toggleButtonState);
+		
+		if(AudioManager.getInstance().isSoundEnable()){
+			this.btnSound.attachChild(soundOn);
+		}else{
+			this.btnSound.attachChild(soundOff);
+		}
+		
+		soundOn.setPosition(this.btnSound.getWidth()/2, this.btnSound.getHeight()/2);
+		soundOff.setPosition(this.btnSound.getWidth()/2, this.btnSound.getHeight()/2);
+		
+		
 		
 		this.btnBack = new SpriteMenuItem(5,super.getResourcesManager().getBack(), super.getVbom());
 		
@@ -237,10 +261,7 @@ public class GameScene extends BaseScene implements Observer,IOnMenuItemClickLis
 		btnReload.setPosition(200, super
 				.getCamera().getCenterY());
 		
-		btnSoundOn.setPosition(280, super
-				.getCamera().getCenterY());
-		
-		btnSoundOff.setPosition(280, super
+		btnSound.setPosition(280, super
 				.getCamera().getCenterY());
 		
 		btnBack.setPosition(360, super
@@ -250,22 +271,8 @@ public class GameScene extends BaseScene implements Observer,IOnMenuItemClickLis
 		pauseGame.attachChild(rectangle);
 		pauseGame.addMenuItem(btnPlay);
 		pauseGame.addMenuItem(btnReload);
-		pauseGame.addMenuItem(btnSoundOn);
-		pauseGame.addMenuItem(btnSoundOff);
+		pauseGame.addMenuItem(btnSound);
 		pauseGame.addMenuItem(btnBack);
-		
-		btnSoundOn.setZIndex(1);
-		btnSoundOff.setZIndex(0);
-		btnSoundOff.setVisible(false);
-		
-		//if sound is disable
-		if(!isSoundEnable()){
-			btnSoundOn.setVisible(false);
-			btnSoundOff.setVisible(true);
-			btnSoundOn.setZIndex(0);
-			btnSoundOff.setZIndex(1);
-		}
-		
 		
 		pauseGame.setBackgroundEnabled(false);
 		pauseGame.setOnMenuItemClickListener(this);
@@ -553,43 +560,7 @@ public class GameScene extends BaseScene implements Observer,IOnMenuItemClickLis
 		return highScore;
 	}
 	
-	public boolean isSoundEnable(){
-		GameActivity gameActivity = ResourcesManager.getInstance().getActivity();
-		SharedPreferences settings = gameActivity.getSharedPreferences(PREFS_NAME, 0);
-		return settings.getBoolean("isSoundEnable", true); 
-	}
 	
-	public void turnOnSound(){
-		//Set Preference
-		GameActivity gameActivity = ResourcesManager.getInstance().getActivity();
-		SharedPreferences settings = gameActivity.getSharedPreferences(PREFS_NAME, 0);
-		SharedPreferences.Editor editor = settings.edit();
-		editor.putBoolean("isSoundEnable", true);
-		editor.commit();
-		
-		//Change Button
-		this.btnSoundOff.setVisible(false);
-		this.btnSoundOn.setVisible(true);
-		btnSoundOn.setZIndex(0);
-		btnSoundOff.setZIndex(1);
-		
-	}
-	
-	public void turnOffSound(){
-		//Set Preference
-		GameActivity gameActivity = ResourcesManager.getInstance().getActivity();
-		SharedPreferences settings = gameActivity.getSharedPreferences(PREFS_NAME, 0);
-		SharedPreferences.Editor editor = settings.edit();
-		editor.putBoolean("isSoundEnable", false);
-		editor.commit();
-		
-		//Change Button
-		this.btnSoundOff.setVisible(true);
-		this.btnSoundOn.setVisible(false);
-		btnSoundOn.setZIndex(1);
-		btnSoundOff.setZIndex(0);
-		
-	}
 	
 	@Override
 	public boolean onMenuItemClicked(MenuScene pMenuScene, IMenuItem pMenuItem,
@@ -611,12 +582,12 @@ public class GameScene extends BaseScene implements Observer,IOnMenuItemClickLis
 				return true;
 			//Press Sound On Button
 			case 3:
-				turnOffSound();
+				
 				return true;
 
 			//Press Sound Off Button
 			case 4:
-				turnOnSound();
+			
 				return true;
 			//Press Back Button
 			case 5:
