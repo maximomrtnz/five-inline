@@ -134,9 +134,6 @@ public class GameScene extends BaseScene implements Observer,IOnMenuItemClickLis
 		createGameOverText();
 		// Set Game State
 		setGameState(new SelectPlayer());
-
-		// this.playersToRemove = new ArrayList<IPlayer>();
-		// registerUpdateHandler(new PlayerRemover(this.playersToRemove,this));
 	}
 
 	@Override
@@ -198,8 +195,7 @@ public class GameScene extends BaseScene implements Observer,IOnMenuItemClickLis
 			@Override
 			public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
 	   			 if(pSceneTouchEvent.getAction()==MotionEvent.ACTION_UP){
-	   				 this.setVisible(false);
-	   				 setChildScene(pauseScene(), false, true, true);
+	   				 setChildScene(new PauseScene(), false, true, true);
 	   			 }
 	   			 return true;
        	}};
@@ -211,72 +207,6 @@ public class GameScene extends BaseScene implements Observer,IOnMenuItemClickLis
 		
 		//Add Hud to Scene
 		super.getCamera().setHUD(gameHUD);
-	}
-	
-	private MenuScene pauseScene(){
-		
-		//The Pause Scene
-		//We will show this scene when user touche pause
-		
-		final MenuScene pauseGame= new MenuScene(super.getCamera());
-		
-		final Rectangle rectangle = new Rectangle(super.getCamera().getCenterX(), super
-				.getCamera().getCenterY(), 400, 150,super.getVbom());
-		
-		rectangle.setColor(0f, 0f, 0f, 0.8f);
-		
-		this.btnPlay = new SpriteMenuItem(1,super.getResourcesManager().getPlay(), super.getVbom());
-		
-		this.btnReload = new SpriteMenuItem(2,super.getResourcesManager().getReload(), super.getVbom());
-		
-		Sprite soundOn = new Sprite(0, 0, super.getResourcesManager().getSoundOn(), super.getVbom());
-		
-		Sprite soundOff = new Sprite(0, 0, super.getResourcesManager().getSoundOff(), super.getVbom());
-		
-		ToggleButtonState toggleButtonState = new SoundButtonStateOn();
-		
-		
-		if(!AudioManager.getInstance().isSoundEnable()){
-			toggleButtonState = new SoundButtonStateOff();
-		}
-		
-		this.btnSound = new ToggleButtonMenu(3, super.getResourcesManager().getSound(), soundOn, soundOff,super.getVbom() ,toggleButtonState);
-		
-		if(AudioManager.getInstance().isSoundEnable()){
-			this.btnSound.attachChild(soundOn);
-		}else{
-			this.btnSound.attachChild(soundOff);
-		}
-		
-		soundOn.setPosition(this.btnSound.getWidth()/2, this.btnSound.getHeight()/2);
-		soundOff.setPosition(this.btnSound.getWidth()/2, this.btnSound.getHeight()/2);
-		
-		
-		
-		this.btnBack = new SpriteMenuItem(5,super.getResourcesManager().getBack(), super.getVbom());
-		
-		btnPlay.setPosition(120, super
-				.getCamera().getCenterY());
-		
-		btnReload.setPosition(200, super
-				.getCamera().getCenterY());
-		
-		btnSound.setPosition(280, super
-				.getCamera().getCenterY());
-		
-		btnBack.setPosition(360, super
-				.getCamera().getCenterY());
-		
-		
-		pauseGame.attachChild(rectangle);
-		pauseGame.addMenuItem(btnPlay);
-		pauseGame.addMenuItem(btnReload);
-		pauseGame.addMenuItem(btnSound);
-		pauseGame.addMenuItem(btnBack);
-		
-		pauseGame.setBackgroundEnabled(false);
-		pauseGame.setOnMenuItemClickListener(this);
-		return pauseGame;
 	}
 	
 	public void addToScore(int i) {
@@ -524,8 +454,7 @@ public class GameScene extends BaseScene implements Observer,IOnMenuItemClickLis
 							.runOnUpdateThread(new Runnable() {
 								@Override
 								public void run() {
-									unregisterTouchArea(pItem);
-									pItem.detachSelf();
+									disposeScene();
 								}
 							});
 				}

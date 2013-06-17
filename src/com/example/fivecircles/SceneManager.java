@@ -9,6 +9,7 @@ import com.example.fivecircles.gamescenes.BaseScene;
 import com.example.fivecircles.gamescenes.GameScene;
 import com.example.fivecircles.gamescenes.LoadingScene;
 import com.example.fivecircles.gamescenes.MainMenuScene;
+import com.example.fivecircles.gamescenes.PauseScene;
 
 public class SceneManager {
 	 //---------------------------------------------
@@ -62,7 +63,7 @@ public class SceneManager {
                 break;
             case SCENE_LOADING:
                 setScene(loadingScene);
-                break;
+                break;   
             default:
                 break;
         }

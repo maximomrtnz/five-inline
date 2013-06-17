@@ -1,31 +1,26 @@
 package com.example.fivecircles.utilities;
 
-import org.andengine.entity.scene.menu.item.SpriteMenuItem;
+
 import org.andengine.entity.sprite.Sprite;
-import org.andengine.entity.sprite.TiledSprite;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.region.ITextureRegion;
-import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
-import android.util.Log;
-
-import com.example.fivecircles.gamescenes.BaseScene;
-
-public class ToggleButtonMenu extends SpriteMenuItem{
+public class ToggleButtonMenu extends Sprite{
 
 	private Sprite  firstStateSprite;
 	private Sprite  secondStateSprite;
 	private ToggleButtonState toggleButtonState;
 
-	public ToggleButtonMenu(int pID,
+	public ToggleButtonMenu(float pX,
+			float pY,
 			ITextureRegion iTextureRegion,
 			Sprite firstStateSprite,
 			Sprite secondStateSprite,	
 			VertexBufferObjectManager pVertexBufferObjectManager, 
 			ToggleButtonState toggleButtonState) {
 		
-		super(pID, iTextureRegion, pVertexBufferObjectManager);
+		super(pX, pY, iTextureRegion, pVertexBufferObjectManager);
 		
 		// TODO Auto-generated constructor stub
 	
