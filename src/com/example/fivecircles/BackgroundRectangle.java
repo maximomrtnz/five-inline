@@ -183,7 +183,7 @@ public class BackgroundRectangle extends Rectangle implements IBackgroundRectang
 	}
 
 	@Override
-	public ArrayList<IBackgroundRectangle> checkColorNeighbors() {
+	public synchronized ArrayList<IBackgroundRectangle> checkColorNeighbors() {
 		// TODO Auto-generated method stub
 		Color color = ((Rectangle)this.player).getColor();
 		ArrayList<IBackgroundRectangle> sameColoRectangles = new ArrayList<IBackgroundRectangle>();
@@ -195,7 +195,9 @@ public class BackgroundRectangle extends Rectangle implements IBackgroundRectang
 			IPlayer player = rectangle.getIPlayer();
 			if(player != null){
 				if(((Rectangle)player).getColor().equals(color)){
-					sameColoRectangles.add(rectangle);
+					if(!sameColoRectangles.contains(rectangle)){
+						sameColoRectangles.add(rectangle);
+					}
 					ArrayList<IBackgroundRectangle> neighbors = rectangle.getNeighbors();
 					for(IBackgroundRectangle neighbor : neighbors){
 						if(!checkedRectangles.contains(neighbor)){

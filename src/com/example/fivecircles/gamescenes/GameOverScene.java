@@ -24,13 +24,12 @@ import com.example.fivecircles.utilities.SoundButtonStateOn;
 import com.example.fivecircles.utilities.ToggleButtonMenu;
 import com.example.fivecircles.utilities.ToggleButtonState;
 
-public class PauseScene extends BaseScene implements IOnMenuItemClickListener{
+public class GameOverScene extends BaseScene implements IOnMenuItemClickListener{
 	
 	private MenuScene menuChildScene;
 	private ToggleButtonMenu soundButton;
-	private final int MENU_PLAY = 0;
-	private final int MENU_RELOAD = 1;
-	private final int MENU_BACK = 2;
+	private final int MENU_RELOAD = 0;
+	private final int MENU_BACK = 1;
 	
 	
 	
@@ -66,37 +65,14 @@ public class PauseScene extends BaseScene implements IOnMenuItemClickListener{
 		setChildScene(menuChildScene);
 		menuChildScene.setBackgroundEnabled(false);
 		
-		//Add Play Button
-		SpriteMenuItem playButton = new SpriteMenuItem(0, ResourcesManager.getInstance().getPlay(), super.getVbom());
-		playButton.setPosition(120, super.getCamera().getCenterY());
-		menuChildScene.addMenuItem(playButton);
-		
 		//Add Reload Button
-		SpriteMenuItem reloadButton = new SpriteMenuItem(1, ResourcesManager.getInstance().getReload(), super.getVbom());
+		SpriteMenuItem reloadButton = new SpriteMenuItem(0, ResourcesManager.getInstance().getReload(), super.getVbom());
 		reloadButton.setPosition(200, super.getCamera().getCenterY());
 		menuChildScene.addMenuItem(reloadButton);
 		
-		//Add Sound Item
-		Sprite soundOn = new Sprite(0, 0, super.getResourcesManager().getSoundOn(), super.getVbom());
-		Sprite soundOff = new Sprite(0, 0, super.getResourcesManager().getSoundOff(), super.getVbom());	
-		ToggleButtonState toggleButtonState = new SoundButtonStateOn();
-		if(!AudioManager.getInstance().isSoundEnable()){
-			toggleButtonState = new SoundButtonStateOff();
-		}
-		soundButton = new ToggleButtonMenu(280, super.getCamera().getCenterY(), super.getResourcesManager().getSound(), soundOn,soundOff, super.getVbom(), toggleButtonState);
-		if(AudioManager.getInstance().isSoundEnable()){
-			soundButton.attachChild(soundOn);
-		}else{
-			soundButton.attachChild(soundOff);
-		}
-		soundOn.setPosition(soundButton.getWidth()/2, soundButton.getHeight()/2);
-		soundOff.setPosition(soundButton.getWidth()/2, soundButton.getHeight()/2);
-		menuChildScene.attachChild(soundButton);
-		registerTouchArea(soundButton);
-		
 		//Add Back Button
-		SpriteMenuItem backButton = new SpriteMenuItem(2, ResourcesManager.getInstance().getBack(), super.getVbom());
-		backButton.setPosition(360, super.getCamera().getCenterY());
+		SpriteMenuItem backButton = new SpriteMenuItem(1, ResourcesManager.getInstance().getBack(), super.getVbom());
+		backButton.setPosition(280, super.getCamera().getCenterY());
 		menuChildScene.addMenuItem(backButton);
 		
 	}
@@ -115,7 +91,7 @@ public class PauseScene extends BaseScene implements IOnMenuItemClickListener{
 		
 		//Pause Text
 		Text pauseText = new Text(super.getCamera().getCenterX(), super.getCamera().getCenterY()+100, super.getResourcesManager().getFont(),
-				"Paused", new TextOptions(HorizontalAlign.LEFT),
+				"Game Over", new TextOptions(HorizontalAlign.LEFT),
 				super.getVbom());
 		
 		attachChild(pauseText);
@@ -126,20 +102,7 @@ public class PauseScene extends BaseScene implements IOnMenuItemClickListener{
 	public boolean onMenuItemClicked(MenuScene pMenuScene, IMenuItem pMenuItem,
 			float pMenuItemLocalX, float pMenuItemLocalY) {
 		switch(pMenuItem.getID()){
-    		case MENU_PLAY:
-    			ResourcesManager.getInstance().getEngine()
-				.runOnUpdateThread(new Runnable() {
-					@Override
-					public void run() {
-						if(hasChildScene()){
-							menuChildScene.unregisterTouchArea(soundButton);
-							menuChildScene.back();
-						}
-						back();
-					}
-				});
-    		return true;
-    		
+		
     		case MENU_RELOAD:
     			menuChildScene.back();
     			SceneManager.getInstance().reloadGameScene(super.getEngine());

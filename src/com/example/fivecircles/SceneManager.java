@@ -128,6 +128,22 @@ public class SceneManager {
         }));
     }
     
+    public void reloadGameScene(final Engine mEngine){
+    	setScene(loadingScene);
+    	gameScene.disposeScene();
+    	ResourcesManager.getInstance().unloadGameTextures();
+    	mEngine.registerUpdateHandler(new TimerHandler(0.1f, new ITimerCallback() 
+         {
+             public void onTimePassed(final TimerHandler pTimerHandler) 
+             {
+                 mEngine.unregisterUpdateHandler(pTimerHandler);
+                 ResourcesManager.getInstance().loadGameResources();
+                 gameScene = new GameScene();
+                 setScene(gameScene);
+             }
+         }));
+    }
+    
     
     //---------------------------------------------
     // GETTERS AND SETTERS

@@ -67,7 +67,7 @@ import com.example.fivecircles.utilities.SoundButtonStateOn;
 import com.example.fivecircles.utilities.ToggleButtonMenu;
 import com.example.fivecircles.utilities.ToggleButtonState;
 
-public class GameScene extends BaseScene implements Observer,IOnMenuItemClickListener {
+public class GameScene extends BaseScene implements Observer {
 
 	// --------------------------------------------------
 	// VARIABLES
@@ -131,7 +131,6 @@ public class GameScene extends BaseScene implements Observer,IOnMenuItemClickLis
 		createHUD();
 		loadLevel(1);
 		setBackgroundRectanglesNeighbors();
-		createGameOverText();
 		// Set Game State
 		setGameState(new SelectPlayer());
 	}
@@ -280,24 +279,6 @@ public class GameScene extends BaseScene implements Observer,IOnMenuItemClickLis
 				"level/" + "level" + levelID + ".xml");
 	}
 
-	private void createGameOverText() {
-		this.gameOverText = new Text(0, 0, ResourcesManager.getInstance()
-				.getFont(), "Game Over!", super.getVbom());
-	}
-
-	public void displayGameOverText() {
-		super.getCamera().setChaseEntity(null);
-		this.gameOverText.setPosition(super.getCamera().getCenterX(), super
-				.getCamera().getCenterY());
-		this.gameOverText.registerEntityModifier(new ScaleModifier(3, 0.1f,
-				1.5f));
-		this.gameOverText
-				.registerEntityModifier(new RotationModifier(3, 0, 720));
-		this.attachChild(gameOverText);
-		this.gameOverDisplayed = true;
-		this.isGameRunning = false;
-	}
-
 	private IEntity addShape(BaseScene scene, float posX, float posY,
 			float width, float height, String type) {
 
@@ -324,7 +305,11 @@ public class GameScene extends BaseScene implements Observer,IOnMenuItemClickLis
 		((Observable) iEntity).addObserver(this);
 		return iEntity;
 	}
-
+	
+	public void displayGameOverScene(){
+		setChildScene(new GameOverScene(), false, true, true);
+	}
+	
 	public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
 		return false;
 	}
@@ -437,8 +422,6 @@ public class GameScene extends BaseScene implements Observer,IOnMenuItemClickLis
 
 		if (player != null) {
 
-			
-
 			AlphaModifier alphaModifier = new AlphaModifier(1, 1f, 0f) {
 				@Override
 				protected void onModifierStarted(IEntity pItem) {
@@ -454,7 +437,8 @@ public class GameScene extends BaseScene implements Observer,IOnMenuItemClickLis
 							.runOnUpdateThread(new Runnable() {
 								@Override
 								public void run() {
-									disposeScene();
+									unregisterTouchArea(pItem);
+									pItem.detachSelf();
 								}
 							});
 				}
@@ -462,8 +446,8 @@ public class GameScene extends BaseScene implements Observer,IOnMenuItemClickLis
 
 			((IEntity) player).registerEntityModifier(alphaModifier);
 		}
-		// this.playersToRemove.add(player);
 	}
+
 
 	public void saveHighScore() {
 
@@ -487,44 +471,6 @@ public class GameScene extends BaseScene implements Observer,IOnMenuItemClickLis
 				PREFS_NAME, 0);
 		int highScore = settings.getInt("highScore", 0);
 		return highScore;
-	}
-	
-	
-	
-	@Override
-	public boolean onMenuItemClicked(MenuScene pMenuScene, IMenuItem pMenuItem,
-			float pMenuItemLocalX, float pMenuItemLocalY) {
-		// TODO Auto-generated method stub
-		Log.d("Pause", Integer.toString(pMenuItem.getID()));
-		switch(pMenuItem.getID()){
-			
-			//Press Play Button
-			case 1:
-				if(hasChildScene()){
-					clearChildScene();
-					pausedSprite.setVisible(true);
-				}
-				return true;
-			//Press Reload Button
-			case 2:
-				SceneManager.getInstance().loadGameScene(super.getEngine());
-				return true;
-			//Press Sound On Button
-			case 3:
-				
-				return true;
-
-			//Press Sound Off Button
-			case 4:
-			
-				return true;
-			//Press Back Button
-			case 5:
-				onBackKeyPressed();
-				return true;
-			default:
-				return false;
-		}
 	}
 
 }
