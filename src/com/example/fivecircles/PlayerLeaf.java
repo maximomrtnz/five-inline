@@ -3,19 +3,22 @@ package com.example.fivecircles;
 import java.util.ArrayList;
 
 import org.andengine.entity.primitive.Rectangle;
+import org.andengine.entity.sprite.Sprite;
 import org.andengine.input.touch.TouchEvent;
+import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.debug.Debug;
 
-public class PlayerLeaf extends Rectangle implements IPlayer,Observable{
+public class PlayerLeaf extends Sprite implements IPlayer,Observable{
 	
 	private IBackgroundRectangle rectangle;
 	private ArrayList<Observer> observers;
 	
 	
 	public PlayerLeaf(float pX, float pY, float pWidth, float pHeight,
+			ITextureRegion iTextureRegion,
 			VertexBufferObjectManager pVertexBufferObjectManager) {
-		super(pX, pY, pWidth, pHeight, pVertexBufferObjectManager);
+		super(pX, pY, pHeight, pWidth, iTextureRegion, pVertexBufferObjectManager);
 		// TODO Auto-generated constructor stub
 		this.observers = new ArrayList<Observer>();
 		this.setZIndex(1);

@@ -53,7 +53,7 @@ import com.example.fivecircles.Observable;
 import com.example.fivecircles.Observer;
 import com.example.fivecircles.PlayerContainer;
 import com.example.fivecircles.PlayerFactory;
-import com.example.fivecircles.PlayerFactoryHoloColors;
+import com.example.fivecircles.PlayerFactoryKindOneNeighbor;
 import com.example.fivecircles.PlayerLeaf;
 import com.example.fivecircles.PlayerRemover;
 import com.example.fivecircles.ResourcesManager;
@@ -292,21 +292,23 @@ public class GameScene extends BaseScene implements Observer {
 		return (Rectangle) rectangle;
 	}
 
-	public IEntity addPlayer(BaseScene scene, float posX, float posY,
+	public synchronized IEntity addPlayer(BaseScene scene, float posX, float posY,
 			float width, float height) {
 
 		int color = MathUtils.random(1, 5);
-		PlayerFactory playerFactory = new PlayerFactoryHoloColors();
+		PlayerFactory playerFactory = new PlayerFactoryKindOneNeighbor();
 		IEntity iEntity = playerFactory.createPlayer(scene, posX, posY, width,
 				height, super.getVbom(), color);
 		registerTouchArea(iEntity);
 		this.player.addPlayer((PlayerLeaf) iEntity);
 		setPlayerToBackgroundRectangle((PlayerLeaf) iEntity);
 		((Observable) iEntity).addObserver(this);
+		
 		return iEntity;
 	}
 	
 	public void displayGameOverScene(){
+		AudioManager.getInstance().soundGameOver();
 		setChildScene(new GameOverScene(), false, true, true);
 	}
 	
@@ -368,9 +370,8 @@ public class GameScene extends BaseScene implements Observer {
 
 			((IEntity) player).registerEntityModifier(new ScaleModifier(1,
 					0.5f, 1.0f));
-
 			rectangle.addIPlayer(player);
-
+		
 		}
 
 	}

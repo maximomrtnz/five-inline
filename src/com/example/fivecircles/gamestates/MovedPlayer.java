@@ -5,6 +5,7 @@ import org.andengine.entity.IEntity;
 import com.example.fivecircles.IBackgroundRectangle;
 import com.example.fivecircles.IPlayer;
 import com.example.fivecircles.gamescenes.GameScene;
+import com.example.fivecircles.utilities.AudioManager;
 
 public class MovedPlayer extends GameState{
 
@@ -37,6 +38,7 @@ public class MovedPlayer extends GameState{
 			checkFive(gameScene, (IPlayer)player);
 			i++;
 		}
+		AudioManager.getInstance().soundAppearPlayers();
 	}
 
 	

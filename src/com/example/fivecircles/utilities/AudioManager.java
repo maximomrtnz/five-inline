@@ -48,7 +48,7 @@ public class AudioManager {
 	}
     
     //Sounds which We need in this game
-    public void soundSelectPlayer(){
+    public synchronized void soundSelectPlayer(){
     	if(this.isSoundEnable()){
     		Sound sound = ResourcesManager.getInstance().getSelectPlayerSound();
         	sound.play();
@@ -56,9 +56,23 @@ public class AudioManager {
     	
     }
     
-    public void soundRemovePlayers(){
+    public synchronized void soundRemovePlayers(){
     	if(this.isSoundEnable()){
     		Sound sound = ResourcesManager.getInstance().getRemovePlayersSound();
+    		sound.play();
+    	}	
+    }
+    
+    public synchronized void soundAppearPlayers(){
+    	if(this.isSoundEnable()){
+    		Sound sound = ResourcesManager.getInstance().getAppearPlayersSound();
+    		sound.play();
+    	}	
+    }
+    
+    public synchronized void soundGameOver(){
+    	if(this.isSoundEnable()){
+    		Sound sound = ResourcesManager.getInstance().getGameOverPlayersSound();
     		sound.play();
     	}	
     }

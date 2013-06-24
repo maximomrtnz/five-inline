@@ -44,6 +44,10 @@ public class ResourcesManager {
     
     private Sound selectPlayerSound; 
     private Sound removePlayersSound; 
+    private Sound appearPlayersSound; 
+    private Sound gameOverPlayersSound; 
+    
+    
     
     
     
@@ -79,6 +83,14 @@ public class ResourcesManager {
     private ITextureRegion soundOff;
     private ITextureRegion reload;
     private ITextureRegion back;
+    
+    //Game Texture Region (Game Scene)
+    private ITextureRegion kindOneNeighborOne;
+    private ITextureRegion kindOneNeighborTwo;
+    private ITextureRegion kindOneNeighborThree;
+    private ITextureRegion kindOneNeighborFour;
+    private ITextureRegion kindOneNeighborFive;
+    private ITextureRegion cross;
     
         
     private BuildableBitmapTextureAtlas menuTextureAtlas;
@@ -125,18 +137,14 @@ public class ResourcesManager {
     
     private void loadMenuAudio(){
    
-    	try{
-    		 this.selectPlayerSound = SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "sound/pick_up.wav");
-    		 this.removePlayersSound = SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "sound/remove.wav");
-    	}catch (IOException e){
-    	    e.printStackTrace();
-    	}
+    	
     }
 
     private void loadGameGraphics(){
     	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
         gameTextureAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024, TextureOptions.BILINEAR);
         
+        // Pause/Game Over Scene  Graphics
         pause = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "pause.png");
         play = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "play.png");
         sound = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "button_green_background.png");
@@ -145,12 +153,32 @@ public class ResourcesManager {
         reload = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "reload.png");
         back = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "back.png");
         
+        // Game Scene Graphics
+        kindOneNeighborOne = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "neighbor-1.png");
+        kindOneNeighborTwo = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "neighbor-2.png");
+        kindOneNeighborThree = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "neighbor-3.png");
+        kindOneNeighborFour = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "neighbor-4.png");
+        kindOneNeighborFive = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "neighbor-5.png");
+        
+        cross = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "cross.png");
+        
         try{
             this.gameTextureAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 1, 0));
             this.gameTextureAtlas.load();
         }catch (final TextureAtlasBuilderException e){
             Debug.e(e);
         }
+    }
+    
+    private void loadGameAudio(){
+    	try{
+   		 this.selectPlayerSound = SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "sound/pick_up.wav");
+   		 this.removePlayersSound = SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "sound/remove.wav");
+   		 this.appearPlayersSound = SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "sound/appear.wav");
+   		 this.gameOverPlayersSound = SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "sound/game_over.wav");
+    	}catch (IOException e){
+   			e.printStackTrace();
+   		}
     }
     
     public ITextureRegion getPlay() {
@@ -199,9 +227,7 @@ public class ResourcesManager {
     }
 
     
-    private void loadGameAudio(){
-        
-    }
+   
     
     public void loadSplashScreen(){
     	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
@@ -359,6 +385,45 @@ public class ResourcesManager {
 
 	public Sound getRemovePlayersSound() {
 		return removePlayersSound;
-	}	
+	}
+	
+
+	public Sound getAppearPlayersSound() {
+		return appearPlayersSound;
+	}
+	
+	
+	
+	public Sound getGameOverPlayersSound() {
+		return gameOverPlayersSound;
+	}
+
+	public ITextureRegion getKindOneNeighborOne() {
+		return kindOneNeighborOne;
+	}
+
+	public ITextureRegion getKindOneNeighborTwo() {
+		return kindOneNeighborTwo;
+	}
+
+	public ITextureRegion getKindOneNeighborThree() {
+		return kindOneNeighborThree;
+	}
+
+	public ITextureRegion getKindOneNeighborFour() {
+		return kindOneNeighborFour;
+	}
+
+	public ITextureRegion getKindOneNeighborFive() {
+		return kindOneNeighborFive;
+	}
+
+	public ITextureRegion getCross() {
+		return cross;
+	}
+
+
+	
+	
 	
 }

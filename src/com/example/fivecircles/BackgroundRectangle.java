@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.Stack;
 
 import org.andengine.entity.primitive.Rectangle;
+import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 import org.andengine.entity.text.TextOptions;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.font.Font;
 import org.andengine.opengl.font.FontLibrary;
 import org.andengine.opengl.font.FontUtils;
+import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.adt.align.HorizontalAlign;
 import org.andengine.util.adt.color.Color;
@@ -80,10 +82,11 @@ public class BackgroundRectangle extends Rectangle implements IBackgroundRectang
 		
 		//Set its position and height and width to player inside its
 		//We need cast it
-		((Rectangle)this.player).setX(getX());
-		((Rectangle)this.player).setY(getY());
-		((Rectangle)this.player).setWidth(getWidth());
-		((Rectangle)this.player).setHeight(getHeight());
+		
+		((Sprite)this.player).setX(getX());
+		((Sprite)this.player).setY(getY());
+		((Sprite)this.player).setWidth(getWidth());
+		((Sprite)this.player).setHeight(getHeight());
 		
 		this.player.addIBackgroundRectabgle(this);
 		
@@ -110,7 +113,6 @@ public class BackgroundRectangle extends Rectangle implements IBackgroundRectang
 	@Override
 	public boolean isTaken() {
 		// TODO Auto-generated method stub
-		
 		//Return true if it has a player in it.
 		return this.player != null;
 	}
@@ -134,8 +136,8 @@ public class BackgroundRectangle extends Rectangle implements IBackgroundRectang
 	public synchronized void drawCross() {
 		// TODO Auto-generated method stub
 	   if(!this.isChecked){
-		   setScale(0.8f);
-		   setColor(Color.ABGR_PACKED_RED_CLEAR);
+		   Sprite cross = new Sprite(getWidth()/2, getHeight()/2, ResourcesManager.getInstance().getCross(), super.getVertexBufferObjectManager());
+		   this.attachChild(cross);
 	   }
 	}
 	
@@ -178,14 +180,19 @@ public class BackgroundRectangle extends Rectangle implements IBackgroundRectang
 	@Override
 	public void eraseCross() {
 		// TODO Auto-generated method stub
-		this.setColor(0.1f,0.1f,0.1f,0.1f);
-		this.setScale(1f);
+		ResourcesManager.getInstance().getEngine()
+		.runOnUpdateThread(new Runnable() {
+			@Override
+			public void run() {
+				detachChildren();
+			}
+		});
 	}
 
 	@Override
 	public synchronized ArrayList<IBackgroundRectangle> checkColorNeighbors() {
 		// TODO Auto-generated method stub
-		Color color = ((Rectangle)this.player).getColor();
+		ITextureRegion textureRegion = ((Sprite)this.player).getTextureRegion();
 		ArrayList<IBackgroundRectangle> sameColoRectangles = new ArrayList<IBackgroundRectangle>();
 		ArrayList<IBackgroundRectangle> checkedRectangles = new ArrayList<IBackgroundRectangle>();
 		Stack<IBackgroundRectangle> stack = new Stack<IBackgroundRectangle>();
@@ -194,7 +201,7 @@ public class BackgroundRectangle extends Rectangle implements IBackgroundRectang
 			checkedRectangles.add(rectangle);
 			IPlayer player = rectangle.getIPlayer();
 			if(player != null){
-				if(((Rectangle)player).getColor().equals(color)){
+				if(((Sprite)player).getTextureRegion().equals(textureRegion)){
 					if(!sameColoRectangles.contains(rectangle)){
 						sameColoRectangles.add(rectangle);
 					}
