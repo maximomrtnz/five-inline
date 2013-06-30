@@ -56,6 +56,8 @@ public class ResourcesManager {
     //---------------------------------------------
     
     private Font font;
+    private Font scoreFont;
+    private Font freckleFaceRegular;
     
     //---------------------------------------------
     // TEXTURES & TEXTURE REGIONS
@@ -63,9 +65,12 @@ public class ResourcesManager {
     
     
     private BitmapTextureAtlas splashTextureAtlas; 
+    private BitmapTextureAtlas loadingTextureAtlas;
+    private ITextureRegion loadingBackground;
     private ITextureRegion menuBackgroundRegion;
-    private ITextureRegion playRegion;
-    private ITextureRegion optionsRegion;
+    private ITextureRegion playMenuButton;
+    private ITextureRegion howToPlayMenuButton;
+    private ITextureRegion scoreMenuButton;
     private ITextureRegion splashRegion;
     
     
@@ -91,6 +96,7 @@ public class ResourcesManager {
     private ITextureRegion kindOneNeighborFour;
     private ITextureRegion kindOneNeighborFive;
     private ITextureRegion cross;
+    private ITextureRegion gameScreenBackground;
     
         
     private BuildableBitmapTextureAtlas menuTextureAtlas;
@@ -117,13 +123,17 @@ public class ResourcesManager {
         loadGameAudio();
     }
     
+    public void loadLoadingResources(){
+    	loadLoadingGraphics();
+    }
+    
     private void loadMenuGraphics(){
     	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/menu/");
     	this.menuTextureAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024, TextureOptions.BILINEAR);
-    	this.menuBackgroundRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "menu_background.png");
-    	this.playRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "play.png");
-    	this.optionsRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "options.png");
-    	
+    	this.menuBackgroundRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "menu_screen.png");
+    	this.playMenuButton = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "play_button.png");
+    	this.scoreMenuButton = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "scores_button.png");
+    	this.howToPlayMenuButton = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "howto_button.png");
     	//Here We are going to create a buildable bitmap texture atlas  
     	//so we don't have to specify positions of particular graphics inside texture. 
     	try{
@@ -154,6 +164,9 @@ public class ResourcesManager {
         back = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "back.png");
         
         // Game Scene Graphics
+        gameScreenBackground = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "game_screen.png");
+        
+        
         kindOneNeighborOne = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "neighbor-1.png");
         kindOneNeighborTwo = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "neighbor-2.png");
         kindOneNeighborThree = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "neighbor-3.png");
@@ -161,6 +174,7 @@ public class ResourcesManager {
         kindOneNeighborFive = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "neighbor-5.png");
         
         cross = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "cross.png");
+        
         
         try{
             this.gameTextureAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 1, 0));
@@ -214,8 +228,17 @@ public class ResourcesManager {
 	}
 
 	private void loadGameFonts(){
-        
-    }
+		FontFactory.setAssetBasePath("font/");
+   	 	final ITexture scoreFontTexture = new BitmapTextureAtlas(activity.getTextureManager(), 256, 256, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+   	 	final ITexture freckleFaceRegularTexture = new BitmapTextureAtlas(activity.getTextureManager(), 256, 256, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+	 	
+   	 	scoreFont = FontFactory.createStrokeFromAsset(activity.getFontManager(), scoreFontTexture, activity.getAssets(), "Inconsolata.otf", 40, true, Color.BLACK, 2, Color.BLACK);
+   	 	freckleFaceRegular = FontFactory.createStrokeFromAsset(activity.getFontManager(), freckleFaceRegularTexture, activity.getAssets(), "FreckleFace-Regular.ttf", 60, true, Color.WHITE, 2, Color.WHITE);
+   	 	
+   	 	scoreFont.load();
+   	 	freckleFaceRegular.load();
+    
+	}
     
     
 
@@ -230,15 +253,27 @@ public class ResourcesManager {
    
     
     public void loadSplashScreen(){
-    	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
+    	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/splash/");
     	splashTextureAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 512, 1024, TextureOptions.BILINEAR);
-    	splashRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(splashTextureAtlas, activity, "splash.png", 0, 0);
+    	splashRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(splashTextureAtlas, activity, "splash_screen.png", 0, 0);
     	splashTextureAtlas.load();
+    }
+    
+    public void loadLoadingGraphics(){
+    	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/loading/");
+    	loadingTextureAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 512, 1024, TextureOptions.BILINEAR);
+    	loadingBackground = BitmapTextureAtlasTextureRegionFactory.createFromAsset(loadingTextureAtlas, activity, "loading_screen.png", 0, 0);
+    	loadingTextureAtlas.load();
     }
     
     public void unloadSplashScreen(){
     	splashTextureAtlas.unload();
     	splashRegion = null;
+    }
+    
+    public void unloadLoadingScreen(){
+    	loadingTextureAtlas.unload();
+    	loadingTextureAtlas = null;
     }
     
     //This method will help us to free some memory 
@@ -252,7 +287,8 @@ public class ResourcesManager {
     }
     
     public void unloadGameTextures(){
-        // TODO (Since we did not create any textures for game scene yet)
+        // TODO
+    	gameTextureAtlas.unload();
     }
     
     /**
@@ -329,25 +365,26 @@ public class ResourcesManager {
 	public ITextureRegion getMenuBackgroundRegion() {
 		return menuBackgroundRegion;
 	}
-
-	public void setMenuBackgroundRegion(ITextureRegion menuBackgroundRegion) {
-		this.menuBackgroundRegion = menuBackgroundRegion;
+	
+	public ITextureRegion getGameScreenBackground() {
+		return gameScreenBackground;
 	}
 
-	public ITextureRegion getPlayRegion() {
-		return playRegion;
+	public ITextureRegion getPlayMenuButtonRegion() {
+		return this.playMenuButton;
+	}
+	
+	public ITextureRegion getScoreMenuButtonRegion() {
+		return this.scoreMenuButton;
 	}
 
-	public void setPlayRegion(ITextureRegion playRegion) {
-		this.playRegion = playRegion;
+	
+	public ITextureRegion getLoadingBackground() {
+		return loadingBackground;
 	}
 
-	public ITextureRegion getOptionsRegion() {
-		return optionsRegion;
-	}
-
-	public void setOptionsRegion(ITextureRegion optionsRegion) {
-		this.optionsRegion = optionsRegion;
+	public ITextureRegion getHowToPlayMenuButtonRegion() {
+		return this.howToPlayMenuButton;
 	}
 
 	public BuildableBitmapTextureAtlas getMenuTextureAtlas() {
@@ -360,6 +397,14 @@ public class ResourcesManager {
 
 	public Font getFont() {
 		return font;
+	}
+	
+	public Font getScoreFont() {
+		return scoreFont;
+	}
+	
+	public Font getFreckleFaceRegular() {
+		return freckleFaceRegular;
 	}
 
 	public ITextureRegion getSquare() {

@@ -67,12 +67,12 @@ public class GameOverScene extends BaseScene implements IOnMenuItemClickListener
 		
 		//Add Reload Button
 		SpriteMenuItem reloadButton = new SpriteMenuItem(0, ResourcesManager.getInstance().getReload(), super.getVbom());
-		reloadButton.setPosition(200, super.getCamera().getCenterY());
+		reloadButton.setPosition(200, super.getCamera().getCenterY()-40);
 		menuChildScene.addMenuItem(reloadButton);
 		
 		//Add Back Button
 		SpriteMenuItem backButton = new SpriteMenuItem(1, ResourcesManager.getInstance().getBack(), super.getVbom());
-		backButton.setPosition(280, super.getCamera().getCenterY());
+		backButton.setPosition(280, super.getCamera().getCenterY()-40);
 		menuChildScene.addMenuItem(backButton);
 		
 	}
@@ -85,15 +85,16 @@ public class GameOverScene extends BaseScene implements IOnMenuItemClickListener
 		attachChild(rectangle);
 		
 		//Pause Rectangle
-		final Rectangle pauseRectangle = new Rectangle(super.getCamera().getCenterX(), super.getCamera().getCenterY(), 400, 300,super.getVbom());
+		final Rectangle pauseRectangle = new Rectangle(super.getCamera().getCenterX(), super.getCamera().getCenterY(), 400, 250,super.getVbom());
 		pauseRectangle.setColor(1f, 1f, 1f, 1f);
 		attachChild(pauseRectangle);
 		
 		//Pause Text
-		Text pauseText = new Text(super.getCamera().getCenterX(), super.getCamera().getCenterY()+100, super.getResourcesManager().getFont(),
-				"Game Over", new TextOptions(HorizontalAlign.LEFT),
+		Text pauseText = new Text(super.getCamera().getCenterX(), super.getCamera().getCenterY()+80, super.getResourcesManager().getFreckleFaceRegular(),
+				"game over", new TextOptions(HorizontalAlign.LEFT),
 				super.getVbom());
 		
+		pauseText.setColor(153f/255f, 56f/255f,159f/255f );
 		attachChild(pauseText);
 		
 	}

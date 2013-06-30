@@ -3,6 +3,7 @@ package com.example.fivecircles.gamescenes;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import org.andengine.engine.camera.Camera;
 import org.andengine.engine.camera.hud.HUD;
 import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.AlphaModifier;
@@ -24,6 +25,7 @@ import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 import org.andengine.entity.text.TextOptions;
 import org.andengine.input.touch.TouchEvent;
+import org.andengine.opengl.util.GLState;
 import org.andengine.util.MailUtils;
 import org.andengine.util.SAXUtils;
 import org.andengine.util.adt.align.HorizontalAlign;
@@ -99,15 +101,6 @@ public class GameScene extends BaseScene implements Observer {
 
 	private boolean isGameRunning = true;
 	
-	//-----------------------------------------------------
-	//	PAUSE BUTTONS
-	//-----------------------------------------------------
-	
-	private SpriteMenuItem btnPlay;
-	private SpriteMenuItem btnReload;
-	private SpriteMenuItem btnSound;
-	private SpriteMenuItem btnBack;
-	
 	// ----------------------------------------------------
 	//	CONSTANTS
 	// ----------------------------------------------------
@@ -161,36 +154,67 @@ public class GameScene extends BaseScene implements Observer {
 	}
 
 	private void createBackground() {
-		setBackground(new Background(1.0f, 1.0f, 1.0f));
+		Sprite background = new Sprite(0, 0, super.getResourcesManager().getGameScreenBackground(), super.getVbom())
+		{
+			//We will override this method to enabled dithering
+		    @Override
+		    protected void preDraw(GLState pGLState, Camera pCamera) 
+		    {
+		       super.preDraw(pGLState, pCamera);
+		       pGLState.enableDither();
+		    }
+		};
+		        
+		//splash.setScale(1.5f);
+		background.setPosition(240,400);
+		attachChild(background);
 	}
 
 	private void createHUD() {
 		// We will to create a HUD to show the score everytime
 		// A HUD is important to "memory optimization"
-		gameHUD = new HUD();
-
-		//Create Current Score Text
-		scoreText = new Text(100, 700, super.getResourcesManager().getFont(),
-				"Score: 0123456789", new TextOptions(HorizontalAlign.LEFT),
+		gameHUD = new HUD(); 
+		
+		Text scoreTittle = new Text(super.getCamera().getCenterX(), 700, super.getResourcesManager().getScoreFont(),
+				"score", new TextOptions(HorizontalAlign.LEFT),
 				super.getVbom());
-		scoreText.setScale(0.8f);
+		
+		Text highScoreTittle = new Text(super.getCamera().getCenterX(), 600, super.getResourcesManager().getScoreFont(),
+				"high score", new TextOptions(HorizontalAlign.LEFT),
+				super.getVbom());
+		
+		scoreTittle.setText("score");
+		highScoreTittle.setText("high score");
+		
+		scoreTittle.setSkewCenter(0, 0);
+		highScoreTittle.setSkew(0,0);
+		
+		gameHUD.attachChild(scoreTittle);
+		gameHUD.attachChild(highScoreTittle);
+		//Create Current Score Text
+		
+		scoreText = new Text(super.getCamera().getCenterX(), 650, super.getResourcesManager().getScoreFont(),
+				"0123456789", new TextOptions(HorizontalAlign.LEFT),
+				super.getVbom());
+		
 		scoreText.setSkewCenter(0, 0);
-		scoreText.setText("Score: 0");
+		
+		scoreText.setText("0");
+		
 		gameHUD.attachChild(scoreText);
 		
 		//Create High Score Text
-		maxScoreText = new Text(160, 600,
-				super.getResourcesManager().getFont(),
-				"High Score: 0123456789",
+		maxScoreText = new Text(super.getCamera().getCenterX(), 550,
+				super.getResourcesManager().getScoreFont(),
+				"0123456789",
 				new TextOptions(HorizontalAlign.LEFT), super.getVbom());
-		maxScoreText.setScale(0.8f);
 		maxScoreText.setSkew(0, 0);
-		maxScoreText.setText("High Score:" + getHighScore());
+		maxScoreText.setText(Integer.toString(getHighScore()));
 		gameHUD.attachChild(maxScoreText);
 		
 		
 		
-		pausedSprite = new Sprite(100, 750,super.getResourcesManager().getPause() , super.getVbom()){
+		pausedSprite = new Sprite(super.getCamera().getCenterX()+(super.getResourcesManager().getPause().getWidth()*2.5f), 765,super.getResourcesManager().getPause() , super.getVbom()){
 			@Override
 			public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
 	   			 if(pSceneTouchEvent.getAction()==MotionEvent.ACTION_UP){
@@ -199,8 +223,7 @@ public class GameScene extends BaseScene implements Observer {
 	   			 return true;
        	}};
        	
-       	pausedSprite.setScale(2f);
-		gameHUD.attachChild(pausedSprite);
+       	gameHUD.attachChild(pausedSprite);
 		
 		gameHUD.registerTouchArea(pausedSprite);
 		
@@ -210,7 +233,7 @@ public class GameScene extends BaseScene implements Observer {
 	
 	public void addToScore(int i) {
 		score += i;
-		scoreText.setText("Score: " + score);
+		scoreText.setText(Integer.toString(score));
 	}
 
 	private void loadLevel(int levelID) {

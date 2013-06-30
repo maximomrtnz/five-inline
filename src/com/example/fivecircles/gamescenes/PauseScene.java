@@ -68,12 +68,12 @@ public class PauseScene extends BaseScene implements IOnMenuItemClickListener{
 		
 		//Add Play Button
 		SpriteMenuItem playButton = new SpriteMenuItem(0, ResourcesManager.getInstance().getPlay(), super.getVbom());
-		playButton.setPosition(120, super.getCamera().getCenterY());
+		playButton.setPosition(120, super.getCamera().getCenterY()-40);
 		menuChildScene.addMenuItem(playButton);
 		
 		//Add Reload Button
 		SpriteMenuItem reloadButton = new SpriteMenuItem(1, ResourcesManager.getInstance().getReload(), super.getVbom());
-		reloadButton.setPosition(200, super.getCamera().getCenterY());
+		reloadButton.setPosition(200, super.getCamera().getCenterY()-40);
 		menuChildScene.addMenuItem(reloadButton);
 		
 		//Add Sound Item
@@ -83,7 +83,7 @@ public class PauseScene extends BaseScene implements IOnMenuItemClickListener{
 		if(!AudioManager.getInstance().isSoundEnable()){
 			toggleButtonState = new SoundButtonStateOff();
 		}
-		soundButton = new ToggleButtonMenu(280, super.getCamera().getCenterY(), super.getResourcesManager().getSound(), soundOn,soundOff, super.getVbom(), toggleButtonState);
+		soundButton = new ToggleButtonMenu(280, super.getCamera().getCenterY()-40, super.getResourcesManager().getSound(), soundOn,soundOff, super.getVbom(), toggleButtonState);
 		if(AudioManager.getInstance().isSoundEnable()){
 			soundButton.attachChild(soundOn);
 		}else{
@@ -96,7 +96,7 @@ public class PauseScene extends BaseScene implements IOnMenuItemClickListener{
 		
 		//Add Back Button
 		SpriteMenuItem backButton = new SpriteMenuItem(2, ResourcesManager.getInstance().getBack(), super.getVbom());
-		backButton.setPosition(360, super.getCamera().getCenterY());
+		backButton.setPosition(360, super.getCamera().getCenterY()-40);
 		menuChildScene.addMenuItem(backButton);
 		
 	}
@@ -109,14 +109,16 @@ public class PauseScene extends BaseScene implements IOnMenuItemClickListener{
 		attachChild(rectangle);
 		
 		//Pause Rectangle
-		final Rectangle pauseRectangle = new Rectangle(super.getCamera().getCenterX(), super.getCamera().getCenterY(), 400, 300,super.getVbom());
+		final Rectangle pauseRectangle = new Rectangle(super.getCamera().getCenterX(), super.getCamera().getCenterY(), 400, 250,super.getVbom());
 		pauseRectangle.setColor(1f, 1f, 1f, 1f);
 		attachChild(pauseRectangle);
 		
 		//Pause Text
-		Text pauseText = new Text(super.getCamera().getCenterX(), super.getCamera().getCenterY()+100, super.getResourcesManager().getFont(),
-				"Paused", new TextOptions(HorizontalAlign.LEFT),
+		Text pauseText = new Text(super.getCamera().getCenterX(), super.getCamera().getCenterY()+80, super.getResourcesManager().getFreckleFaceRegular(),
+				"paused", new TextOptions(HorizontalAlign.LEFT),
 				super.getVbom());
+		
+		pauseText.setColor(153f/255f, 56f/255f,159f/255f );
 		
 		attachChild(pauseText);
 		

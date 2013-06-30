@@ -1,24 +1,25 @@
 package com.example.fivecircles.gamescenes;
 
-import org.andengine.engine.camera.Camera;
-import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.sprite.Sprite;
-import org.andengine.entity.text.Text;
 import org.andengine.opengl.util.GLState;
-import org.andengine.util.adt.color.Color;
-
+import org.andengine.engine.camera.Camera;
 
 import com.example.fivecircles.SceneManager;
 import com.example.fivecircles.SceneManager.SceneType;
 
-public class LoadingScene extends BaseScene{
+public class SplashScene extends BaseScene{
 	
-	private Sprite loadingBackground;
+	//------------------------------------------------
+	//					VARIABLES
+	//------------------------------------------------
 	
+	private Sprite splash;
+
 	@Override
 	public void createScene() {
 		// TODO Auto-generated method stub
-		loadingBackground = new Sprite(0, 0, super.getResourcesManager().getLoadingBackground(), super.getVbom())
+		
+		splash = new Sprite(0, 0, super.getResourcesManager().getSplashRegion(), super.getVbom())
 		{
 			//We will override this method to enabled dithering
 		    @Override
@@ -30,27 +31,28 @@ public class LoadingScene extends BaseScene{
 		};
 		        
 		//splash.setScale(1.5f);
-		loadingBackground.setPosition(240,400);
-		attachChild(loadingBackground);
+		splash.setPosition(240,400);
+		attachChild(splash);
+		
 	}
 
 	@Override
 	public void onBackKeyPressed() {
 		// TODO Auto-generated method stub
-		return;
+		
 	}
 
 	@Override
 	public SceneType getSceneType() {
 		// TODO Auto-generated method stub
-		return SceneType.SCENE_LOADING;
+		return SceneType.SCENE_SPLASH;
 	}
 
 	@Override
 	public void disposeScene() {
 		// TODO Auto-generated method stub
-		loadingBackground.detachSelf();
-		loadingBackground.dispose();
+		splash.detachSelf();
+	    splash.dispose();
 	    this.detachSelf();
 	    this.dispose();
 	}
