@@ -1,0 +1,99 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/activity_background"
+    android:padding="15sp"
+    android:id="@+id/howToPlayLayout">
+    
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+			
+            <TextView
+    			android:id="@+id/firstTitle"
+   				android:gravity="left"
+    			android:layout_height="wrap_content"
+    			android:layout_width="wrap_content"
+    			style="@style/TitleHowToPlay"
+       			android:text="#pichqa"></TextView>
+           
+            
+            <TextView
+    			android:id="@+id/firstParagraph"
+   				android:gravity="left"
+    			android:layout_height="fill_parent"
+    			android:layout_width="wrap_content"
+    			style="@style/ParagraphHowToPlay"
+    			android:maxLines="3"
+    			android:lines="3"
+    			android:text="The goal of this game is get the highest score by removing shapes."></TextView>
+            
+            <ImageView
+                android:id="@+id/firstImage" 
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/howtoplay_movements_1"/>
+            
+            <TextView
+    			android:id="@+id/secondTitle"
+   				android:gravity="left"
+    			android:layout_height="wrap_content"
+    			android:layout_width="wrap_content"
+    			style="@style/TitleHowToPlay"
+       			android:text="How to remove shapes?"></TextView>
+            
+           	<TextView
+    			android:id="@+id/secondParagraph"
+   				android:gravity="left"
+    			android:layout_height="wrap_content"
+    			android:layout_width="wrap_content"
+    			style="@style/ParagraphHowToPlay"
+       			android:text="To remove shapes you need to group five or more shapes with the same color.You can put five or more shape vertically, horizontally or also you can group shape until join five or more shape. You will earn ten points to each removed shape."></TextView>
+           	 
+            
+              <TextView
+    			android:id="@+id/thirdTitle"
+   				android:gravity="left"
+    			android:layout_height="wrap_content"
+    			android:layout_width="wrap_content"
+    			style="@style/TitleHowToPlay"
+    			android:text="How to move shapes?"></TextView>
+            
+            <TextView
+    			android:id="@+id/thirdParagraph"
+   				android:gravity="left"
+    			android:layout_height="fill_parent"
+    			android:layout_width="wrap_content"
+    			android:maxLines="7"
+    			android:lines="7"    			
+    			style="@style/ParagraphHowToPlay"
+    			android:text="To move a shape you only need touch it and then touch an empty rectangle. But if you touch an taken rectangle you can't move the shape.New shapes will generate on the board after every move."></TextView>
+            
+            <TextView
+    			android:id="@+id/fourthTitle"
+   				android:gravity="left"
+    			android:layout_height="wrap_content"
+    			android:layout_width="wrap_content"
+    			style="@style/TitleHowToPlay"
+    			android:text="How to cancel a movement?"></TextView>
+            
+            <TextView
+    			android:id="@+id/fourthParagraph"
+   				android:gravity="left"
+    			android:layout_height="fill_parent"
+    			android:layout_width="wrap_content"
+    			android:maxLines="5"
+    			android:lines="5"			
+    			style="@style/ParagraphHowToPlay"
+    			android:text="To cancel a movement you need to touch the selected text again. After that you can touch another shape to move."></TextView>
+
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>

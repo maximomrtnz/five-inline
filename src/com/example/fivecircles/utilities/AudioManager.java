@@ -4,8 +4,8 @@ import org.andengine.audio.sound.Sound;
 
 import android.content.SharedPreferences;
 
-import com.example.fivecircles.GameActivity;
 import com.example.fivecircles.ResourcesManager;
+import com.example.fivecircles.activities.GameActivity;
 
 public class AudioManager {
 	

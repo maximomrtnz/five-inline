@@ -23,6 +23,8 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 import org.andengine.util.debug.Debug;
 
+import com.example.fivecircles.activities.GameActivity;
+
 import android.graphics.Color;
 
 public class ResourcesManager {

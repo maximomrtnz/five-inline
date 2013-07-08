@@ -9,10 +9,12 @@ import org.andengine.entity.sprite.Sprite;
 import org.andengine.engine.camera.Camera;
 import org.andengine.opengl.util.GLState;
 
+import android.content.Intent;
 import android.util.Log;
 
 import com.example.fivecircles.SceneManager;
 import com.example.fivecircles.SceneManager.SceneType;
+import com.example.fivecircles.activities.HowToPlayActivity;
 
 public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener{
 	
@@ -21,8 +23,8 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 	//-------------------------------------------
 	private MenuScene menuChildScene;
 	private final int MENU_PLAY = 0;
-	private final int MENU_SCORES = 1;
-	private final int MENU_HOWTOPLAY = 2;
+	//private final int MENU_SCORES = 1;
+	private final int MENU_HOWTOPLAY = 1;
 	
 	@Override
 	public void createScene() {
@@ -70,20 +72,20 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 		menuChildScene.setPosition(0, 0);
 	  
 		final IMenuItem playMenuItem = new ScaleMenuItemDecorator(new SpriteMenuItem(MENU_PLAY, super.getResourcesManager().getPlayMenuButtonRegion(), super.getVbom()), 1.1f, 1);
-	    final IMenuItem scoresMenuItem = new ScaleMenuItemDecorator(new SpriteMenuItem(MENU_SCORES, super.getResourcesManager().getScoreMenuButtonRegion(), super.getVbom()), 1.1f, 1);
+	    //final IMenuItem scoresMenuItem = new ScaleMenuItemDecorator(new SpriteMenuItem(MENU_SCORES, super.getResourcesManager().getScoreMenuButtonRegion(), super.getVbom()), 1.1f, 1);
 	    final IMenuItem howToPlayMenuItem = new ScaleMenuItemDecorator(new SpriteMenuItem(MENU_HOWTOPLAY, super.getResourcesManager().getHowToPlayMenuButtonRegion(), super.getVbom()), 1.1f, 1);
 	    
 	  
 	    
 	    menuChildScene.addMenuItem(playMenuItem);
-	    menuChildScene.addMenuItem(scoresMenuItem);
+	    //menuChildScene.addMenuItem(scoresMenuItem);
 	    menuChildScene.addMenuItem(howToPlayMenuItem);
 	    menuChildScene.buildAnimations();
 	    menuChildScene.setBackgroundEnabled(false);
 	    
 	    playMenuItem.setPosition(playMenuItem.getX(), playMenuItem.getY() + 10);
-	    scoresMenuItem.setPosition(scoresMenuItem.getX(), scoresMenuItem.getY()-30);
-	    howToPlayMenuItem.setPosition(howToPlayMenuItem.getX(), howToPlayMenuItem.getY()-60);
+	    //scoresMenuItem.setPosition(scoresMenuItem.getX(), scoresMenuItem.getY()-30);
+	    howToPlayMenuItem.setPosition(howToPlayMenuItem.getX(), howToPlayMenuItem.getY()-30);
 	    menuChildScene.setOnMenuItemClickListener(this);
 	    
 	    setChildScene(menuChildScene);
@@ -95,11 +97,16 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 		// TODO Auto-generated method stub
 		switch(pMenuItem.getID()){
         	case MENU_PLAY:
-        		 //Load Game Scene!
+        		 //Load Game Scene
                 SceneManager.getInstance().loadGameScene(super.getEngine());
         		return true;
-        	case MENU_SCORES:
+        	case MENU_HOWTOPLAY:
+        		//Load How To Play Scene
+        		//SceneManager.getInstance().loadHowToPlayScene(super.getEngine());
+        		Intent i = new Intent(super.getActivity(), HowToPlayActivity.class);
+        		super.getActivity().startActivity(i);
         		return true;
+	
         	default:
         		return false;
 		}

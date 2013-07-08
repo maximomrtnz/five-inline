@@ -48,7 +48,6 @@ import android.util.Log;
 import android.view.MotionEvent;
 
 import com.example.fivecircles.BackgroundRectangle;
-import com.example.fivecircles.GameActivity;
 import com.example.fivecircles.IBackgroundRectangle;
 import com.example.fivecircles.IPlayer;
 import com.example.fivecircles.Observable;
@@ -61,6 +60,7 @@ import com.example.fivecircles.PlayerRemover;
 import com.example.fivecircles.ResourcesManager;
 import com.example.fivecircles.SceneManager;
 import com.example.fivecircles.SceneManager.SceneType;
+import com.example.fivecircles.activities.GameActivity;
 import com.example.fivecircles.gamestates.GameState;
 import com.example.fivecircles.gamestates.SelectPlayer;
 import com.example.fivecircles.utilities.AudioManager;
