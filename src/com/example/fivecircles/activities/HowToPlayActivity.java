@@ -1,5 +1,8 @@
 package com.example.fivecircles.activities;
 
+import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
 import com.example.fivecircles.R;
 
 import android.app.Activity;
@@ -12,14 +15,18 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 
-public class HowToPlayActivity extends Activity {
+public class HowToPlayActivity extends SherlockFragmentActivity {
 	@Override
 	 protected void onCreate(Bundle savedInstanceState) {
 	  
 		super.onCreate(savedInstanceState);
-		
+		this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+	            WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.howtoplay);
-	  
+		
+		//Enable Action Bar
+		getSupportActionBar().setDisplayShowCustomEnabled(true);
+	
 		//Get custom font
 		Typeface font = Typeface.createFromAsset(getAssets(), "font/Quicksand-Regular.otf");  
 		
@@ -54,4 +61,16 @@ public class HowToPlayActivity extends Activity {
 		
 		
 	 }
+	
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+	        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+	  
+	        getSupportMenuInflater().inflate(R.menu.actionbar, menu);
+
+	        return super.onCreateOptionsMenu(menu);
+	}
+	
+	
 }
