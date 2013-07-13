@@ -21,21 +21,23 @@ public class HowToPlayActivity extends Activity {
 		setContentView(R.layout.howtoplay);
 	  
 		//Get custom font
-		Typeface font = Typeface.createFromAsset(getAssets(), "font/Inconsolata.otf");  
+		Typeface font = Typeface.createFromAsset(getAssets(), "font/Quicksand-Regular.otf");  
+		
+		Typeface fontBold = Typeface.createFromAsset(getAssets(), "font/Quicksand-Bold.otf");  
 		
 		//This is one way to set your custom fonts
 		
 		TextView firstTitle = (TextView) findViewById(R.id.firstTitle);  
-		firstTitle.setTypeface(font);  
+		firstTitle.setTypeface(fontBold);  
 		
 		TextView secondTitle = (TextView) findViewById(R.id.secondTitle);  
-		secondTitle.setTypeface(font);  
+		secondTitle.setTypeface(fontBold);  
 		
 		TextView thirdTitle = (TextView) findViewById(R.id.thirdTitle);  
-		thirdTitle.setTypeface(font);  
+		thirdTitle.setTypeface(fontBold);  
 		
 		TextView fourTitle = (TextView) findViewById(R.id.fourthTitle);  
-		fourTitle.setTypeface(font);  
+		fourTitle.setTypeface(fontBold);  
 		
 		
 		TextView firstParagraph = (TextView) findViewById(R.id.firstParagraph);  

@@ -31,4 +31,10 @@
 	    <item name="android:paddingBottom">15sp</item>
 	</style>
 	
+	<style name="ImageHowToPlay">
+		<item name="android:paddingBottom">25sp</item>
+		<item name="android:paddingTop">15sp</item>
+		<item name="android:adjustViewBounds">true</item>
+	</style>
+	
 </resources>

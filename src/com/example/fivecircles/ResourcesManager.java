@@ -61,6 +61,7 @@ public class ResourcesManager {
     private Font scoreFont;
     private Font freckleFaceRegular;
     
+    
     //---------------------------------------------
     // TEXTURES & TEXTURE REGIONS
     //---------------------------------------------

@@ -16,19 +16,23 @@ public final class R {
         public static final int howtoplay_title=0x7f040001;
     }
     public static final class drawable {
-        public static final int howtoplay_movements_1=0x7f020000;
-        public static final int ic_launcher=0x7f020001;
+        public static final int howtoplay_movements=0x7f020000;
+        public static final int howtoplay_shape_cancelmovement=0x7f020001;
+        public static final int howtoplay_shape_movement=0x7f020002;
+        public static final int ic_launcher=0x7f020003;
     }
     public static final class id {
-        public static final int firstImage=0x7f080003;
+        public static final int firstImage=0x7f080005;
         public static final int firstParagraph=0x7f080002;
         public static final int firstTitle=0x7f080001;
-        public static final int fourthParagraph=0x7f080009;
-        public static final int fourthTitle=0x7f080008;
+        public static final int fourthParagraph=0x7f08000a;
+        public static final int fourthTitle=0x7f080009;
         public static final int howToPlayLayout=0x7f080000;
-        public static final int menu_settings=0x7f08000a;
-        public static final int secondParagraph=0x7f080005;
-        public static final int secondTitle=0x7f080004;
+        public static final int menu_settings=0x7f08000c;
+        public static final int secondImage=0x7f080008;
+        public static final int secondParagraph=0x7f080004;
+        public static final int secondTitle=0x7f080003;
+        public static final int thirdImage=0x7f08000b;
         public static final int thirdParagraph=0x7f080007;
         public static final int thirdTitle=0x7f080006;
     }
@@ -71,8 +75,9 @@ public final class R {
  All customizations that are NOT specific to a particular API-level can go here. 
          */
         public static final int AppTheme=0x7f060001;
+        public static final int ImageHowToPlay=0x7f060004;
         public static final int ParagraphHowToPlay=0x7f060003;
-        public static final int Theme_NoBackground=0x7f060004;
+        public static final int Theme_NoBackground=0x7f060005;
         /**  How To Play Layout 
          */
         public static final int TitleHowToPlay=0x7f060002;
