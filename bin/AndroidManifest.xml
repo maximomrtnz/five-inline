@@ -29,7 +29,7 @@
         
         <activity 
            	android:name="com.example.fivecircles.activities.HowToPlayActivity"
-           	android:theme="@style/Theme.Sherlock.Light"
+           	android:theme="@style/Theme.Styled"
            	android:screenOrientation="portrait">
         </activity>
         

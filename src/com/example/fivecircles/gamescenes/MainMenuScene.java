@@ -104,7 +104,7 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
         		//Load How To Play Scene
         		//SceneManager.getInstance().loadHowToPlayScene(super.getEngine());
         		Intent i = new Intent(super.getActivity(), HowToPlayActivity.class);
-        		super.getActivity().startActivity(i);
+        		super.getActivity().startActivityForResult(i, 1);
         		return true;
 	
         	default:

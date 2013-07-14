@@ -905,10 +905,11 @@ containing a value of this type.
         public static final int abs__textfield_searchview_right_holo_dark=0x7f02006d;
         public static final int abs__textfield_searchview_right_holo_light=0x7f02006e;
         public static final int abs__toast_frame=0x7f02006f;
-        public static final int howtoplay_movements=0x7f020070;
-        public static final int howtoplay_shape_cancelmovement=0x7f020071;
-        public static final int howtoplay_shape_movement=0x7f020072;
-        public static final int ic_launcher=0x7f020073;
+        public static final int actionbar_background=0x7f020070;
+        public static final int howtoplay_movements=0x7f020071;
+        public static final int howtoplay_shape_cancelmovement=0x7f020072;
+        public static final int howtoplay_shape_movement=0x7f020073;
+        public static final int ic_launcher=0x7f020074;
     }
     public static final class id {
         public static final int abs__action_bar=0x7f040020;
@@ -1126,6 +1127,7 @@ containing a value of this type.
         public static final int Theme_Sherlock_Light_DarkActionBar=0x7f0a0056;
         public static final int Theme_Sherlock_Light_NoActionBar=0x7f0a0058;
         public static final int Theme_Sherlock_NoActionBar=0x7f0a0057;
+        public static final int Theme_Styled=0x7f0a005f;
         /**  How To Play Layout 
          */
         public static final int TitleHowToPlay=0x7f0a005b;
@@ -1176,6 +1178,7 @@ containing a value of this type.
         public static final int Widget_Sherlock_SearchAutoCompleteTextView=0x7f0a0034;
         public static final int Widget_Sherlock_Spinner_DropDown_ActionBar=0x7f0a0024;
         public static final int Widget_Sherlock_TextView_SpinnerItem=0x7f0a0032;
+        public static final int Widget_Styled_ActionBar=0x7f0a0060;
     }
     public static final class styleable {
         /**  Attributes used to style the Action Bar. 

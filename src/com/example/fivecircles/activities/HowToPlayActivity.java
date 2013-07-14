@@ -1,11 +1,13 @@
 package com.example.fivecircles.activities;
 
+import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.example.fivecircles.R;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -20,12 +22,17 @@ public class HowToPlayActivity extends SherlockFragmentActivity {
 	 protected void onCreate(Bundle savedInstanceState) {
 	  
 		super.onCreate(savedInstanceState);
+		
 		this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 	            WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		
 		setContentView(R.layout.howtoplay);
 		
 		//Enable Action Bar
-		getSupportActionBar().setDisplayShowCustomEnabled(true);
+		
+		 ActionBar actionBar = getSupportActionBar();
+		 
+		actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME|ActionBar.DISPLAY_HOME_AS_UP);
 	
 		//Get custom font
 		Typeface font = Typeface.createFromAsset(getAssets(), "font/Quicksand-Regular.otf");  
@@ -64,13 +71,14 @@ public class HowToPlayActivity extends SherlockFragmentActivity {
 	
 	
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-	        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-	  
-	        getSupportMenuInflater().inflate(R.menu.actionbar, menu);
-
-	        return super.onCreateOptionsMenu(menu);
-	}
-	
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            Intent returnIntent = new Intent();
+            setResult(RESULT_CANCELED, returnIntent);        
+            finish();
+            return true;
+        }
+        return true;
+    }
 	
 }
