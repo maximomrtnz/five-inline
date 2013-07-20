@@ -8,8 +8,8 @@ import org.andengine.opengl.util.GLState;
 import org.andengine.util.adt.color.Color;
 
 
-import com.example.fivecircles.SceneManager;
-import com.example.fivecircles.SceneManager.SceneType;
+import com.example.managers.SceneManager;
+import com.example.managers.SceneManager.SceneType;
 
 public class LoadingScene extends BaseScene{
 	

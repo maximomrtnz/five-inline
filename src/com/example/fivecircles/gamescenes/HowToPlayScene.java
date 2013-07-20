@@ -10,8 +10,8 @@ import org.andengine.input.touch.detector.ScrollDetector.IScrollDetectorListener
 import org.andengine.input.touch.detector.SurfaceScrollDetector;
 import org.andengine.util.adt.color.Color;
 
-import com.example.fivecircles.SceneManager;
-import com.example.fivecircles.SceneManager.SceneType;
+import com.example.managers.SceneManager;
+import com.example.managers.SceneManager.SceneType;
 
 public class HowToPlayScene extends BaseScene implements IScrollDetectorListener, IOnSceneTouchListener{
     // ===========================================================

@@ -1,11 +1,10 @@
 package com.example.fivecircles.gamestates;
 
-import org.andengine.entity.IEntity;
+import org.andengine.entity.scene.ITouchArea;
 
 import com.example.fivecircles.IBackgroundRectangle;
 import com.example.fivecircles.IPlayer;
 import com.example.fivecircles.gamescenes.GameScene;
-import com.example.fivecircles.utilities.AudioManager;
 
 public class MovedPlayer extends GameState{
 
@@ -19,7 +18,7 @@ public class MovedPlayer extends GameState{
 		checkFive(gameScene,player);
 		addNewPlayers(gameScene, 3);
 		checkGameOver(gameScene);
-		gameScene.setGameState(new SelectPlayer());
+		gameScene.setGameState(new WaitingShapeSelection());
 	}
 
 	@Override
@@ -30,7 +29,7 @@ public class MovedPlayer extends GameState{
 	}
 
 	private void addNewPlayers(GameScene gameScene,int numberOfPlayer){
-		int i = 0;
+		/*int i = 0;
 		while(i<numberOfPlayer){
 			IEntity player = gameScene.addPlayer(gameScene, 0, 0, 0, 0);
 			gameScene.attachChild(player);
@@ -39,6 +38,19 @@ public class MovedPlayer extends GameState{
 			i++;
 		}
 		AudioManager.getInstance().soundAppearPlayers();
+		*/
+	}
+
+	@Override
+	public void loadGame(GameScene gameScene) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void areaTouch(GameScene gameScene, ITouchArea iTouchArea) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	

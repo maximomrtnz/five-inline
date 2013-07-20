@@ -1,5 +1,7 @@
 package com.example.fivecircles.gamestates;
 
+import org.andengine.entity.scene.ITouchArea;
+
 import com.example.fivecircles.IBackgroundRectangle;
 import com.example.fivecircles.IPlayer;
 import com.example.fivecircles.PlayerLeaf;
@@ -30,6 +32,19 @@ public class MovePlayer extends GameState{
 			gameScene.setGameState(new MovedPlayer());
 		
 		}
+		
+	}
+
+
+	@Override
+	public void loadGame(GameScene gameScene) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void areaTouch(GameScene gameScene, ITouchArea iTouchArea) {
+		// TODO Auto-generated method stub
 		
 	}
 	

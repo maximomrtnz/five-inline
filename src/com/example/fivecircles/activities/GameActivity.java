@@ -13,8 +13,9 @@ import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
 import org.andengine.entity.scene.Scene;
 import org.andengine.ui.activity.BaseGameActivity;
 
-import com.example.fivecircles.ResourcesManager;
-import com.example.fivecircles.SceneManager;
+import com.example.entities.Game;
+import com.example.managers.ResourcesManager;
+import com.example.managers.SceneManager;
 
 
 import android.content.SharedPreferences;
@@ -28,26 +29,19 @@ public class GameActivity extends BaseGameActivity {
 	
 
 	private Camera camera;
-	private ResourcesManager resourcesManager;
 	private int CAMERA_WIDTH = 480;
 	private int CAMERA_HEIGHT = 800;
-
+	private Game game = new Game();
 
 	@Override
 	public EngineOptions onCreateEngineOptions() {
 		// TODO Auto-generated method stub
-		
 		//Get Display Device Information 
-
-		this.camera = new Camera(0, 0, CAMERA_WIDTH, CAMERA_HEIGHT);
-		
-		
+		camera = new Camera(0, 0, CAMERA_WIDTH, CAMERA_HEIGHT);
 		EngineOptions engineOptions = new EngineOptions(true,
 				ScreenOrientation.PORTRAIT_SENSOR,  new FillResolutionPolicy(), camera);
 		engineOptions.getAudioOptions().setNeedsMusic(true).setNeedsSound(true);
 		engineOptions.setWakeLockOptions(WakeLockOptions.SCREEN_ON);
-		
-	
 		return engineOptions;
 	}
 	
@@ -60,11 +54,8 @@ public class GameActivity extends BaseGameActivity {
 	public void onCreateResources(
 			OnCreateResourcesCallback pOnCreateResourcesCallback) {
 		// TODO Auto-generated method stub
-		
 		ResourcesManager.prepareManager(mEngine, this, camera, getVertexBufferObjectManager());
-	    resourcesManager = ResourcesManager.getInstance();
 	    pOnCreateResourcesCallback.onCreateResourcesFinished();
-		
 	}
 
 	@Override
@@ -76,30 +67,40 @@ public class GameActivity extends BaseGameActivity {
 
 	@Override
 	public void onPopulateScene(Scene pScene,
-			OnPopulateSceneCallback pOnPopulateSceneCallback) {
+		OnPopulateSceneCallback pOnPopulateSceneCallback) {
 		// TODO Auto-generated method stub
-		//mEngine.registerUpdateHandler(new TimerHandler(2f,new GameTimeCallback(mEngine)));
-		 mEngine.registerUpdateHandler(new TimerHandler(2f, new ITimerCallback() 
-		    {
-		        public void onTimePassed(final TimerHandler pTimerHandler) 
-		        {
+		mEngine.registerUpdateHandler(new TimerHandler(2f, new ITimerCallback(){
+		        public void onTimePassed(final TimerHandler pTimerHandler){
 		            mEngine.unregisterUpdateHandler(pTimerHandler);
 		            SceneManager.getInstance().createMenuScene();
 		        }
-		    }));
+		  }));
 		
 		pOnPopulateSceneCallback.onPopulateSceneFinished();
 		
 	}
+	
 	@Override
 	protected void onDestroy(){
 	    super.onDestroy();
-	        
 	    if (this.isGameLoaded()) {
 	        System.exit(0);    
 	    }
 	}
 	
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		//Save Current Game
+	}
+	
+	@Override
+	protected synchronized void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		//Get Stored Game
+	}
 	
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event){  
@@ -107,6 +108,14 @@ public class GameActivity extends BaseGameActivity {
 	        SceneManager.getInstance().getCurrentScene().onBackKeyPressed();
 	    }
 	    return false; 
+	}
+
+	public Game getGame() {
+		return game;
+	}
+
+	public void setGame(Game game) {
+		this.game = game;
 	}
 	
 	

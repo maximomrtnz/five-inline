@@ -7,125 +7,72 @@ import org.andengine.engine.camera.Camera;
 import org.andengine.engine.camera.hud.HUD;
 import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.AlphaModifier;
-import org.andengine.entity.modifier.LoopEntityModifier;
-import org.andengine.entity.modifier.PathModifier;
-import org.andengine.entity.modifier.RotationModifier;
 import org.andengine.entity.modifier.ScaleModifier;
-import org.andengine.entity.modifier.SequenceEntityModifier;
 import org.andengine.entity.primitive.Rectangle;
-import org.andengine.entity.scene.IOnSceneTouchListener;
+import org.andengine.entity.scene.IOnAreaTouchListener;
+import org.andengine.entity.scene.ITouchArea;
 import org.andengine.entity.scene.Scene;
-import org.andengine.entity.scene.background.Background;
-import org.andengine.entity.scene.menu.MenuScene;
-import org.andengine.entity.scene.menu.MenuScene.IOnMenuItemClickListener;
-import org.andengine.entity.scene.menu.item.IMenuItem;
-import org.andengine.entity.scene.menu.item.SpriteMenuItem;
-import org.andengine.entity.shape.Shape;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 import org.andengine.entity.text.TextOptions;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.util.GLState;
-import org.andengine.util.MailUtils;
 import org.andengine.util.SAXUtils;
 import org.andengine.util.adt.align.HorizontalAlign;
-import org.andengine.util.adt.color.Color;
-import org.andengine.util.algorithm.path.Path;
-import org.andengine.util.debug.Debug;
 import org.andengine.util.level.EntityLoader;
-import org.andengine.util.level.IEntityLoader;
-import org.andengine.util.level.LevelLoader;
 import org.andengine.util.level.constants.LevelConstants;
 import org.andengine.util.level.simple.SimpleLevelEntityLoaderData;
 import org.andengine.util.level.simple.SimpleLevelLoader;
 import org.andengine.util.math.MathUtils;
-import org.andengine.util.modifier.ease.EaseSineInOut;
 import org.xml.sax.Attributes;
 
 import android.content.SharedPreferences;
-import android.graphics.Matrix;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.MotionEvent;
 
-import com.example.fivecircles.BackgroundRectangle;
+import com.example.entities.GameRectangle;
+import com.example.entities.GameShape;
 import com.example.fivecircles.IBackgroundRectangle;
 import com.example.fivecircles.IPlayer;
-import com.example.fivecircles.Observable;
-import com.example.fivecircles.Observer;
-import com.example.fivecircles.PlayerContainer;
-import com.example.fivecircles.PlayerFactory;
-import com.example.fivecircles.PlayerFactoryKindOneNeighbor;
-import com.example.fivecircles.PlayerLeaf;
-import com.example.fivecircles.PlayerRemover;
-import com.example.fivecircles.ResourcesManager;
-import com.example.fivecircles.SceneManager;
-import com.example.fivecircles.SceneManager.SceneType;
+import com.example.fivecircles.ShapeFactory;
+import com.example.fivecircles.ShapeFactoryTypeOne;
 import com.example.fivecircles.activities.GameActivity;
 import com.example.fivecircles.gamestates.GameState;
-import com.example.fivecircles.gamestates.SelectPlayer;
-import com.example.fivecircles.utilities.AudioManager;
-import com.example.fivecircles.utilities.SoundButtonStateOff;
-import com.example.fivecircles.utilities.SoundButtonStateOn;
-import com.example.fivecircles.utilities.ToggleButtonMenu;
-import com.example.fivecircles.utilities.ToggleButtonState;
+import com.example.managers.AudioManager;
+import com.example.managers.ResourcesManager;
+import com.example.managers.SceneManager;
+import com.example.managers.SceneManager.SceneType;
+import com.example.storage.LevelGameContract;
 
-public class GameScene extends BaseScene implements Observer {
-
-	// --------------------------------------------------
-	// VARIABLES
-	// ---------------------------------------------------
-
+public class GameScene extends BaseScene implements IOnAreaTouchListener {
+	
+	
 	private HUD gameHUD;
 	private Text scoreText;
 	private Text maxScoreText;
 	private Sprite pausedSprite;
 	
-	// Our Score
 	private int score = 0;
-
-	private Text gameOverText;
-
-	private boolean gameOverDisplayed = false;
-
-	private GameState state;
+	
+	private GameState gameState;
 
 	private IPlayer player;
 
-	private int idBackgroundRectangle = 0;
-
-	private ArrayList<IBackgroundRectangle> rectangles;
-
-	private ArrayList<IPlayer> playersToRemove;
-
+	
 	private IPlayer selectedPlayer;
 
-	private boolean isGameRunning = true;
-	
-	// ----------------------------------------------------
-	//	CONSTANTS
-	// ----------------------------------------------------
-
-	private static final String TAG_ENTITY = "entity";
-	private static final String TAG_ENTITY_ATTRIBUTE_X = "x";
-	private static final String TAG_ENTITY_ATTRIBUTE_Y = "y";
-	private static final String TAG_ENTITY_ATTRIBUTE_WIDTH = "width";
-	private static final String TAG_ENTITY_ATTRIBUTE_HEIGHT = "height";
-	private static final String TAG_ENTITY_ATTRIBUTE_TYPE = "type";
-
-	private static final Object TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_SQUARE = "square";
-	private static final Object TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_PLAYER = "player";
-
 	public static final String PREFS_NAME = "FiveNeighborPreferences";
-
+	
+	public GameScene(GameState gameState){
+		this.gameState = gameState;
+		this.gameState.loadGame(this);
+	}
+	
+	
 	@Override
 	public void createScene() {
 		// TODO Auto-generated method stub
-		createBackground();
-		createHUD();
-		loadLevel(1);
-		setBackgroundRectanglesNeighbors();
-		// Set Game State
-		setGameState(new SelectPlayer());
 	}
 
 	@Override
@@ -147,28 +94,12 @@ public class GameScene extends BaseScene implements Observer {
 	public void disposeScene() {
 		// TODO Auto-generated method stub
 		super.getCamera().setHUD(null);
-
 		// Set camera`s center position to
 		// its default value
 		super.getCamera().setCenter(240, 400);
+		
 	}
 
-	private void createBackground() {
-		Sprite background = new Sprite(0, 0, super.getResourcesManager().getGameScreenBackground(), super.getVbom())
-		{
-			//We will override this method to enabled dithering
-		    @Override
-		    protected void preDraw(GLState pGLState, Camera pCamera) 
-		    {
-		       super.preDraw(pGLState, pCamera);
-		       pGLState.enableDither();
-		    }
-		};
-		        
-		//splash.setScale(1.5f);
-		background.setPosition(240,400);
-		attachChild(background);
-	}
 
 	private void createHUD() {
 		// We will to create a HUD to show the score everytime
@@ -236,14 +167,11 @@ public class GameScene extends BaseScene implements Observer {
 		scoreText.setText(Integer.toString(score));
 	}
 
-	private void loadLevel(int levelID) {
+	public void loadNewLevel() {
 
-		final SimpleLevelLoader levelLoader = new SimpleLevelLoader(
-				super.getVbom());
+		final SimpleLevelLoader levelLoader = new SimpleLevelLoader(super.getVbom());
 
-		this.player = new PlayerContainer();
-
-		this.rectangles = new ArrayList<IBackgroundRectangle>();
+		
 
 		levelLoader
 				.registerEntityLoader(new EntityLoader<SimpleLevelEntityLoaderData>(
@@ -266,68 +194,90 @@ public class GameScene extends BaseScene implements Observer {
 
 		levelLoader
 				.registerEntityLoader(new EntityLoader<SimpleLevelEntityLoaderData>(
-						TAG_ENTITY) {
+					LevelGameContract.LEVEL_GAME_TAG_ENTITY) {
 					public IEntity onLoadEntity(
 							final String pEntityName,
 							final IEntity pParent,
 							final Attributes pAttributes,
 							final SimpleLevelEntityLoaderData pSimpleLevelEntityLoaderData)
 							throws IOException {
-						final float x = SAXUtils.getFloatAttributeOrThrow(
-								pAttributes, TAG_ENTITY_ATTRIBUTE_X);
-						final float y = SAXUtils.getFloatAttributeOrThrow(
-								pAttributes, TAG_ENTITY_ATTRIBUTE_Y);
+						
+						final int row = SAXUtils.getIntAttributeOrThrow(
+								pAttributes, LevelGameContract.LEVEL_GAME_TAG_ENTITY_ATTRIBUTE_ROW);
+						
+						final int column = SAXUtils.getIntAttributeOrThrow(
+								pAttributes, LevelGameContract.LEVEL_GAME_TAG_ENTITY_ATTRIBUTE_COLUMN);
+						
+						final float posX = SAXUtils.getFloatAttributeOrThrow(
+								pAttributes, LevelGameContract.LEVEL_GAME_TAG_ENTITY_ATTRIBUTE_X);
+						final float posY = SAXUtils.getFloatAttributeOrThrow(
+								pAttributes, LevelGameContract.LEVEL_GAME_TAG_ENTITY_ATTRIBUTE_Y);
 						final float width = SAXUtils.getFloatAttributeOrThrow(
-								pAttributes, TAG_ENTITY_ATTRIBUTE_WIDTH);
+								pAttributes, LevelGameContract.LEVEL_GAME_TAG_ENTITY_ATTRIBUTE_WIDTH);
 						final float height = SAXUtils.getFloatAttributeOrThrow(
-								pAttributes, TAG_ENTITY_ATTRIBUTE_HEIGHT);
+								pAttributes, LevelGameContract.LEVEL_GAME_TAG_ENTITY_ATTRIBUTE_HEIGHT);
 
 						final String type = SAXUtils.getAttributeOrThrow(
-								pAttributes, TAG_ENTITY_ATTRIBUTE_TYPE);
+								pAttributes, LevelGameContract.LEVEL_GAME_TAG_ENTITY_ATTRIBUTE_TYPE);
 
 						IEntity entity = null;
-						if (type.equals(TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_SQUARE)) {
-							entity = addShape(GameScene.this, x, y, width,
-									height, type);
-						} else if (type
-								.equals(TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_PLAYER)) {
-							entity = addPlayer(GameScene.this, x, y, width,
-									height);
+						
+						if (type.equals(LevelGameContract.LEVEL_GAME_TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_SQUARE)) {
+							entity = drawRectangle(row,column,posX, posY, width,height);
 						}
 						return entity;
 					}
 				});
 
-		levelLoader.loadLevelFromAsset(super.getActivity().getAssets(),
-				"level/" + "level" + levelID + ".xml");
+		levelLoader.loadLevelFromAsset(super.getActivity().getAssets(),	"level/" + "level.xml");
 	}
-
-	private IEntity addShape(BaseScene scene, float posX, float posY,
-			float width, float height, String type) {
-
-		IBackgroundRectangle rectangle = new BackgroundRectangle(posX, posY,
-				width, height, super.getVbom());
-		rectangle.setId(this.idBackgroundRectangle);
-		this.idBackgroundRectangle++;
-		this.rectangles.add(rectangle);
-		((Observable) rectangle).addObserver(this);
-		registerTouchArea((IEntity) rectangle);
-		return (Rectangle) rectangle;
-	}
-
-	public synchronized IEntity addPlayer(BaseScene scene, float posX, float posY,
-			float width, float height) {
-
-		int color = MathUtils.random(1, 5);
-		PlayerFactory playerFactory = new PlayerFactoryKindOneNeighbor();
-		IEntity iEntity = playerFactory.createPlayer(scene, posX, posY, width,
-				height, super.getVbom(), color);
-		registerTouchArea(iEntity);
-		this.player.addPlayer((PlayerLeaf) iEntity);
-		setPlayerToBackgroundRectangle((PlayerLeaf) iEntity);
-		((Observable) iEntity).addObserver(this);
+	
+	
+	public void drawBackgroundGame(){
 		
-		return iEntity;
+		Sprite background = new Sprite(0, 0, ResourcesManager.getInstance().getGameScreenBackground(), ResourcesManager.getInstance().getVbom()){
+			//We will override this method to enabled dithering
+		    @Override
+		    protected void preDraw(GLState pGLState, Camera pCamera){
+		       super.preDraw(pGLState, pCamera);
+		       pGLState.enableDither();
+		    }
+		};
+		     
+		background.setPosition(240,400);
+		
+		attachChild(background);
+	}
+	
+	
+	public IEntity drawRectangle(int row, int column, float posX, float posY,float width, float height) {
+		
+		Rectangle rectangle = new Rectangle(posX, posY, width, height, super.getVbom());
+		
+		rectangle.setColor(Color.GRAY);
+		
+		registerTouchArea(rectangle);
+		
+		rectangle.setUserData(new GameRectangle(row, column));
+		
+		rectangle.setTag(1);
+		
+		return rectangle;
+	}
+	
+	public IEntity drawShape(float posX, float posY,float width, float height, int type){
+		
+		ShapeFactory shapeFactory = new ShapeFactoryTypeOne();
+		
+		Sprite shape = shapeFactory.createShape(posX, posY, width, height, getVbom(), type);
+		
+		registerTouchArea(shape);
+		
+		attachChild(shape);
+		
+		shape.setTag(2);
+		
+		return shape;
 	}
 	
 	public void displayGameOverScene(){
@@ -335,48 +285,9 @@ public class GameScene extends BaseScene implements Observer {
 		setChildScene(new GameOverScene(), false, true, true);
 	}
 	
-	public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
-		return false;
-	}
-
-	private synchronized void setBackgroundRectanglesNeighbors() {
-
-		for (IBackgroundRectangle rectangle : this.rectangles) {
-
-			int id = rectangle.getId();
-			int leftNeighbor = id - 1;
-			int rigthNeighbor = id + 1;
-			int bottomNeighbor = id - 8;
-			int topNeighbor = id + 8;
-
-			if (topNeighbor <= 63) {
-				rectangle.addNeighbor(this.rectangles.get(topNeighbor));
-			}
-
-			if (bottomNeighbor >= 0) {
-				rectangle.addNeighbor(this.rectangles.get(bottomNeighbor));
-			}
-
-			// Test special cases (with less than four neighbor)
-
-			if (id % 8 == 0) {
-				// Rectangles on the left
-				rectangle.addNeighbor(this.rectangles.get(rigthNeighbor));
-			} else if ((id + 1) % 8 == 0) {
-				// Rectangles on the right
-				rectangle.addNeighbor(this.rectangles.get(leftNeighbor));
-			} else {
-				// The common case with four neighbor
-				rectangle.addNeighbor(this.rectangles.get(rigthNeighbor));
-				rectangle.addNeighbor(this.rectangles.get(leftNeighbor));
-			}
-
-		}
-
-	}
-
+	
 	public synchronized void setPlayerToBackgroundRectangle(IPlayer player) {
-
+		/*
 		ArrayList<IBackgroundRectangle> emptyRectangles = new ArrayList<IBackgroundRectangle>();
 
 		for (IBackgroundRectangle rectangle : this.rectangles) {
@@ -395,35 +306,12 @@ public class GameScene extends BaseScene implements Observer {
 					0.5f, 1.0f));
 			rectangle.addIPlayer(player);
 		
-		}
-
-	}
-
-	@Override
-	public void update(Observable observable, Object object) {
-
-		if (this.isGameRunning) {
-			// TODO Auto-generated method stub
-			if (observable instanceof IPlayer) {
-				if (String.valueOf(object).equals("TOUCHED")) {
-					// Player is touched pass the action to the GameState
-					this.state.playerTouched(this, (IPlayer) observable);
-				}
-
-			} else if (observable instanceof IBackgroundRectangle) {
-				if (String.valueOf(object).equals("TOUCHED")) {
-					// Player is touched pass the action to the GameState
-					this.state.backgroundTouched(this,
-							(IBackgroundRectangle) observable);
-				}
-			}
-
-		}
+		}*/
 
 	}
 
 	public void setGameState(GameState gameState) {
-		this.state = gameState;
+		this.gameState = gameState;
 	}
 
 	public IPlayer getPlayer() {
@@ -439,7 +327,8 @@ public class GameScene extends BaseScene implements Observer {
 	}
 
 	public ArrayList<IBackgroundRectangle> getRectangles() {
-		return this.rectangles;
+		//return this.rectangles;
+		return null;
 	}
 
 	public void removePlayer(IPlayer player) {
@@ -497,4 +386,22 @@ public class GameScene extends BaseScene implements Observer {
 		return highScore;
 	}
 
+	@Override
+	public boolean onAreaTouched(TouchEvent pSceneTouchEvent,
+			ITouchArea pTouchArea, float pTouchAreaLocalX,
+			float pTouchAreaLocalY) {
+		// TODO Auto-generated method stub
+		if(pSceneTouchEvent.isActionDown()) {
+			Rectangle rectangle = (Rectangle)pTouchArea;
+			GameRectangle gameRectangle = (GameRectangle)rectangle.getUserData();
+			Log.d("row", Integer.toString(gameRectangle.getRow()));
+			Log.d("column", Integer.toString(gameRectangle.getColumn()));		
+			return true;
+		}
+		return false;
+	}
+	
+	
+	
+	
 }

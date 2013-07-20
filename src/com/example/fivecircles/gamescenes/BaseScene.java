@@ -5,9 +5,9 @@ import org.andengine.engine.camera.Camera;
 import org.andengine.entity.scene.Scene;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
-import com.example.fivecircles.ResourcesManager;
-import com.example.fivecircles.SceneManager;
-import com.example.fivecircles.SceneManager.SceneType;
+import com.example.managers.ResourcesManager;
+import com.example.managers.SceneManager;
+import com.example.managers.SceneManager.SceneType;
 
 import android.app.Activity;
 

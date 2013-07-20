@@ -12,6 +12,7 @@ import org.andengine.entity.modifier.ScaleModifier;
 import android.util.Log;
 
 import com.example.fivecircles.gamescenes.GameScene;
+import com.example.managers.ResourcesManager;
 
 public class PlayerRemover implements IUpdateHandler{
 	

@@ -15,14 +15,14 @@ import org.andengine.util.adt.align.HorizontalAlign;
 import android.util.Log;
 import android.view.MotionEvent;
 
-import com.example.fivecircles.ResourcesManager;
-import com.example.fivecircles.SceneManager;
-import com.example.fivecircles.SceneManager.SceneType;
-import com.example.fivecircles.utilities.AudioManager;
 import com.example.fivecircles.utilities.SoundButtonStateOff;
 import com.example.fivecircles.utilities.SoundButtonStateOn;
 import com.example.fivecircles.utilities.ToggleButtonMenu;
 import com.example.fivecircles.utilities.ToggleButtonState;
+import com.example.managers.AudioManager;
+import com.example.managers.ResourcesManager;
+import com.example.managers.SceneManager;
+import com.example.managers.SceneManager.SceneType;
 
 public class GameOverScene extends BaseScene implements IOnMenuItemClickListener{
 	

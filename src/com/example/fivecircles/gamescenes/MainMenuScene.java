@@ -12,9 +12,10 @@ import org.andengine.opengl.util.GLState;
 import android.content.Intent;
 import android.util.Log;
 
-import com.example.fivecircles.SceneManager;
-import com.example.fivecircles.SceneManager.SceneType;
 import com.example.fivecircles.activities.HowToPlayActivity;
+import com.example.fivecircles.gamestates.LoadingNewGame;
+import com.example.managers.SceneManager;
+import com.example.managers.SceneManager.SceneType;
 
 public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener{
 	
@@ -98,7 +99,7 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 		switch(pMenuItem.getID()){
         	case MENU_PLAY:
         		 //Load Game Scene
-                SceneManager.getInstance().loadGameScene(super.getEngine());
+                SceneManager.getInstance().loadGameScene(super.getEngine(),new LoadingNewGame());
         		return true;
         	case MENU_HOWTOPLAY:
         		//Load How To Play Scene

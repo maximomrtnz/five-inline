@@ -17,6 +17,8 @@ import org.andengine.util.adt.align.HorizontalAlign;
 import org.andengine.util.adt.color.Color;
 import org.andengine.util.debug.Debug;
 
+import com.example.managers.ResourcesManager;
+
 import android.util.Log;
 
 
