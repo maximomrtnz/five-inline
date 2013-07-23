@@ -6,18 +6,19 @@ public class GameShape {
 	
 	public GameShape(int shapeType) {
 		// TODO Auto-generated constructor stub
+		this.shapeType = shapeType;
 	}
 	
 	/*
 	 * GETTERS
 	 */
-	public int getShapeId(){
+	public int getShapeType(){
 		return shapeType;
 	}
 	/*
 	 * SETTERS
 	 */
-	public void setShapeId(int shapeType){
+	public void setShapeType(int shapeType){
 		this.shapeType = shapeType;
 	}
 	

@@ -19,6 +19,8 @@ import com.example.managers.ResourcesManager;
 
 public abstract class GameState {
 	
+	private Sprite selectedShape;
+	
 	public abstract void playerTouched(GameScene gameScene,IPlayer player);
 	
 	public abstract void backgroundTouched(GameScene gameScene, IBackgroundRectangle rectangle);
@@ -106,18 +108,88 @@ public abstract class GameState {
 	protected Rectangle getRectangleFromGameRectangle(GameScene gameScene,GameRectangle gameRectangle){
 		Rectangle rectangle = null;
 		int i = 0;
-		boolean foundIt = false;
-		while(i < gameScene.getChildCount() && !foundIt){
+		boolean findIt = false;
+		while(i < gameScene.getChildCount() && !findIt){
 			if(gameScene.getChildByIndex(i).getTag() == 1){
-		    	 foundIt = gameScene.getChildByIndex(i).getUserData().equals(gameRectangle);
+				findIt = gameScene.getChildByIndex(i).getUserData().equals(gameRectangle);
 		    }
-			if(!foundIt)
+			if(!findIt)
 				i++;
 		}
-		if(i < gameScene.getChildCount() && foundIt){
+		if(i < gameScene.getChildCount() && findIt){
 			rectangle = (Rectangle) gameScene.getChildByIndex(i);
 		}
 		return rectangle;
+	}
+	
+	protected Rectangle getRectangleByRowAndColumn(GameScene gameScene,int row, int column){
+		Rectangle rectangle = null;
+		int i = 0;
+		boolean findIt = false;
+		while(i < gameScene.getChildCount() && !findIt){
+			if(gameScene.getChildByIndex(i).getTag() == 1){
+				GameRectangle gameRectangle = (GameRectangle)gameScene.getChildByIndex(i);
+				findIt = gameRectangle.getRow() == row && gameRectangle.getColumn() == column; 
+		    }
+			if(!findIt)
+				i++;
+		}
+		if(i < gameScene.getChildCount() && findIt){
+			rectangle = (Rectangle) gameScene.getChildByIndex(i);
+		}
+		return rectangle;
+	}
+	
+	protected GameRectangle getGameRectangleByRowAndColumn(GameScene gameScene,int row, int column){
+		GameRectangle rectangle = null;
+		int i = 0;
+		boolean findIt = false;
+		while(i < gameScene.getChildCount() && !findIt){
+			if(gameScene.getChildByIndex(i).getTag() == 1){
+				GameRectangle gameRectangle = (GameRectangle)gameScene.getChildByIndex(i).getUserData();
+				findIt = (gameRectangle.getRow() == row && gameRectangle.getColumn() == column); 
+		    }
+			if(!findIt)
+				i++;
+		}
+		if(i < gameScene.getChildCount() && findIt){
+			rectangle = (GameRectangle) gameScene.getChildByIndex(i).getUserData();
+		}
+		return rectangle;
+	}
+	
+	protected Sprite getShapeByRectangle(GameScene gameScene,Rectangle rectangle){
+		Sprite shape = null;
+		int i = 0;
+		boolean findIt = false;
+		while(i < gameScene.getChildCount() && !findIt){
+			if(gameScene.getChildByIndex(i).getTag() == 2){
+				Rectangle rectangle2 = (Rectangle)gameScene.getChildByIndex(i).getUserData();
+				findIt = rectangle.equals(rectangle2); 
+		    }
+			if(!findIt)
+				i++;
+		}
+		if(i < gameScene.getChildCount() && findIt){
+			shape = (Sprite)gameScene.getChildByIndex(i);
+		}
+		return shape;
+	}
+	
+	protected boolean checkBundleRow(int row){
+		return row<=8 && 1<=row;
+	}
+	
+	protected boolean checkBundleColumn(int column){
+		return column<=8 && 1<=column;
+	}
+	
+	public Sprite getSelectedShape() {
+		return selectedShape;
+	}
+
+	public void setSelectedShape(Sprite selectedShape) {
+		this.selectedShape = selectedShape;
 	}
 	
 	/*

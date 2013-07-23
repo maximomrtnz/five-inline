@@ -262,6 +262,8 @@ public class GameScene extends BaseScene implements IOnAreaTouchListener {
 		
 		rectangle.setTag(1);
 		
+		rectangle.setZIndex(1);
+		
 		return rectangle;
 	}
 	
@@ -271,13 +273,23 @@ public class GameScene extends BaseScene implements IOnAreaTouchListener {
 		
 		Sprite shape = shapeFactory.createShape(posX, posY, width, height, getVbom(), type);
 		
-		registerTouchArea(shape);
-		
 		attachChild(shape);
+		
+		registerTouchArea(shape);
 		
 		shape.setTag(2);
 		
+		shape.setZIndex(2);
+		
+		sortChildren();
+		
 		return shape;
+	}
+	
+	public IEntity drawCross(Rectangle rectangle){
+		Sprite cross = new Sprite(rectangle.getWidth()/2, rectangle.getHeight()/2, ResourcesManager.getInstance().getCross(), super.getVbom());
+		rectangle.attachChild(cross);
+		return cross;
 	}
 	
 	public void displayGameOverScene(){
@@ -392,10 +404,11 @@ public class GameScene extends BaseScene implements IOnAreaTouchListener {
 			float pTouchAreaLocalY) {
 		// TODO Auto-generated method stub
 		if(pSceneTouchEvent.isActionDown()) {
-			Rectangle rectangle = (Rectangle)pTouchArea;
-			GameRectangle gameRectangle = (GameRectangle)rectangle.getUserData();
-			Log.d("row", Integer.toString(gameRectangle.getRow()));
-			Log.d("column", Integer.toString(gameRectangle.getColumn()));		
+			if(((IEntity)pTouchArea).getTag()==1){
+				Log.d("-Row", ""+((GameRectangle)((IEntity)pTouchArea).getUserData()).getRow());
+				Log.d("-Column", ""+((GameRectangle)((IEntity)pTouchArea).getUserData()).getColumn());
+			}
+			this.gameState.areaTouch(this, pTouchArea);
 			return true;
 		}
 		return false;
