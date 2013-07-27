@@ -41,6 +41,7 @@ public class WaitingShapeMove extends GameState{
 			case 1:
 				
 				Sprite shape = (Sprite) gameScene.getChildByTag(3);
+				shape.setVisible(true);
 				Rectangle oldRectangle = (Rectangle)shape.getUserData();
 				GameRectangle gameRectangleFromOldRectangle = (GameRectangle)oldRectangle.getUserData();
 				gameScene.registerTouchArea(oldRectangle);
@@ -70,7 +71,7 @@ public class WaitingShapeMove extends GameState{
 				hideBadPath(gameScene);
 				checkFive(gameScene, touchedGameRectangle.getRow(),touchedGameRectangle.getColumn(), touchedGameRectangle.getShape().getShapeType());
 				gameScene.setGameState(new WaitingShapeSelection());
-				break;
+				break;	
 			case 3:
 				//It's important to set the shape tag number
 				((IEntity)iTouchArea).setTag(2);
@@ -81,6 +82,21 @@ public class WaitingShapeMove extends GameState{
 			default:
 				break;
 		}
+		
+		
+		final Sprite oldShapeCopy = (Sprite) gameScene.getChildByTag(5);
+		
+		ResourcesManager.getInstance().getEngine().runOnUpdateThread(new Runnable(){
+            @Override
+            public void run(){
+            	try{
+            		if(oldShapeCopy!=null){
+            			oldShapeCopy.detachSelf();
+            		}
+            	}catch(Exception exception){
+            		Log.d("Error", exception.getMessage());
+            	}
+            }});
 		
 		
 	}

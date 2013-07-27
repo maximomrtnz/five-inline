@@ -29,7 +29,6 @@ public class WaitingShapeSelection extends GameState{
 			Sprite shape = (Sprite)iTouchArea;
 			Rectangle rectangle = (Rectangle)shape.getUserData();
 			GameRectangle gameRectangle = (GameRectangle)rectangle.getUserData();
-			shape.setScale(1.5f);
 			shape.setZIndex(3);
 			gameScene.sortChildren();
 			
