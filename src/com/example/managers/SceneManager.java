@@ -10,7 +10,6 @@ import com.example.fivecircles.gamescenes.GameScene;
 import com.example.fivecircles.gamescenes.HowToPlayScene;
 import com.example.fivecircles.gamescenes.LoadingScene;
 import com.example.fivecircles.gamescenes.MainMenuScene;
-import com.example.fivecircles.gamescenes.PauseScene;
 import com.example.fivecircles.gamescenes.SplashScene;
 import com.example.fivecircles.gamestates.GameState;
 import com.example.fivecircles.gamestates.LoadingNewGame;
@@ -109,7 +108,8 @@ public class SceneManager {
     public void loadHowToPlayScene(final Engine mEngine){
     	ResourcesManager.getInstance().unloadMenuTextures();
         mEngine.registerUpdateHandler(new TimerHandler(0.1f, new ITimerCallback(){
-            public void onTimePassed(final TimerHandler pTimerHandler){
+            @Override
+			public void onTimePassed(final TimerHandler pTimerHandler){
                 mEngine.unregisterUpdateHandler(pTimerHandler);
                 ResourcesManager.getInstance().loadGameResources();
                 howToPlay = new HowToPlayScene();
@@ -127,7 +127,8 @@ public class SceneManager {
         setScene(loadingScene);
         ResourcesManager.getInstance().unloadMenuTextures();
         mEngine.registerUpdateHandler(new TimerHandler(0.1f, new ITimerCallback(){
-            public void onTimePassed(final TimerHandler pTimerHandler){
+            @Override
+			public void onTimePassed(final TimerHandler pTimerHandler){
                 mEngine.unregisterUpdateHandler(pTimerHandler);
                 ResourcesManager.getInstance().unloadLoadingScreen();
                 ResourcesManager.getInstance().loadGameResources();
@@ -146,7 +147,8 @@ public class SceneManager {
         gameScene.disposeScene();
         ResourcesManager.getInstance().unloadGameTextures();
         mEngine.registerUpdateHandler(new TimerHandler(0.1f, new ITimerCallback(){
-            public void onTimePassed(final TimerHandler pTimerHandler){
+            @Override
+			public void onTimePassed(final TimerHandler pTimerHandler){
                 mEngine.unregisterUpdateHandler(pTimerHandler);
                 ResourcesManager.getInstance().unloadLoadingScreen();
                 ResourcesManager.getInstance().loadMenuTextures();
@@ -161,7 +163,8 @@ public class SceneManager {
     	gameScene.disposeScene();
     	ResourcesManager.getInstance().unloadGameTextures();
     	mEngine.registerUpdateHandler(new TimerHandler(0.1f, new ITimerCallback(){
-             public void onTimePassed(final TimerHandler pTimerHandler){
+             @Override
+			public void onTimePassed(final TimerHandler pTimerHandler){
                  mEngine.unregisterUpdateHandler(pTimerHandler);
                  ResourcesManager.getInstance().unloadLoadingScreen();
                  ResourcesManager.getInstance().loadGameResources();

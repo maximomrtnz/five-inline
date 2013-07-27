@@ -4,7 +4,6 @@ package com.example.fivecircles;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
-import com.example.fivecircles.gamescenes.BaseScene;
 import com.example.managers.ResourcesManager;
 
 public class ShapeFactoryTypeOne implements ShapeFactory{

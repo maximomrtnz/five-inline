@@ -10,8 +10,6 @@ import org.andengine.engine.camera.Camera;
 import org.andengine.opengl.util.GLState;
 
 import android.content.Intent;
-import android.util.Log;
-
 import com.example.fivecircles.activities.HowToPlayActivity;
 import com.example.fivecircles.gamestates.LoadingNewGame;
 import com.example.managers.SceneManager;

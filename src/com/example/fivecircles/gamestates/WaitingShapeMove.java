@@ -9,30 +9,21 @@ import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.ITouchArea;
 import org.andengine.entity.sprite.Sprite;
 
-import android.graphics.Color;
 import android.util.Log;
 
 import com.example.entities.GameRectangle;
-import com.example.entities.GameShape;
-import com.example.fivecircles.IBackgroundRectangle;
-import com.example.fivecircles.IPlayer;
+import com.example.fivecircles.ShapeFactory;
+import com.example.fivecircles.ShapeFactoryTypeOne;
 import com.example.fivecircles.gamescenes.GameScene;
+import com.example.gamealgorithms.CheckSameShapeAlgorithm;
+import com.example.gamealgorithms.CheckSameShapeDiagonallyLeft;
+import com.example.gamealgorithms.CheckSameShapeDiagonallyRight;
+import com.example.gamealgorithms.CheckSameShapeHorizontally;
+import com.example.gamealgorithms.CheckSameShapeVertically;
+import com.example.gamealgorithms.SearchAlgorithms;
 import com.example.managers.ResourcesManager;
 
 public class WaitingShapeMove extends GameState{
-
-	@Override
-	public void playerTouched(GameScene gameScene, IPlayer player) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void backgroundTouched(GameScene gameScene,
-			IBackgroundRectangle rectangle) {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public void loadGame(GameScene gameScene) {
@@ -96,7 +87,7 @@ public class WaitingShapeMove extends GameState{
 	
 	private void hideBadPath(GameScene gameScene){
 		for(int i=0;i<gameScene.getChildCount();i++){
-			if(((IEntity)gameScene.getChildByIndex(i)).getTag()==4){
+			if(gameScene.getChildByIndex(i).getTag()==4){
 				final Rectangle rectangle = (Rectangle)gameScene.getChildByIndex(i);
 				ResourcesManager.getInstance().getEngine()
 				.runOnUpdateThread(new Runnable() {
@@ -110,182 +101,45 @@ public class WaitingShapeMove extends GameState{
 		}
 	}
 	
-	private ArrayList<GameRectangle> checkHorizontally(GameScene gameScene,int row, int column, int type){
-		ArrayList<GameRectangle> gameRectangles = new ArrayList<GameRectangle>();
-		int n = 0;
-		int i = column-1;
-		boolean follow = true;
 		
-		while(i>n && follow){
-			GameRectangle sameRowGameRectangle = getGameRectangleByRowAndColumn(gameScene, row,i);
-			follow = false;
-			if(sameRowGameRectangle!=null){
-				GameShape gameShape = sameRowGameRectangle.getShape();
-				if(gameShape!=null){
-					follow = gameShape.getShapeType() == type;
-					if(follow){
-						gameRectangles.add(sameRowGameRectangle);
-					}
-				}
-			}
-			i--;
-		}
-		follow = true;
-		n = 9;
-		i = column+1;
-		while(i<n && follow){
-			GameRectangle sameRowGameRectangle = getGameRectangleByRowAndColumn(gameScene, row,i);
-			follow = false;
-			if(sameRowGameRectangle!=null){
-				GameShape gameShape = sameRowGameRectangle.getShape();
-				if(gameShape!=null){
-					follow = gameShape.getShapeType() == type;
-					if(follow){
-						gameRectangles.add(sameRowGameRectangle);
-					}
-				}
-			}
-			i++;
-		}
-		
-		if(gameRectangles.size() < 4){
-			gameRectangles = null;
-		}
-		
-		return gameRectangles;
-		
-	}
-	
-	private ArrayList<GameRectangle> checkVertically(GameScene gameScene,int row, int column, int type){
-		ArrayList<GameRectangle> gameRectangles = new ArrayList<GameRectangle>();
-		int n = 0;
-		int i = row-1;
-		boolean follow = true;
-		
-		while(i>n && follow){
-			GameRectangle sameRowGameRectangle = getGameRectangleByRowAndColumn(gameScene, i, column);
-			follow = false;
-			if(sameRowGameRectangle!=null){
-				GameShape gameShape = sameRowGameRectangle.getShape();
-				if(gameShape!=null){
-					follow = gameShape.getShapeType() == type;
-					if(follow){
-						gameRectangles.add(sameRowGameRectangle);
-					}
-				}
-			}
-			i--;
-		}
-		follow = true;
-		n = 9;
-		i = row+1;
-		while(i<n && follow){
-			GameRectangle sameRowGameRectangle = getGameRectangleByRowAndColumn(gameScene, i, column);
-			follow = false;
-			if(sameRowGameRectangle!=null){
-				GameShape gameShape = sameRowGameRectangle.getShape();
-				if(gameShape!=null){
-					follow = gameShape.getShapeType() == type;
-					if(follow){
-						gameRectangles.add(sameRowGameRectangle);
-					}
-				}
-			}
-			i++;
-		}
-		
-		if(gameRectangles.size() < 4){
-			gameRectangles = null;
-		}
-		
-		return gameRectangles;
-	}
-	
-	
-	private ArrayList<GameRectangle> checkDiagonally(GameScene gameScene,int row, int column, int type){
-		ArrayList<GameRectangle> gameRectangles = new ArrayList<GameRectangle>();
-		int n = 0;
-		int i = row-1;
-		int j = column - 1;
-		boolean follow = true;
-		
-		while(i>n && j > n && follow){
-			GameRectangle sameRowGameRectangle = getGameRectangleByRowAndColumn(gameScene, i, j);
-			if(sameRowGameRectangle!=null){
-				GameShape gameShape = sameRowGameRectangle.getShape();
-				if(gameShape!=null){
-					follow = gameShape.getShapeType() == type;
-					if(follow){
-						gameRectangles.add(sameRowGameRectangle);
-					}
-				}
-			}
-			i--;
-			j--;
-		}
-		
-		follow = true;
-		n = 9;
-		i = row+1;
-		j = column + 1;
-		while(i<n && j<n && follow){
-			GameRectangle sameRowGameRectangle = getGameRectangleByRowAndColumn(gameScene, i, j);
-			if(sameRowGameRectangle!=null){
-				GameShape gameShape = sameRowGameRectangle.getShape();
-				if(gameShape!=null){
-					follow = gameShape.getShapeType() == type;
-					if(follow){
-						gameRectangles.add(sameRowGameRectangle);
-					}
-				}
-			}
-			i++;
-			j++;
-		}
-		
-		if(gameRectangles.size() < 4){
-			gameRectangles = null;
-		}
-		
-		return gameRectangles;
-	}
-	
 	private void checkFive(final GameScene gameScene, int row, int column, int type){
 		
-		Stack<GameRectangle> stack = new Stack<GameRectangle>();
+		CheckSameShapeAlgorithm checkSameShapeAlgorithm = null;
 		
-		ArrayList<GameRectangle> gameRectanglesVertically = new ArrayList<GameRectangle>();
-		ArrayList<GameRectangle> gameRectanglesHorizantally = new ArrayList<GameRectangle>();
-		ArrayList<GameRectangle> gameRectanglesDiagonally = new ArrayList<GameRectangle>();
+		Stack<GameRectangle> stack 				= new Stack<GameRectangle>();
+		ArrayList<GameRectangle> gameRectangles = null;
 		
-		gameRectanglesVertically = checkVertically(gameScene, row, column, type);
-		gameRectanglesHorizantally = checkHorizontally(gameScene, row, column, type);
-		gameRectanglesDiagonally = checkDiagonally(gameScene, row, column, type);
-		
-		
-		//Combo 1
-		if(gameRectanglesVertically != null){
-			stack.addAll(gameRectanglesVertically);
+		for(int i = 0; i < 4;i++){
+			//Erase ArraList
+			gameRectangles							= null;
+			switch (i) {
+				case 0:
+					checkSameShapeAlgorithm 				= new CheckSameShapeVertically();
+					break;
+					case 1:
+					checkSameShapeAlgorithm 				= new CheckSameShapeHorizontally();
+					break;
+				case 2:
+					checkSameShapeAlgorithm					= new CheckSameShapeDiagonallyLeft();
+					break;		
+				default:
+					checkSameShapeAlgorithm					= new CheckSameShapeDiagonallyRight();
+					break;
+			}
+			gameRectangles	= checkSameShapeAlgorithm.checkSameShape(gameScene, row, column, type);
+			if(gameRectangles != null)
+				stack.addAll(gameRectangles);
 		}
-		//Combo 2
-		if(gameRectanglesHorizantally != null){
-			stack.addAll(gameRectanglesHorizantally);
-		}
-		//Combo 3
-		if(gameRectanglesDiagonally != null){
-			stack.addAll(gameRectanglesDiagonally);
-		}
-		
 		
 		if(!stack.isEmpty()){
-			GameRectangle gameRectangle = getGameRectangleByRowAndColumn(gameScene, row, column);
+			GameRectangle gameRectangle = SearchAlgorithms.getGameRectangleByRowAndColumn(gameScene, row, column);
 			stack.push(gameRectangle);
 		}
 		
 		for(GameRectangle gameRectangleToDelete : stack){
 			gameRectangleToDelete.setShape(null);
-			Rectangle rectangle = getRectangleFromGameRectangle(gameScene, gameRectangleToDelete);
-			final Sprite shape = getShapeByRectangle(gameScene, rectangle);
+			final Rectangle rectangle = SearchAlgorithms.getRectangleFromGameRectangle(gameScene, gameRectangleToDelete);
+			final Sprite shape = SearchAlgorithms.getShapeByRectangle(gameScene, rectangle);
 			
 			AlphaModifier alphaModifier = new AlphaModifier(1, 1f, 0f) {
 				@Override
@@ -302,8 +156,13 @@ public class WaitingShapeMove extends GameState{
 							.runOnUpdateThread(new Runnable() {
 								@Override
 								public void run() {
+									//Delete Shape
 									gameScene.unregisterTouchArea(pItem);
 									pItem.detachSelf();
+									
+									//Restore Rectangle Properties
+									gameScene.registerTouchArea(rectangle);
+									rectangle.setTag(1);
 								}
 							});
 				}
@@ -313,6 +172,35 @@ public class WaitingShapeMove extends GameState{
 		
 		}
 		
+	}
+
+	@Override
+	public void shapeDrag(final GameScene gameScene, ITouchArea iTouchArea) {
+		// TODO Auto-generated method stub
+		if(((IEntity)iTouchArea).getTag()==1){
+			
+			final Sprite oldShapeCopy = (Sprite) gameScene.getChildByTag(5);
+			
+			Sprite shape = (Sprite) gameScene.getChildByTag(3);
+			Rectangle rectangle = (Rectangle)shape.getUserData();
+			GameRectangle gameRectangle = (GameRectangle)rectangle.getUserData();
+			
+			final Sprite shapeCopy = (Sprite) gameScene.drawShape(((IEntity)iTouchArea).getX(),((IEntity)iTouchArea).getY(), shape.getWidth(),shape.getHeight(), gameRectangle.getShape().getShapeType());
+			shapeCopy.setScale(1.5f);
+			shapeCopy.setTag(5);
+			
+			ResourcesManager.getInstance().getEngine()
+			.runOnUpdateThread(new Runnable() {
+				@Override
+				public void run() {
+					if(oldShapeCopy!=null)
+						oldShapeCopy.detachSelf();
+					gameScene.unregisterTouchArea(shapeCopy);	
+				}
+			});
+
+			
+		}
 	}
 	
 }

@@ -1,17 +1,12 @@
 package com.example.fivecircles.gamescenes;
 
 import java.io.IOException;
-import java.util.ArrayList;
-
 import org.andengine.engine.camera.Camera;
 import org.andengine.engine.camera.hud.HUD;
 import org.andengine.entity.IEntity;
-import org.andengine.entity.modifier.AlphaModifier;
-import org.andengine.entity.modifier.ScaleModifier;
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.IOnAreaTouchListener;
 import org.andengine.entity.scene.ITouchArea;
-import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 import org.andengine.entity.text.TextOptions;
@@ -23,7 +18,6 @@ import org.andengine.util.level.EntityLoader;
 import org.andengine.util.level.constants.LevelConstants;
 import org.andengine.util.level.simple.SimpleLevelEntityLoaderData;
 import org.andengine.util.level.simple.SimpleLevelLoader;
-import org.andengine.util.math.MathUtils;
 import org.xml.sax.Attributes;
 
 import android.content.SharedPreferences;
@@ -32,9 +26,6 @@ import android.util.Log;
 import android.view.MotionEvent;
 
 import com.example.entities.GameRectangle;
-import com.example.entities.GameShape;
-import com.example.fivecircles.IBackgroundRectangle;
-import com.example.fivecircles.IPlayer;
 import com.example.fivecircles.ShapeFactory;
 import com.example.fivecircles.ShapeFactoryTypeOne;
 import com.example.fivecircles.activities.GameActivity;
@@ -56,11 +47,6 @@ public class GameScene extends BaseScene implements IOnAreaTouchListener {
 	private int score = 0;
 	
 	private GameState gameState;
-
-	private IPlayer player;
-
-	
-	private IPlayer selectedPlayer;
 
 	public static final String PREFS_NAME = "FiveNeighborPreferences";
 	
@@ -176,6 +162,7 @@ public class GameScene extends BaseScene implements IOnAreaTouchListener {
 		levelLoader
 				.registerEntityLoader(new EntityLoader<SimpleLevelEntityLoaderData>(
 						LevelConstants.TAG_LEVEL) {
+					@Override
 					public IEntity onLoadEntity(
 							final String pEntityName,
 							final IEntity pParent,
@@ -195,6 +182,7 @@ public class GameScene extends BaseScene implements IOnAreaTouchListener {
 		levelLoader
 				.registerEntityLoader(new EntityLoader<SimpleLevelEntityLoaderData>(
 					LevelGameContract.LEVEL_GAME_TAG_ENTITY) {
+					@Override
 					public IEntity onLoadEntity(
 							final String pEntityName,
 							final IEntity pParent,
@@ -298,82 +286,13 @@ public class GameScene extends BaseScene implements IOnAreaTouchListener {
 	}
 	
 	
-	public synchronized void setPlayerToBackgroundRectangle(IPlayer player) {
-		/*
-		ArrayList<IBackgroundRectangle> emptyRectangles = new ArrayList<IBackgroundRectangle>();
-
-		for (IBackgroundRectangle rectangle : this.rectangles) {
-			if (!rectangle.isTaken()) {
-				emptyRectangles.add(rectangle);
-			}
-		}
-
-		if (emptyRectangles.size() > 0) {
-
-			int next = MathUtils.random(0, emptyRectangles.size() - 1);
-
-			IBackgroundRectangle rectangle = emptyRectangles.get(next);
-
-			((IEntity) player).registerEntityModifier(new ScaleModifier(1,
-					0.5f, 1.0f));
-			rectangle.addIPlayer(player);
-		
-		}*/
-
-	}
-
+	
 	public void setGameState(GameState gameState) {
 		this.gameState = gameState;
 	}
 
-	public IPlayer getPlayer() {
-		return this.player;
-	}
-
-	public IPlayer getSelectedPlayer() {
-		return selectedPlayer;
-	}
-
-	public void setSelectedPlayer(IPlayer selectedPlayer) {
-		this.selectedPlayer = selectedPlayer;
-	}
-
-	public ArrayList<IBackgroundRectangle> getRectangles() {
-		//return this.rectangles;
-		return null;
-	}
-
-	public void removePlayer(IPlayer player) {
-
-		if (player != null) {
-
-			AlphaModifier alphaModifier = new AlphaModifier(1, 1f, 0f) {
-				@Override
-				protected void onModifierStarted(IEntity pItem) {
-					super.onModifierStarted(pItem);
-					// Your action after starting modifier
-				}
-
-				@Override
-				protected void onModifierFinished(final IEntity pItem) {
-					super.onModifierFinished(pItem);
-					// Your action after finishing modifier
-					ResourcesManager.getInstance().getEngine()
-							.runOnUpdateThread(new Runnable() {
-								@Override
-								public void run() {
-									unregisterTouchArea(pItem);
-									pItem.detachSelf();
-								}
-							});
-				}
-			};
-
-			((IEntity) player).registerEntityModifier(alphaModifier);
-		}
-	}
-
-
+	
+	
 	public void saveHighScore() {
 
 		int highScore = getHighScore();
@@ -397,24 +316,39 @@ public class GameScene extends BaseScene implements IOnAreaTouchListener {
 		int highScore = settings.getInt("highScore", 0);
 		return highScore;
 	}
-
+	
+	private boolean longTouch = false;
+	
 	@Override
 	public boolean onAreaTouched(TouchEvent pSceneTouchEvent,
 			ITouchArea pTouchArea, float pTouchAreaLocalX,
 			float pTouchAreaLocalY) {
 		// TODO Auto-generated method stub
-		if(pSceneTouchEvent.isActionDown()) {
-			if(((IEntity)pTouchArea).getTag()==1){
-				Log.d("-Row", ""+((GameRectangle)((IEntity)pTouchArea).getUserData()).getRow());
-				Log.d("-Column", ""+((GameRectangle)((IEntity)pTouchArea).getUserData()).getColumn());
+		
+		if(pSceneTouchEvent.isActionDown()){
+			if(!this.longTouch)
+				this.gameState.areaTouch(this, pTouchArea);
+			this.longTouch = true;
+		}
+		
+		if(pSceneTouchEvent.isActionMove()){
+			if(this.longTouch && ((IEntity)pTouchArea).getTag()==1){
+				this.gameState.shapeDrag(this, pTouchArea);
 			}
-			this.gameState.areaTouch(this, pTouchArea);
+		}
+		
+		if(pSceneTouchEvent.isActionCancel()){
+			Log.d("Touch","3");
+		}
+		
+		if(pSceneTouchEvent.isActionUp()) {
+			if(this.longTouch)
+				this.gameState.areaTouch(this, pTouchArea);
+			this.longTouch = false;
 			return true;
 		}
 		return false;
 	}
-	
-	
 	
 	
 }

@@ -9,25 +9,11 @@ import android.util.Log;
 
 import com.example.entities.GameRectangle;
 import com.example.entities.GameShape;
-import com.example.fivecircles.IBackgroundRectangle;
-import com.example.fivecircles.IPlayer;
 import com.example.fivecircles.gamescenes.GameScene;
+import com.example.gamealgorithms.SearchAlgorithms;
 import com.example.managers.ResourcesManager;
 
 public class LoadingNewGame extends GameState{
-
-	@Override
-	public void playerTouched(GameScene gameScene, IPlayer player) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void backgroundTouched(GameScene gameScene,
-			IBackgroundRectangle rectangle) {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public void loadGame(GameScene gameScene) {
@@ -50,8 +36,8 @@ public class LoadingNewGame extends GameState{
 	private void initNewGame(final GameScene gameScene, int initShapes){
 		for(int i = 0; i < initShapes ; i++){
 			
-			GameRectangle gameRectangle= this.getEmptyGameRectangle(gameScene);
-			final Rectangle rectangle = this.getRectangleFromGameRectangle(gameScene,gameRectangle);
+			GameRectangle gameRectangle= SearchAlgorithms.getEmptyGameRectangle(gameScene);
+			final Rectangle rectangle = SearchAlgorithms.getRectangleFromGameRectangle(gameScene,gameRectangle);
 			int type = MathUtils.random(1, 5);
 			Sprite shape = (Sprite) gameScene.drawShape(rectangle.getX(),rectangle.getY(), rectangle.getWidth(), rectangle.getWidth(), type);
 			gameRectangle.setShape(new GameShape(type));
@@ -69,6 +55,12 @@ public class LoadingNewGame extends GameState{
                 }});
 			
 		}
+	}
+
+	@Override
+	public void shapeDrag(GameScene gameScene, ITouchArea iTouchArea) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

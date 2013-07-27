@@ -1,14 +1,8 @@
 package com.example.fivecircles.gamescenes;
 
 import org.andengine.engine.camera.Camera;
-import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.sprite.Sprite;
-import org.andengine.entity.text.Text;
 import org.andengine.opengl.util.GLState;
-import org.andengine.util.adt.color.Color;
-
-
-import com.example.managers.SceneManager;
 import com.example.managers.SceneManager.SceneType;
 
 public class LoadingScene extends BaseScene{

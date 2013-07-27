@@ -9,7 +9,6 @@ import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
 import org.andengine.engine.options.WakeLockOptions;
 import org.andengine.engine.options.resolutionpolicy.FillResolutionPolicy;
-import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
 import org.andengine.entity.scene.Scene;
 import org.andengine.ui.activity.BaseGameActivity;
 
@@ -18,10 +17,6 @@ import com.example.managers.ResourcesManager;
 import com.example.managers.SceneManager;
 
 
-import android.content.SharedPreferences;
-import android.graphics.Point;
-import android.util.DisplayMetrics;
-import android.view.Display;
 import android.view.KeyEvent;
 
 public class GameActivity extends BaseGameActivity {
@@ -70,7 +65,8 @@ public class GameActivity extends BaseGameActivity {
 		OnPopulateSceneCallback pOnPopulateSceneCallback) {
 		// TODO Auto-generated method stub
 		mEngine.registerUpdateHandler(new TimerHandler(2f, new ITimerCallback(){
-		        public void onTimePassed(final TimerHandler pTimerHandler){
+		        @Override
+				public void onTimePassed(final TimerHandler pTimerHandler){
 		            mEngine.unregisterUpdateHandler(pTimerHandler);
 		            SceneManager.getInstance().createMenuScene();
 		        }

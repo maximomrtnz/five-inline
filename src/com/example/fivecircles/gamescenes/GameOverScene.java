@@ -1,25 +1,15 @@
 package com.example.fivecircles.gamescenes;
 
 import org.andengine.entity.primitive.Rectangle;
-import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.menu.MenuScene;
 import org.andengine.entity.scene.menu.MenuScene.IOnMenuItemClickListener;
 import org.andengine.entity.scene.menu.item.IMenuItem;
 import org.andengine.entity.scene.menu.item.SpriteMenuItem;
-import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 import org.andengine.entity.text.TextOptions;
-import org.andengine.input.touch.TouchEvent;
 import org.andengine.util.adt.align.HorizontalAlign;
 
-import android.util.Log;
-import android.view.MotionEvent;
-
-import com.example.fivecircles.utilities.SoundButtonStateOff;
-import com.example.fivecircles.utilities.SoundButtonStateOn;
 import com.example.fivecircles.utilities.ToggleButtonMenu;
-import com.example.fivecircles.utilities.ToggleButtonState;
-import com.example.managers.AudioManager;
 import com.example.managers.ResourcesManager;
 import com.example.managers.SceneManager;
 import com.example.managers.SceneManager.SceneType;
