@@ -5,9 +5,12 @@ import java.util.Stack;
 
 import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.AlphaModifier;
+import org.andengine.entity.modifier.ScaleAtModifier;
+import org.andengine.entity.modifier.ScaleModifier;
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.ITouchArea;
 import org.andengine.entity.sprite.Sprite;
+import org.andengine.entity.text.Text;
 
 import android.util.Log;
 
@@ -34,14 +37,13 @@ public class WaitingShapeMove extends GameState{
 	@Override
 	public void areaTouch(final GameScene gameScene, ITouchArea iTouchArea) {
 		// TODO Auto-generated method stub
-		//If some rectangle on the board was touched
-		//Then We move the shape
+		
 		
 		switch (((IEntity)iTouchArea).getTag()) {
+			//If some rectangle on the board was touched
+			//Then We move the shape
 			case 1:
-				
 				Sprite shape = (Sprite) gameScene.getChildByTag(3);
-				shape.setVisible(true);
 				Rectangle oldRectangle = (Rectangle)shape.getUserData();
 				GameRectangle gameRectangleFromOldRectangle = (GameRectangle)oldRectangle.getUserData();
 				gameScene.registerTouchArea(oldRectangle);
@@ -65,17 +67,30 @@ public class WaitingShapeMove extends GameState{
 	                }});
 				
 				shape.setTag(2);
-				shape.setScale(1f);
 				shape.setZIndex(2);
 				shape.sortChildren();
 				hideBadPath(gameScene);
-				checkFive(gameScene, touchedGameRectangle.getRow(),touchedGameRectangle.getColumn(), touchedGameRectangle.getShape().getShapeType());
+				if(!checkFive(gameScene, touchedGameRectangle.getRow(),touchedGameRectangle.getColumn(), touchedGameRectangle.getShape().getShapeType())){
+					addNewShapes(gameScene, 2);
+					//ArrayList<GameRectangle> addedGameRectangles = addNewShapes(gameScene, 2);
+					//for(GameRectangle addedGameRectangle : addedGameRectangles){
+						//checkFive(gameScene, addedGameRectangle.getRow(), addedGameRectangle.getColumn(), addedGameRectangle.getShape().getShapeType());
+					//}
+				}	
 				gameScene.setGameState(new WaitingShapeSelection());
 				break;	
+			case 2:
+				//Case two happened when you drag the shape and drop over other shape
+				//It's important to set the shape tag number
+				Sprite shapeSelected = (Sprite) gameScene.getChildByTag(3);
+				shapeSelected.setTag(2);
+				hideBadPath(gameScene);
+				gameScene.setGameState(new WaitingShapeSelection());
+				break;
 			case 3:
+				//Case two happened when you drag the shape and drop over the same shape
 				//It's important to set the shape tag number
 				((IEntity)iTouchArea).setTag(2);
-				((IEntity)iTouchArea).setScale(1f);
 				hideBadPath(gameScene);
 				gameScene.setGameState(new WaitingShapeSelection());
 				break;
@@ -118,12 +133,17 @@ public class WaitingShapeMove extends GameState{
 	}
 	
 		
-	private void checkFive(final GameScene gameScene, int row, int column, int type){
+	private boolean checkFive(final GameScene gameScene, int row, int column, int type){
+		
+		boolean isThereFive = false;
 		
 		CheckSameShapeAlgorithm checkSameShapeAlgorithm = null;
 		
 		Stack<GameRectangle> stack 				= new Stack<GameRectangle>();
+		
 		ArrayList<GameRectangle> gameRectangles = null;
+		
+		int multiplyPointBy						= 0;
 		
 		for(int i = 0; i < 4;i++){
 			//Erase ArraList
@@ -144,12 +164,14 @@ public class WaitingShapeMove extends GameState{
 			}
 			gameRectangles	= checkSameShapeAlgorithm.checkSameShape(gameScene, row, column, type);
 			if(gameRectangles != null)
+				multiplyPointBy++;
 				stack.addAll(gameRectangles);
 		}
 		
 		if(!stack.isEmpty()){
 			GameRectangle gameRectangle = SearchAlgorithms.getGameRectangleByRowAndColumn(gameScene, row, column);
 			stack.push(gameRectangle);
+			isThereFive = true;
 		}
 		
 		for(GameRectangle gameRectangleToDelete : stack){
@@ -157,13 +179,32 @@ public class WaitingShapeMove extends GameState{
 			final Rectangle rectangle = SearchAlgorithms.getRectangleFromGameRectangle(gameScene, gameRectangleToDelete);
 			final Sprite shape = SearchAlgorithms.getShapeByRectangle(gameScene, rectangle);
 			
-			AlphaModifier alphaModifier = new AlphaModifier(1, 1f, 0f) {
-				@Override
-				protected void onModifierStarted(IEntity pItem) {
-					super.onModifierStarted(pItem);
-					// Your action after starting modifier
-				}
 
+			//Add number to show the points that player wins
+			Text text = gameScene.drawPointText(rectangle.getX(),rectangle.getY(), "+"+multiplyPointBy+"0");
+			
+			ScaleModifier scaleModifier = new ScaleModifier(2, 2f, 0f){
+				@Override
+				protected void onModifierFinished(final IEntity pItem) {
+					// TODO Auto-generated method stub
+					super.onModifierFinished(pItem);
+					ResourcesManager.getInstance().getEngine()
+					.runOnUpdateThread(new Runnable() {
+						@Override
+						public void run() {
+							
+							//Delete Shape
+					
+							pItem.detachSelf();
+							
+						}
+					});
+				}
+			};
+			
+			text.registerEntityModifier(scaleModifier);
+			
+			AlphaModifier alphaModifier = new AlphaModifier(1, 1f, 0f) {
 				@Override
 				protected void onModifierFinished(final IEntity pItem) {
 					super.onModifierFinished(pItem);
@@ -172,6 +213,7 @@ public class WaitingShapeMove extends GameState{
 							.runOnUpdateThread(new Runnable() {
 								@Override
 								public void run() {
+									
 									//Delete Shape
 									gameScene.unregisterTouchArea(pItem);
 									pItem.detachSelf();
@@ -188,7 +230,9 @@ public class WaitingShapeMove extends GameState{
 		
 		}
 		
+		return isThereFive;
 	}
+	
 
 	@Override
 	public void shapeDrag(final GameScene gameScene, ITouchArea iTouchArea) {

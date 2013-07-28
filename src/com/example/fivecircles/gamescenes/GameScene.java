@@ -285,7 +285,11 @@ public class GameScene extends BaseScene implements IOnAreaTouchListener {
 		setChildScene(new GameOverScene(), false, true, true);
 	}
 	
-	
+	public Text drawPointText(float posX, float posY, String pText){
+		Text text = new Text(posX, posY, ResourcesManager.getInstance().getFreckleFaceRegular(), pText, super.getVbom());
+		attachChild(text);
+		return text;
+	}
 	
 	public void setGameState(GameState gameState) {
 		this.gameState = gameState;

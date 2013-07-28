@@ -20,7 +20,7 @@ public class LoadingNewGame extends GameState{
 		// TODO Auto-generated method stub
 		gameScene.drawBackgroundGame();
 		gameScene.loadNewLevel();
-		initNewGame(gameScene, 20);
+		addNewShapes(gameScene, 20);
 		gameScene.setOnAreaTouchListener(gameScene);
 		gameScene.setTouchAreaBindingOnActionDownEnabled(true);
 		gameScene.setGameState(new WaitingShapeSelection());
@@ -32,30 +32,6 @@ public class LoadingNewGame extends GameState{
 		
 	}
 	
-	
-	private void initNewGame(final GameScene gameScene, int initShapes){
-		for(int i = 0; i < initShapes ; i++){
-			
-			GameRectangle gameRectangle= SearchAlgorithms.getEmptyGameRectangle(gameScene);
-			final Rectangle rectangle = SearchAlgorithms.getRectangleFromGameRectangle(gameScene,gameRectangle);
-			int type = MathUtils.random(1, 5);
-			Sprite shape = (Sprite) gameScene.drawShape(rectangle.getX(),rectangle.getY(), rectangle.getWidth(), rectangle.getWidth(), type);
-			gameRectangle.setShape(new GameShape(type));
-			//Storage rectangle because We need it then
-			shape.setUserData(rectangle);
-			
-			ResourcesManager.getInstance().getEngine().runOnUpdateThread(new Runnable(){
-                @Override
-                public void run(){
-                	try{
-                        gameScene.unregisterTouchArea(rectangle);
-                	}catch(Exception exception){
-                		Log.d("Error On Remove Player", exception.getMessage());
-                	}
-                }});
-			
-		}
-	}
 
 	@Override
 	public void shapeDrag(GameScene gameScene, ITouchArea iTouchArea) {
