@@ -109,4 +109,10 @@ public class GameOverScene extends BaseScene implements IOnMenuItemClickListener
 
 	}
 
+	@Override
+	public void updateScene() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

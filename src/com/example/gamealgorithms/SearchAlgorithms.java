@@ -6,6 +6,7 @@ import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.util.math.MathUtils;
 
+import com.example.entities.Game;
 import com.example.entities.GameRectangle;
 import com.example.fivecircles.gamescenes.GameScene;
 
@@ -87,6 +88,23 @@ public class SearchAlgorithms {
 		}
 		return rectangle;
 	}
+	
+	public static GameRectangle getGameRectangleByRowAndColumnFromGameEntity(Game game,int row, int column){
+		GameRectangle rectangle = null;
+		int i = 0;
+		ArrayList<GameRectangle> gameRectangles = game.getBoard();
+		boolean findIt = false;
+		while(i < gameRectangles.size() && !findIt){
+			findIt = gameRectangles.get(i).getRow() == row && gameRectangles.get(i).getColumn() == column;
+			if(!findIt)
+				i++;
+		}
+		if(i < gameRectangles.size() && gameRectangles.get(i).getRow() == row && gameRectangles.get(i).getColumn()==column){
+			rectangle = gameRectangles.get(i);
+		}
+		return rectangle;
+	}
+	
 	
 	public static Sprite getShapeByRectangle(GameScene gameScene,Rectangle rectangle){
 		Sprite shape = null;

@@ -14,6 +14,7 @@ import org.andengine.entity.text.Text;
 
 import android.util.Log;
 
+import com.example.entities.Game;
 import com.example.entities.GameRectangle;
 import com.example.fivecircles.ShapeFactory;
 import com.example.fivecircles.ShapeFactoryTypeOne;
@@ -37,7 +38,6 @@ public class WaitingShapeMove extends GameState{
 	@Override
 	public void areaTouch(final GameScene gameScene, ITouchArea iTouchArea) {
 		// TODO Auto-generated method stub
-		
 		
 		switch (((IEntity)iTouchArea).getTag()) {
 			//If some rectangle on the board was touched
@@ -71,12 +71,19 @@ public class WaitingShapeMove extends GameState{
 				shape.sortChildren();
 				hideBadPath(gameScene);
 				if(!checkFive(gameScene, touchedGameRectangle.getRow(),touchedGameRectangle.getColumn(), touchedGameRectangle.getShape().getShapeType())){
-					addNewShapes(gameScene, 2);
-					//ArrayList<GameRectangle> addedGameRectangles = addNewShapes(gameScene, 2);
-					//for(GameRectangle addedGameRectangle : addedGameRectangles){
-						//checkFive(gameScene, addedGameRectangle.getRow(), addedGameRectangle.getColumn(), addedGameRectangle.getShape().getShapeType());
-					//}
-				}	
+					//When you add a new shape you need to check five shape joined
+					ArrayList<GameRectangle> addedGameRecatngles = addNewShapes(gameScene, 2);
+					for(GameRectangle addedGameRectangle : addedGameRecatngles){
+						checkFive(gameScene, addedGameRectangle.getRow(),  addedGameRectangle.getColumn(), addedGameRectangle.getShape().getShapeType());
+					}
+					//After that you need to check game over below
+					
+					/*
+					 * Code For Check Game Over
+					 */
+					checkGameOver(gameScene);
+				}
+				setScore();
 				gameScene.setGameState(new WaitingShapeSelection());
 				break;	
 			case 2:
@@ -135,6 +142,8 @@ public class WaitingShapeMove extends GameState{
 		
 	private boolean checkFive(final GameScene gameScene, int row, int column, int type){
 		
+		Game game = ResourcesManager.getInstance().getActivity().getGame();
+		
 		boolean isThereFive = false;
 		
 		CheckSameShapeAlgorithm checkSameShapeAlgorithm = null;
@@ -163,9 +172,10 @@ public class WaitingShapeMove extends GameState{
 					break;
 			}
 			gameRectangles	= checkSameShapeAlgorithm.checkSameShape(gameScene, row, column, type);
-			if(gameRectangles != null)
+			if(gameRectangles != null){
 				multiplyPointBy++;
 				stack.addAll(gameRectangles);
+			}	
 		}
 		
 		if(!stack.isEmpty()){
@@ -173,6 +183,8 @@ public class WaitingShapeMove extends GameState{
 			stack.push(gameRectangle);
 			isThereFive = true;
 		}
+		
+		
 		
 		for(GameRectangle gameRectangleToDelete : stack){
 			gameRectangleToDelete.setShape(null);
@@ -227,7 +239,9 @@ public class WaitingShapeMove extends GameState{
 			};
 
 			shape.registerEntityModifier(alphaModifier);
-		
+			
+			game.setCurrentScore(game.getCurrentScore()+10*multiplyPointBy);
+			
 		}
 		
 		return isThereFive;
@@ -261,6 +275,12 @@ public class WaitingShapeMove extends GameState{
 
 			
 		}
+	}
+
+	@Override
+	public void instantiateGameEntity() {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

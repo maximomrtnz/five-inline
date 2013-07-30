@@ -56,4 +56,10 @@ public class SplashScene extends BaseScene{
 	    this.dispose();
 	}
 
+	@Override
+	public void updateScene() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

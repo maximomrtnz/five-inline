@@ -30,6 +30,7 @@ import com.example.fivecircles.ShapeFactory;
 import com.example.fivecircles.ShapeFactoryTypeOne;
 import com.example.fivecircles.activities.GameActivity;
 import com.example.fivecircles.gamestates.GameState;
+import com.example.gamealgorithms.SearchAlgorithms;
 import com.example.managers.AudioManager;
 import com.example.managers.ResourcesManager;
 import com.example.managers.SceneManager;
@@ -38,17 +39,9 @@ import com.example.storage.LevelGameContract;
 
 public class GameScene extends BaseScene implements IOnAreaTouchListener {
 	
-	
-	private HUD gameHUD;
-	private Text scoreText;
-	private Text maxScoreText;
-	private Sprite pausedSprite;
-	
-	private int score = 0;
-	
+
 	private GameState gameState;
 
-	public static final String PREFS_NAME = "FiveNeighborPreferences";
 	
 	public GameScene(GameState gameState){
 		this.gameState = gameState;
@@ -87,10 +80,10 @@ public class GameScene extends BaseScene implements IOnAreaTouchListener {
 	}
 
 
-	private void createHUD() {
+	public void drawHUD() {
 		// We will to create a HUD to show the score everytime
 		// A HUD is important to "memory optimization"
-		gameHUD = new HUD(); 
+		HUD gameHUD = new HUD(); 
 		
 		Text scoreTittle = new Text(super.getCamera().getCenterX(), 700, super.getResourcesManager().getScoreFont(),
 				"score", new TextOptions(HorizontalAlign.LEFT),
@@ -108,30 +101,33 @@ public class GameScene extends BaseScene implements IOnAreaTouchListener {
 		
 		gameHUD.attachChild(scoreTittle);
 		gameHUD.attachChild(highScoreTittle);
-		//Create Current Score Text
 		
-		scoreText = new Text(super.getCamera().getCenterX(), 650, super.getResourcesManager().getScoreFont(),
+		
+		//Create Current Score Text
+		Text scoreText = new Text(super.getCamera().getCenterX(), 650, super.getResourcesManager().getScoreFont(),
 				"0123456789", new TextOptions(HorizontalAlign.LEFT),
 				super.getVbom());
 		
 		scoreText.setSkewCenter(0, 0);
 		
-		scoreText.setText("0");
+		scoreText.setTag(1);
 		
 		gameHUD.attachChild(scoreText);
 		
+		
 		//Create High Score Text
-		maxScoreText = new Text(super.getCamera().getCenterX(), 550,
+		Text maxScoreText = new Text(super.getCamera().getCenterX(), 550,
 				super.getResourcesManager().getScoreFont(),
 				"0123456789",
 				new TextOptions(HorizontalAlign.LEFT), super.getVbom());
+		
+		maxScoreText.setTag(2);
+		
 		maxScoreText.setSkew(0, 0);
-		maxScoreText.setText(Integer.toString(getHighScore()));
+
 		gameHUD.attachChild(maxScoreText);
 		
-		
-		
-		pausedSprite = new Sprite(super.getCamera().getCenterX()+(super.getResourcesManager().getPause().getWidth()*2.5f), 765,super.getResourcesManager().getPause() , super.getVbom()){
+		Sprite pausedSprite = new Sprite(super.getCamera().getCenterX()+(super.getResourcesManager().getPause().getWidth()*2.5f), 765,super.getResourcesManager().getPause() , super.getVbom()){
 			@Override
 			public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
 	   			 if(pSceneTouchEvent.getAction()==MotionEvent.ACTION_UP){
@@ -140,19 +136,17 @@ public class GameScene extends BaseScene implements IOnAreaTouchListener {
 	   			 return true;
        	}};
        	
+       	pausedSprite.setTag(3);
+       	
        	gameHUD.attachChild(pausedSprite);
 		
 		gameHUD.registerTouchArea(pausedSprite);
-		
+	
 		//Add Hud to Scene
 		super.getCamera().setHUD(gameHUD);
+		
 	}
 	
-	public void addToScore(int i) {
-		score += i;
-		scoreText.setText(Integer.toString(score));
-	}
-
 	public void loadNewLevel() {
 
 		final SimpleLevelLoader levelLoader = new SimpleLevelLoader(super.getVbom());
@@ -246,7 +240,9 @@ public class GameScene extends BaseScene implements IOnAreaTouchListener {
 		
 		registerTouchArea(rectangle);
 		
-		rectangle.setUserData(new GameRectangle(row, column));
+		GameRectangle gameRectangle = SearchAlgorithms.getGameRectangleByRowAndColumnFromGameEntity(ResourcesManager.getInstance().getActivity().getGame(), row, column);
+		
+		rectangle.setUserData(gameRectangle);
 		
 		rectangle.setTag(1);
 		
@@ -296,31 +292,6 @@ public class GameScene extends BaseScene implements IOnAreaTouchListener {
 	}
 
 	
-	
-	public void saveHighScore() {
-
-		int highScore = getHighScore();
-		if (highScore < this.score) {
-			GameActivity gameActivity = ResourcesManager.getInstance()
-					.getActivity();
-			SharedPreferences settings = gameActivity.getSharedPreferences(
-					PREFS_NAME, 0);
-			SharedPreferences.Editor editor = settings.edit();
-			editor.putInt("highScore", this.score);
-			editor.commit();
-		}
-
-	}
-
-	public int getHighScore() {
-		GameActivity gameActivity = ResourcesManager.getInstance()
-				.getActivity();
-		SharedPreferences settings = gameActivity.getSharedPreferences(
-				PREFS_NAME, 0);
-		int highScore = settings.getInt("highScore", 0);
-		return highScore;
-	}
-	
 	private boolean longTouch = false;
 	
 	@Override
@@ -352,6 +323,13 @@ public class GameScene extends BaseScene implements IOnAreaTouchListener {
 			return true;
 		}
 		return false;
+	}
+
+
+	@Override
+	public void updateScene() {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	

@@ -71,6 +71,7 @@ public class ResourcesManager {
     private ITextureRegion menuBackgroundRegion;
     private ITextureRegion playMenuButton;
     private ITextureRegion howToPlayMenuButton;
+    private ITextureRegion continueMenuButton;
     private ITextureRegion scoreMenuButton;
     private ITextureRegion splashRegion;
     
@@ -132,9 +133,12 @@ public class ResourcesManager {
     	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/menu/");
     	this.menuTextureAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024, TextureOptions.BILINEAR);
     	this.menuBackgroundRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "menu_screen.png");
+    	
     	this.playMenuButton = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "play_button.png");
     	this.scoreMenuButton = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "scores_button.png");
+    	this.continueMenuButton = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "continue_button.png");
     	this.howToPlayMenuButton = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "howto_button.png");
+    	
     	//Here We are going to create a buildable bitmap texture atlas  
     	//so we don't have to specify positions of particular graphics inside texture. 
     	try{
@@ -468,6 +472,16 @@ public class ResourcesManager {
 		return cross;
 	}
 
+	public ITextureRegion getContinueMenuButton() {
+		return continueMenuButton;
+	}
+
+	public void setContinueMenuButton(ITextureRegion continueMenuButton) {
+		this.continueMenuButton = continueMenuButton;
+	}
+	
+	
+	
 
 	
 	

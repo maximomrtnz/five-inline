@@ -26,7 +26,7 @@ public class GameActivity extends BaseGameActivity {
 	private Camera camera;
 	private int CAMERA_WIDTH = 480;
 	private int CAMERA_HEIGHT = 800;
-	private Game game = new Game();
+	private Game game;
 
 	@Override
 	public EngineOptions onCreateEngineOptions() {

@@ -50,6 +50,7 @@ public class SceneManager {
     //---------------------------------------------
     
     public void setScene(BaseScene scene){
+    	scene.updateScene();
         engine.setScene(scene);
         currentScene = scene;
         currentSceneType = scene.getSceneType();

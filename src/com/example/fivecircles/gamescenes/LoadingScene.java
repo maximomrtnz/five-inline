@@ -49,4 +49,10 @@ public class LoadingScene extends BaseScene{
 	    this.dispose();
 	}
 
+	@Override
+	public void updateScene() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

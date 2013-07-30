@@ -109,5 +109,11 @@ public class WaitingShapeSelection extends GameState{
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void instantiateGameEntity() {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }
