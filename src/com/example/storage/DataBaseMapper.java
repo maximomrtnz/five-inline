@@ -1,5 +1,18 @@
 package com.example.storage;
 
+import java.util.ArrayList;
+
+import org.andengine.entity.primitive.Rectangle;
+
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+
+import com.example.entities.Game;
+import com.example.entities.GameRectangle;
+import com.example.entities.GameShape;
+
 public class DataBaseMapper {
 	
 	private String[] gamesColumn = 		{
@@ -26,142 +39,77 @@ public class DataBaseMapper {
 		}
 		return instance;
 	}
-	/*
 	
-	public  getWidgetInitData(String widgetId, Context context) throws Exception{
-	 	
-		
-		
-		//Get Yawa DataBase
+	public Game getSavedGame(Context context){
+		Game game = null;
+		//Get Data Base
 		SQLiteDatabase db = DataBaseHandler.getInstance(context).getReadableDatabase();
 		
-		Cursor cursorWidgets = db.query(GameContract.TABLE_WIDGETS, this.widgetsColumn, GameContract.KEY_WIDGETS_ID + " = " + widgetId , null, null, null, null);
+		Cursor cursorGame = db.rawQuery("SELECT * FROM "+GameContract.TABLE_GAMES,null);
 		
-		if(cursorWidgets==null){
-			return null;
-		}else if(!cursorWidgets.moveToFirst()){
-			cursorWidgets.close();
-			return null;
+		if (cursorGame.moveToFirst()) {
+			do {
+	            game = new Game();
+	            game.setGameId(cursorGame.getInt(cursorGame.getColumnIndex(GameContract.KEY_GAMES_GAME_ID)));
+	            game.setCurrentScore(cursorGame.getInt(cursorGame.getColumnIndex(GameContract.KEY_GAMES_CURRENT_SCORE)));
+			} while (cursorGame.moveToNext());
+        }
+		
+		return game;
+	}
+	
+	
+	public void addGame(Context context, Game game){
+		SQLiteDatabase db =  DataBaseHandler.getInstance(context).getWritableDatabase();
+		 
+	    ContentValues values = new ContentValues();
+	    values.put(GameContract.KEY_GAMES_GAME_ID, game.getGameId()); 
+	    values.put(GameContract.KEY_GAMES_CURRENT_SCORE, game.getCurrentScore()); 
+	    
+	    // Inserting Row
+	    db.insert(GameContract.TABLE_GAMES, null, values);
+	    // Closing database connection
+	    db.close(); 
+	}
+	
+	public void deleteGame(Context context, Game game) {
+	    SQLiteDatabase db = DataBaseHandler.getInstance(context).getWritableDatabase();
+	    db.delete(GameContract.TABLE_GAMES, GameContract.KEY_GAMES_GAME_ID + " = ?",
+	            new String[] { String.valueOf(game.getGameId()) });
+	    db.close();
+	}
+	
+	public ArrayList<GameRectangle> getGameRectangle(Context context, Game game){
+		ArrayList<GameRectangle> gameRectangles = null;
+		
+		//Get Data Base
+		SQLiteDatabase db = DataBaseHandler.getInstance(context).getReadableDatabase();
+		
+		Cursor cursorRectangles = db.rawQuery("SELECT * FROM "+GameContract.TABLE_RECTANGLES+" WHERE "+GameContract.KEY_RECTANGLES_GAME_ID+" = "+Integer.toString(game.getGameId()),null);
+		
+		if (cursorRectangles.moveToFirst()) {
+			gameRectangles = new ArrayList<GameRectangle>();
+			do {
+	            int row = cursorRectangles.getInt(cursorRectangles.getColumnIndex(GameContract.KEY_RECTANGLES_RECTANGLE_ROW));
+	            int column = cursorRectangles.getInt(cursorRectangles.getColumnIndex(GameContract.KEY_RECTANGLES_RECTANGLE_COLUMN));
+	            int shapeType = cursorRectangles.getInt(cursorRectangles.getColumnIndex(GameContract.KEY_RECTANGLES_SHAPE_ID));
+	            GameRectangle gameRectangle = new GameRectangle(row, column);
+	            if(shapeType >= 0){
+	            	GameShape gameShape = new GameShape(shapeType);
+	            	gameRectangle.setShape(gameShape);
+	            }
+	            gameRectangles.add(gameRectangle);
+			} while (cursorRectangles.moveToNext());
+        }
+		
+		return gameRectangles;
+	}
+	
+	public void addGameRectangles(Context context, Game game){
+		ArrayList<GameRectangle> gameRectangles = game.getBoard();
+		for(GameRectangle gameRectangle : gameRectangles){
+			
 		}
 		
-		Widget widget = new Widget();
-		
-		widget.setWidgetID(cursorWidgets.getString(cursorWidgets.getColumnIndex(GameContract.KEY_WIDGETS_ID)));
-		widget.setCountryName(cursorWidgets.getString(cursorWidgets.getColumnIndex(GameContract.KEY_WIDGETS_COUNTRY_NAME)));
-		widget.setCityName(cursorWidgets.getString(cursorWidgets.getColumnIndex(GameContract.KEY_WIDGETS_CITY_NAME)));
-		widget.setTemperature(cursorWidgets.getString(cursorWidgets.getColumnIndex(GameContract.KEY_WIDGETS_LAST_TEMPERATURE)));
-		widget.setPressure(cursorWidgets.getString(cursorWidgets.getColumnIndex(GameContract.KEY_WIDGETS_LAST_PRESURE)));
-		widget.setHumidity(cursorWidgets.getString(cursorWidgets.getColumnIndex(GameContract.KEY_WIDGETS_LAST_HUMEDITY)));
-		widget.setHighTemperature(cursorWidgets.getString(cursorWidgets.getColumnIndex(GameContract.KEY_WIDGETS_HIGH_TEMPERATURE)));
-		widget.setLowTemperature(cursorWidgets.getString(cursorWidgets.getColumnIndex(GameContract.KEY_WIDGETS_LOW_TEMPERATURE)));
-		widget.setScale(cursorWidgets.getString(cursorWidgets.getColumnIndex(GameContract.KEY_WIDGETS_SCALE_DATA)));
-		widget.setWoeid(cursorWidgets.getString(cursorWidgets.getColumnIndex(GameContract.KEY_WIDGETS_WOEID)));
-		widget.setSkyConditions(cursorWidgets.getString(cursorWidgets.getColumnIndex(GameContract.KEY_WIDGETS_LAST_SKY_CONDITIONS)));
-		widget.setUpdateDateTime(cursorWidgets.getString(cursorWidgets.getColumnIndex(GameContract.KEY_WIDGETS_LAST_UPDATE_DATETIME)));
-		widget.setWindDegree(cursorWidgets.getString(cursorWidgets.getColumnIndex(GameContract.KEY_WIDGETS_WIND_DEGREE)));
-		widget.setWindVelocity(cursorWidgets.getString(cursorWidgets.getColumnIndex(GameContract.KEY_WIDGETS_WIND_VELOCITY)));
-		widget.setYahooWeatherImages(cursorWidgets.getString(cursorWidgets.getColumnIndex(GameContract.KEY_WIDGETS_YAHOO_IMAGE)));
-		
-		cursorWidgets.close();
-		// return Widget Init Data
-		return widget;
 	}
-	
-	
-	public void addWidget(Widget widget, Context context) throws Exception{
-		
-	
-				
-		//Get Yawa DataBase
-		SQLiteDatabase db = DataBaseHandler.getInstance(context).getWritableDatabase();
-		
-		ContentValues values = new ContentValues();
-		
-		values.put(GameContract.KEY_WIDGETS_ID, widget.getWidgetID()); 
-		
-		values.put(GameContract.KEY_WIDGETS_COUNTRY_NAME,widget.getCountryName()); 
-		
-		values.put(GameContract.KEY_WIDGETS_CITY_NAME,widget.getCityName()); 
-		
-		values.put(GameContract.KEY_WIDGETS_LAST_TEMPERATURE,widget.getTemperature()); 
-		
-		values.put(GameContract.KEY_WIDGETS_LAST_HUMEDITY,widget.getHumidity());
-		
-		values.put(GameContract.KEY_WIDGETS_LAST_PRESURE,widget.getPressure()); 
-		
-		values.put(GameContract.KEY_WIDGETS_LOW_TEMPERATURE,widget.getLowTemperature()); 
-		
-		values.put(GameContract.KEY_WIDGETS_HIGH_TEMPERATURE,widget.getHighTemperature()); 
-		
-		values.put(GameContract.KEY_WIDGETS_SCALE_DATA,widget.getScale()); 
-		
-		values.put(GameContract.KEY_WIDGETS_WOEID,widget.getWoeid()); 
-		
-		values.put(GameContract.KEY_WIDGETS_LAST_SKY_CONDITIONS,widget.getSkyConditions()); 
-		
-		values.put(GameContract.KEY_WIDGETS_LAST_UPDATE_DATETIME, widget.getUpdateDateTime());
-		
-		values.put(GameContract.KEY_WIDGETS_WIND_DEGREE, widget.getWindDegree());
-		
-		values.put(GameContract.KEY_WIDGETS_WIND_VELOCITY, widget.getWindVelocity());
-		
-		values.put(GameContract.KEY_WIDGETS_WIND_VELOCITY, widget.getYahooWeatherImages());
-		
-		// Inserting Row
-		db.insert(GameContract.TABLE_WIDGETS, null, values);
-	
-
-	}
-	
-	
-	public void updateWidget(Widget widget,Context context) throws Exception{
-						
-		//Get Yawa DataBase
-		SQLiteDatabase db = DataBaseHandler.getInstance(context).getWritableDatabase();
-				
-		ContentValues values = new ContentValues();
-		
-		values.put(GameContract.KEY_WIDGETS_LAST_TEMPERATURE,widget.getTemperature()); 
-		
-		values.put(GameContract.KEY_WIDGETS_LAST_HUMEDITY,widget.getHumidity());
-		
-		values.put(GameContract.KEY_WIDGETS_LAST_PRESURE,widget.getPressure()); 
-		
-		values.put(GameContract.KEY_WIDGETS_LOW_TEMPERATURE,widget.getLowTemperature()); 
-		
-		values.put(GameContract.KEY_WIDGETS_HIGH_TEMPERATURE,widget.getHighTemperature()); 
-		
-		values.put(GameContract.KEY_WIDGETS_SCALE_DATA,widget.getScale()); 
-		
-		values.put(GameContract.KEY_WIDGETS_LAST_SKY_CONDITIONS,widget.getSkyConditions()); 
-		
-		values.put(GameContract.KEY_WIDGETS_LAST_UPDATE_DATETIME, widget.getUpdateDateTime());
-		
-		values.put(GameContract.KEY_WIDGETS_WIND_DEGREE, widget.getWindDegree());
-		
-		values.put(GameContract.KEY_WIDGETS_WIND_VELOCITY, widget.getWindVelocity());
-		
-		values.put(GameContract.KEY_WIDGETS_WIND_VELOCITY, widget.getYahooWeatherImages());
-		
-		//Actualizamos el registro en la base de datos
-		db.update(GameContract.TABLE_WIDGETS, values,GameContract.KEY_WIDGETS_ID + " = ?" , new String[] { widget.getWidgetID() });
-		
-	
-	}
-	
-	
-	
-	// Deleting single Widget
-	public void deleteWidget(Widget widget, Context context) throws Exception{
-							
-		//Get Yawa DataBase
-		SQLiteDatabase db = DataBaseHandler.getInstance(context).getWritableDatabase();
-			
-		db.delete(GameContract.TABLE_WIDGETS, GameContract.KEY_WIDGETS_ID + " = ?",
-				new String[] { widget.getWidgetID() });
-		
-
-	}
-	*/
-	
 }
