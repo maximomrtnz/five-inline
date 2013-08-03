@@ -14,39 +14,51 @@ import android.util.Log;
 import com.example.entities.Game;
 import com.example.entities.GameRectangle;
 import com.example.entities.GameShape;
+import com.example.fivecircles.activities.GameActivity;
 import com.example.fivecircles.gamescenes.GameScene;
 import com.example.gamealgorithms.SearchAlgorithms;
 import com.example.managers.ResourcesManager;
+import com.example.storage.DataBaseMapper;
 
 public class LoadingSavedGame extends GameState{
 
 	@Override
 	public void loadGame(GameScene gameScene) {
 		// TODO Auto-generated method stub
-		instantiateGameEntity();
-		gameScene.drawBackgroundGame();
-		gameScene.drawHUD();
-		setScore();
-		setHighScore();
-		gameScene.loadNewLevel();
-		//Draw Shape From Store Data
-		drawSavedSahpes(gameScene);
-		gameScene.setOnAreaTouchListener(gameScene);
-		gameScene.setTouchAreaBindingOnActionDownEnabled(true);
-		gameScene.setGameState(new WaitingShapeSelection());
+		
+			instantiateGameEntity();
+			gameScene.drawBackgroundGame();
+			gameScene.drawHUD();
+			setScore();
+			setHighScore();
+			gameScene.loadNewLevel();
+			//Draw Shape From Store Data
+			drawSavedSahpes(gameScene);
+			gameScene.setOnAreaTouchListener(gameScene);
+			gameScene.setTouchAreaBindingOnActionDownEnabled(true);
+			gameScene.setGameState(new WaitingShapeSelection());
+		
 	}
 
 	@Override
-	public void instantiateGameEntity() {
+	public void instantiateGameEntity(){
 		// TODO Auto-generated method stub
 		//Create a new game instance
 		Game savedGame = ResourcesManager.getInstance().getActivity().getGame();
-		
-		if(savedGame.getBoard() == null){
+		GameActivity gameActivity = ResourcesManager.getInstance().getActivity();
+		DataBaseMapper dataBaseMapper = DataBaseMapper.getInstance();
+		if(savedGame == null){
+			savedGame = dataBaseMapper.getSavedGame(gameActivity);
+			gameActivity.setGame(savedGame);
+		}
+		if(savedGame.getBoard().isEmpty()){
 			//Get board from DataBase
+			ArrayList<GameRectangle>gameRectangles = dataBaseMapper.getGameRectangles(gameActivity, savedGame);
+			savedGame.setBoard(gameRectangles);
 		}
 		savedGame.setCurrentScore(savedGame.getCurrentScore());
 		savedGame.setHighScore(getHighScore());
+		
 					
 	}
 

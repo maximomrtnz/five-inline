@@ -15,9 +15,13 @@ import org.andengine.ui.activity.BaseGameActivity;
 import com.example.entities.Game;
 import com.example.managers.ResourcesManager;
 import com.example.managers.SceneManager;
+import com.example.storage.DataBaseMapper;
 
 
+import android.content.Context;
+import android.util.Log;
 import android.view.KeyEvent;
+import android.widget.Toast;
 
 public class GameActivity extends BaseGameActivity {
 	
@@ -79,23 +83,41 @@ public class GameActivity extends BaseGameActivity {
 	@Override
 	protected void onDestroy(){
 	    super.onDestroy();
-	    if (this.isGameLoaded()) {
-	        System.exit(0);    
-	    }
+	    System.exit(0);    
 	}
 	
 	@Override
 	protected void onPause() {
 		// TODO Auto-generated method stub
 		super.onPause();
-		//Save Current Game
+		
+		//Check if we have a game
+		if(this.game != null){
+			//Save Current Game
+			DataBaseMapper dataBaseMapper = DataBaseMapper.getInstance();
+			this.game.setGameId(1);
+			//Delete old game
+			Game oldGame = dataBaseMapper.getSavedGame(this);
+			if(oldGame !=null){
+				dataBaseMapper.deleteGameRectangles(this, oldGame);
+				dataBaseMapper.deleteGame(this, oldGame);	
+			}
+			//Save Current Game
+			dataBaseMapper.addGame(this, this.game);
+			dataBaseMapper.addGameRectangles(this, this.game);
+		}
+		
 	}
 	
 	@Override
 	protected synchronized void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
+		
 		//Get Stored Game
+		DataBaseMapper dataBaseMapper = DataBaseMapper.getInstance();
+		Game savedGame = dataBaseMapper.getSavedGame(this);
+		this.game = savedGame;		
 	}
 	
 	@Override

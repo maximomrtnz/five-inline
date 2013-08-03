@@ -2,8 +2,6 @@ package com.example.storage;
 
 import java.util.ArrayList;
 
-import org.andengine.entity.primitive.Rectangle;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -26,7 +24,6 @@ public class DataBaseMapper {
 											GameContract.KEY_RECTANGLES_RECTANGLE_COLUMN,
 											GameContract.KEY_RECTANGLES_SHAPE_ID
 		   								};
-
 	
 	//Make This Class Singleton
 	public static DataBaseMapper instance;
@@ -79,7 +76,7 @@ public class DataBaseMapper {
 	    db.close();
 	}
 	
-	public ArrayList<GameRectangle> getGameRectangle(Context context, Game game){
+	public ArrayList<GameRectangle> getGameRectangles(Context context, Game game){
 		ArrayList<GameRectangle> gameRectangles = null;
 		
 		//Get Data Base
@@ -107,9 +104,32 @@ public class DataBaseMapper {
 	
 	public void addGameRectangles(Context context, Game game){
 		ArrayList<GameRectangle> gameRectangles = game.getBoard();
+		//Get Data Base
+		SQLiteDatabase db = DataBaseHandler.getInstance(context).getReadableDatabase();
 		for(GameRectangle gameRectangle : gameRectangles){
-			
+			 	ContentValues values = new ContentValues();
+			 	GameShape gameShape = gameRectangle.getShape();
+			 	int shapeType = -1;
+			 	if(gameShape!=null)
+			 		shapeType = gameShape.getShapeType();
+			 	
+			 	values.put(GameContract.KEY_RECTANGLES_GAME_ID, game.getGameId()); 
+			    values.put(GameContract.KEY_RECTANGLES_RECTANGLE_ROW, gameRectangle.getRow()); 
+			    values.put(GameContract.KEY_RECTANGLES_RECTANGLE_COLUMN, gameRectangle.getColumn()); 
+			    values.put(GameContract.KEY_RECTANGLES_SHAPE_ID, shapeType);
+			    
+			    // Inserting Row
+			    db.insert(GameContract.TABLE_RECTANGLES, null, values);
 		}
+		// Closing database connection
+	    db.close(); 
 		
+	}
+	
+	public void deleteGameRectangles(Context context, Game game){
+		  SQLiteDatabase db = DataBaseHandler.getInstance(context).getWritableDatabase();
+		  db.delete(GameContract.TABLE_RECTANGLES, GameContract.KEY_GAMES_GAME_ID + " = ?",
+		            new String[] { String.valueOf(game.getGameId()) });
+		  db.close();
 	}
 }

@@ -8,26 +8,30 @@ import android.util.Log;
 
 import com.example.entities.Game;
 import com.example.entities.GameRectangle;
+import com.example.fivecircles.activities.GameActivity;
 import com.example.fivecircles.gamescenes.GameScene;
 import com.example.managers.ResourcesManager;
+import com.example.storage.DataBaseMapper;
 
 public class LoadingNewGame extends GameState{
 
 	@Override
 	public void loadGame(GameScene gameScene) {
 		// TODO Auto-generated method stub
-		
-		instantiateGameEntity();
-		gameScene.drawBackgroundGame();
-		gameScene.drawHUD();
-		setScore();
-		setHighScore();
-		gameScene.loadNewLevel();
-		addNewShapes(gameScene, 3);
-		gameScene.setOnAreaTouchListener(gameScene);
-		gameScene.setTouchAreaBindingOnActionDownEnabled(true);
-		gameScene.setGameState(new WaitingShapeSelection());
-		
+		try{
+			instantiateGameEntity();
+			gameScene.drawBackgroundGame();
+			gameScene.drawHUD();
+			setScore();
+			setHighScore();
+			gameScene.loadNewLevel();
+			addNewShapes(gameScene, 3);
+			gameScene.setOnAreaTouchListener(gameScene);
+			gameScene.setTouchAreaBindingOnActionDownEnabled(true);
+			gameScene.setGameState(new WaitingShapeSelection());
+		}catch(Exception e){
+			Log.d("Error Loading New Game", e.getMessage());
+		}	
 	}
 
 	@Override
@@ -46,6 +50,17 @@ public class LoadingNewGame extends GameState{
 	@Override
 	public void instantiateGameEntity() {
 		// TODO Auto-generated method stub
+		
+		//Get Old Saved Game
+		GameActivity gameActivity = ResourcesManager.getInstance().getActivity();
+		DataBaseMapper dataBaseMapper = DataBaseMapper.getInstance();
+		Game oldGame = dataBaseMapper.getSavedGame(gameActivity);
+		
+		//Delete old Game and its Game Rectangles
+		if(oldGame != null){
+			dataBaseMapper.deleteGameRectangles(gameActivity, oldGame);
+			dataBaseMapper.deleteGame(gameActivity, oldGame);
+		}
 		
 		//Create a new game instance
 		Game newGame = new Game(); 
