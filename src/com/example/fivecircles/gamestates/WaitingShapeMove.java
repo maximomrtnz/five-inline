@@ -25,6 +25,7 @@ import com.example.gamealgorithms.CheckSameShapeDiagonallyRight;
 import com.example.gamealgorithms.CheckSameShapeHorizontally;
 import com.example.gamealgorithms.CheckSameShapeVertically;
 import com.example.gamealgorithms.SearchAlgorithms;
+import com.example.managers.NotificationManager;
 import com.example.managers.ResourcesManager;
 
 public class WaitingShapeMove extends GameState{
@@ -153,6 +154,7 @@ public class WaitingShapeMove extends GameState{
 		ArrayList<GameRectangle> gameRectangles = null;
 		
 		int multiplyPointBy						= 0;
+		int totalScore							= 0;
 		
 		for(int i = 0; i < 4;i++){
 			//Erase ArraList
@@ -193,7 +195,7 @@ public class WaitingShapeMove extends GameState{
 			
 
 			//Add number to show the points that player wins
-			Text text = gameScene.drawPointText(rectangle.getX(),rectangle.getY(), "+"+multiplyPointBy+"0");
+			Text text = gameScene.drawPointText(rectangle.getX(),rectangle.getY(), "+10");
 			
 			ScaleModifier scaleModifier = new ScaleModifier(2, 2f, 0f){
 				@Override
@@ -242,7 +244,12 @@ public class WaitingShapeMove extends GameState{
 			
 			game.setCurrentScore(game.getCurrentScore()+10*multiplyPointBy);
 			
+			totalScore += 10*multiplyPointBy;
 		}
+		
+		if(totalScore != 0)
+			//Show Toast notification
+			NotificationManager.getInstance().showToastNotification("+"+totalScore, ResourcesManager.getInstance().getActivity());
 		
 		return isThereFive;
 	}

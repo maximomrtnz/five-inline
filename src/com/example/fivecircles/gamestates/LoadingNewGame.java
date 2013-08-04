@@ -8,8 +8,10 @@ import android.util.Log;
 
 import com.example.entities.Game;
 import com.example.entities.GameRectangle;
+import com.example.fivecircles.R;
 import com.example.fivecircles.activities.GameActivity;
 import com.example.fivecircles.gamescenes.GameScene;
+import com.example.managers.NotificationManager;
 import com.example.managers.ResourcesManager;
 import com.example.storage.DataBaseMapper;
 
@@ -30,7 +32,10 @@ public class LoadingNewGame extends GameState{
 			gameScene.setTouchAreaBindingOnActionDownEnabled(true);
 			gameScene.setGameState(new WaitingShapeSelection());
 		}catch(Exception e){
-			Log.d("Error Loading New Game", e.getMessage());
+			//Unable to load game for any reason
+			NotificationManager.getInstance().showToastNotification(R.string.error_unable_to_load_game, ResourcesManager.getInstance().getActivity());
+			//Return to Menu Scene
+			gameScene.onBackKeyPressed();
 		}	
 	}
 

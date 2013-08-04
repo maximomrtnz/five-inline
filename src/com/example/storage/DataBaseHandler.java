@@ -36,8 +36,9 @@ public class DataBaseHandler extends SQLiteOpenHelper{
 			
 		//Create a Games Table
 		String CREATE_GAMES_TABLE = "CREATE TABLE " + GameContract.TABLE_GAMES + 
-				"(" + GameContract.KEY_GAMES_GAME_ID + " INTEGER PRIMARY KEY,"+ 
-				GameContract.KEY_GAMES_CURRENT_SCORE + " INTEGER );";
+				"(" + GameContract.KEY_GAMES_GAME_ID + " INTEGER PRIMARY KEY,"+
+					  GameContract.KEY_GAMES_CURRENT_SCORE + " INTEGER," +
+					  GameContract.KEY_GAMES_MD5_HASH + " TEXT );";
 		db.execSQL(CREATE_GAMES_TABLE);
 		
 		//Create a Rectangles Table
@@ -45,7 +46,8 @@ public class DataBaseHandler extends SQLiteOpenHelper{
 				"(" + GameContract.KEY_RECTANGLES_GAME_ID + " INTEGER,"+ 
 					GameContract.KEY_RECTANGLES_RECTANGLE_ROW + " INTEGER,"+
 					GameContract.KEY_RECTANGLES_RECTANGLE_COLUMN + " INTEGER,"+
-					GameContract.KEY_RECTANGLES_SHAPE_ID + " INTEGER,"+ 
+					GameContract.KEY_RECTANGLES_SHAPE_ID + " INTEGER,"+
+					GameContract.KEY_RECTANGLES_MD5_HASH + " TEXT,"+
 					"PRIMARY KEY ("+GameContract.KEY_RECTANGLES_RECTANGLE_ROW+","+GameContract.KEY_RECTANGLES_RECTANGLE_COLUMN+"),"+
 					" FOREIGN KEY ("+GameContract.KEY_RECTANGLES_GAME_ID+") REFERENCES "+GameContract.TABLE_GAMES+" ("+GameContract.KEY_GAMES_GAME_ID+"));";
 		db.execSQL(CREATE_RECTANGLES_TABLE);

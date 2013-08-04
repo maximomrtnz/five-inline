@@ -90,22 +90,26 @@ public class GameActivity extends BaseGameActivity {
 	protected void onPause() {
 		// TODO Auto-generated method stub
 		super.onPause();
-		
-		//Check if we have a game
-		if(this.game != null){
-			//Save Current Game
-			DataBaseMapper dataBaseMapper = DataBaseMapper.getInstance();
-			this.game.setGameId(1);
-			//Delete old game
-			Game oldGame = dataBaseMapper.getSavedGame(this);
-			if(oldGame !=null){
-				dataBaseMapper.deleteGameRectangles(this, oldGame);
-				dataBaseMapper.deleteGame(this, oldGame);	
+		try{
+			//Check if we have a game
+			if(this.game != null){
+				//Save Current Game
+				DataBaseMapper dataBaseMapper = DataBaseMapper.getInstance();
+				this.game.setGameId(1);
+				//Delete old game
+				Game oldGame = dataBaseMapper.getSavedGame(this);
+				if(oldGame !=null){
+					dataBaseMapper.deleteGameRectangles(this, oldGame);
+					dataBaseMapper.deleteGame(this, oldGame);	
+				}
+				//Save Current Game
+				dataBaseMapper.addGame(this, this.game);
+				dataBaseMapper.addGameRectangles(this, this.game);
 			}
-			//Save Current Game
-			dataBaseMapper.addGame(this, this.game);
-			dataBaseMapper.addGameRectangles(this, this.game);
+		}catch(Exception e){
+			Log.d("Error Saving Game Data", e.getMessage());
 		}
+		
 		
 	}
 	
@@ -113,11 +117,13 @@ public class GameActivity extends BaseGameActivity {
 	protected synchronized void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-		
-		//Get Stored Game
-		DataBaseMapper dataBaseMapper = DataBaseMapper.getInstance();
-		Game savedGame = dataBaseMapper.getSavedGame(this);
-		this.game = savedGame;		
+		//If We don't have any game stored
+		if(this.game == null){
+			//Get Stored Game
+			DataBaseMapper dataBaseMapper = DataBaseMapper.getInstance();
+			Game savedGame = dataBaseMapper.getSavedGame(this);
+			this.game = savedGame;		
+		}
 	}
 	
 	@Override

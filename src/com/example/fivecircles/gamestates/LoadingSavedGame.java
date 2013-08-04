@@ -14,10 +14,14 @@ import android.util.Log;
 import com.example.entities.Game;
 import com.example.entities.GameRectangle;
 import com.example.entities.GameShape;
+import com.example.fivecircles.R;
 import com.example.fivecircles.activities.GameActivity;
 import com.example.fivecircles.gamescenes.GameScene;
+import com.example.fivecircles.utilities.MD5Manager;
 import com.example.gamealgorithms.SearchAlgorithms;
+import com.example.managers.NotificationManager;
 import com.example.managers.ResourcesManager;
+import com.example.managers.SceneManager;
 import com.example.storage.DataBaseMapper;
 
 public class LoadingSavedGame extends GameState{
@@ -25,6 +29,8 @@ public class LoadingSavedGame extends GameState{
 	@Override
 	public void loadGame(GameScene gameScene) {
 		// TODO Auto-generated method stub
+		try{
+			
 		
 			instantiateGameEntity();
 			gameScene.drawBackgroundGame();
@@ -38,10 +44,16 @@ public class LoadingSavedGame extends GameState{
 			gameScene.setTouchAreaBindingOnActionDownEnabled(true);
 			gameScene.setGameState(new WaitingShapeSelection());
 		
+		}catch(Exception exception){
+			//Unable to load game for any reason
+			NotificationManager.getInstance().showToastNotification(R.string.error_unable_to_load_game, ResourcesManager.getInstance().getActivity());
+			//Return to Menu Scene
+			SceneManager.getInstance().loadMenuScene(gameScene.getEngine());
+		}
 	}
 
 	@Override
-	public void instantiateGameEntity(){
+	public void instantiateGameEntity() throws Exception{
 		// TODO Auto-generated method stub
 		//Create a new game instance
 		Game savedGame = ResourcesManager.getInstance().getActivity().getGame();
@@ -50,16 +62,18 @@ public class LoadingSavedGame extends GameState{
 		if(savedGame == null){
 			savedGame = dataBaseMapper.getSavedGame(gameActivity);
 			gameActivity.setGame(savedGame);
+			if(!MD5Manager.getInstance().checkGameBoardMD5Hash(savedGame))
+				throw new Exception("Corrupted Data");
 		}
 		if(savedGame.getBoard().isEmpty()){
 			//Get board from DataBase
 			ArrayList<GameRectangle>gameRectangles = dataBaseMapper.getGameRectangles(gameActivity, savedGame);
 			savedGame.setBoard(gameRectangles);
+			if(!MD5Manager.getInstance().checkGameBoardMD5Hash(savedGame))
+				throw new Exception("Corrupted Data");
 		}
 		savedGame.setCurrentScore(savedGame.getCurrentScore());
-		savedGame.setHighScore(getHighScore());
-		
-					
+		savedGame.setHighScore(getHighScore());		
 	}
 
 	@Override

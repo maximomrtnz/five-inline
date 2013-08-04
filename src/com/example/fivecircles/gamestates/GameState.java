@@ -122,7 +122,7 @@ public abstract class GameState {
 	
 	public abstract void loadGame(GameScene gameScene);
 	
-	public abstract void instantiateGameEntity();
+	public abstract void instantiateGameEntity() throws Exception;
 	
 	public abstract void areaTouch(GameScene gameScene, ITouchArea iTouchArea);
 	

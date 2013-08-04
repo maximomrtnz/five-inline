@@ -145,7 +145,8 @@ public class SceneManager {
     public void loadMenuScene(final Engine mEngine){
     	ResourcesManager.getInstance().loadLoadingResources();
         setScene(loadingScene);
-        gameScene.disposeScene();
+        if(gameScene != null)
+        	gameScene.disposeScene();
         ResourcesManager.getInstance().unloadGameTextures();
         mEngine.registerUpdateHandler(new TimerHandler(0.1f, new ITimerCallback(){
             @Override

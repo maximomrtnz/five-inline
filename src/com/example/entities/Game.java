@@ -2,6 +2,8 @@ package com.example.entities;
 
 import java.util.ArrayList;
 
+import com.example.fivecircles.utilities.MD5Manager;
+
 /*
  * This class represent the current game
  */
@@ -10,6 +12,8 @@ public class Game {
 	private int currentScore;
 	private int highScore;
 	private int gameId;
+	private String md5Hash;
+	
 	private ArrayList<GameRectangle> board = new ArrayList<GameRectangle>();
 	
 	/*
@@ -29,6 +33,11 @@ public class Game {
 		return gameId;
 	}
 	
+	public String getMD5Hash(){
+		return this.md5Hash;
+	}
+	
+	
 	/*
 	 * SETTERS
 	 */
@@ -45,6 +54,21 @@ public class Game {
 		this.gameId = gameId;
 	}
 	
+	public void setMD5Hash(String md5Hash){
+		this.md5Hash = md5Hash;
+	}
 	
+	/*
+	 * MD5 Hash
+	 */
+	
+	//Method which generate a MD5 hash using object information
+	public String generateMD5Hash() throws Exception{
+		ArrayList<String>strings = new ArrayList<String>();
+		strings.add(Integer.toString(this.gameId));
+		strings.add(Integer.toString(this.currentScore));
+		this.md5Hash = MD5Manager.getInstance().generateMD5Hash(strings);
+		return this.md5Hash;
+	}
 	
 }
