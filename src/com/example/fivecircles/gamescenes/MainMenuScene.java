@@ -13,10 +13,13 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.example.entities.Game;
+import com.example.fivecircles.R;
 import com.example.fivecircles.activities.GameActivity;
 import com.example.fivecircles.activities.HowToPlayActivity;
 import com.example.fivecircles.gamestates.LoadingNewGame;
 import com.example.fivecircles.gamestates.LoadingSavedGame;
+import com.example.fivecircles.utilities.MD5Manager;
+import com.example.managers.NotificationManager;
 import com.example.managers.ResourcesManager;
 import com.example.managers.SceneManager;
 import com.example.managers.SceneManager.SceneType;
@@ -136,12 +139,6 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 	private void addContinueMenuItem(){
 		//Check for saved game	
 		 Game game = ResourcesManager.getInstance().getActivity().getGame();
-		 if(game == null){
-			 //Checking for saved game
-			 GameActivity gameActivity = ResourcesManager.getInstance().getActivity();
-			 DataBaseMapper dataBaseMapper = DataBaseMapper.getInstance();
-			 game = dataBaseMapper.getSavedGame(gameActivity);
-		 }
 		 IMenuItem continueMenuItem = (IMenuItem)menuChildScene.getChildByTag(3);
 		 if(game != null && continueMenuItem == null){
 			 IMenuItem playMenuItem= (IMenuItem)menuChildScene.getChildByTag(1);

@@ -70,8 +70,7 @@ public class GameRectangle {
 		strings.add(Integer.toString(this.column));
 		strings.add(Integer.toString(shapeId));
 		
-		this.md5Hash = MD5Manager.getInstance().generateMD5Hash(strings);
-		return this.md5Hash;
+		return  MD5Manager.getInstance().generateMD5Hash(strings);
 	}
 	
 }

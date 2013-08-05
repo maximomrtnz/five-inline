@@ -59,12 +59,6 @@ public class LoadingSavedGame extends GameState{
 		Game savedGame = ResourcesManager.getInstance().getActivity().getGame();
 		GameActivity gameActivity = ResourcesManager.getInstance().getActivity();
 		DataBaseMapper dataBaseMapper = DataBaseMapper.getInstance();
-		if(savedGame == null){
-			savedGame = dataBaseMapper.getSavedGame(gameActivity);
-			gameActivity.setGame(savedGame);
-			if(!MD5Manager.getInstance().checkGameBoardMD5Hash(savedGame))
-				throw new Exception("Corrupted Data");
-		}
 		if(savedGame.getBoard().isEmpty()){
 			//Get board from DataBase
 			ArrayList<GameRectangle>gameRectangles = dataBaseMapper.getGameRectangles(gameActivity, savedGame);

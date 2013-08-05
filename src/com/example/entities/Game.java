@@ -67,8 +67,7 @@ public class Game {
 		ArrayList<String>strings = new ArrayList<String>();
 		strings.add(Integer.toString(this.gameId));
 		strings.add(Integer.toString(this.currentScore));
-		this.md5Hash = MD5Manager.getInstance().generateMD5Hash(strings);
-		return this.md5Hash;
+		return MD5Manager.getInstance().generateMD5Hash(strings);
 	}
 	
 }

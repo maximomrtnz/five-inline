@@ -13,6 +13,9 @@ import org.andengine.entity.scene.Scene;
 import org.andengine.ui.activity.BaseGameActivity;
 
 import com.example.entities.Game;
+import com.example.fivecircles.R;
+import com.example.fivecircles.utilities.MD5Manager;
+import com.example.managers.NotificationManager;
 import com.example.managers.ResourcesManager;
 import com.example.managers.SceneManager;
 import com.example.storage.DataBaseMapper;
@@ -118,12 +121,24 @@ public class GameActivity extends BaseGameActivity {
 		// TODO Auto-generated method stub
 		super.onResume();
 		//If We don't have any game stored
-		if(this.game == null){
-			//Get Stored Game
-			DataBaseMapper dataBaseMapper = DataBaseMapper.getInstance();
-			Game savedGame = dataBaseMapper.getSavedGame(this);
-			this.game = savedGame;		
+		try {	
+			if(this.game == null){
+				//Get Stored Game
+				DataBaseMapper dataBaseMapper = DataBaseMapper.getInstance();
+				Game savedGame = dataBaseMapper.getSavedGame(this);
+				if(savedGame != null){
+				  if(!MD5Manager.getInstance().checkGameMD5Hash(savedGame))
+				    	throw new Exception("Corrupted Data");
+					this.game = savedGame;		
+				}
+			  
+			}
+		}catch (Exception e) {
+			// TODO Auto-generated catch block
+			//Unable to load game for any reason
+			NotificationManager.getInstance().showToastNotificationFromActivity(R.string.error_unable_to_load_game, getApplicationContext());
 		}
+		
 	}
 	
 	@Override
