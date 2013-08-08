@@ -2,6 +2,8 @@ package com.example.managers;
 
 import java.io.IOException;
 
+import org.andengine.audio.music.Music;
+import org.andengine.audio.music.MusicFactory;
 import org.andengine.audio.sound.Sound;
 import org.andengine.audio.sound.SoundFactory;
 import org.andengine.engine.Engine;
@@ -48,7 +50,11 @@ public class ResourcesManager {
     private Sound gameOverPlayersSound; 
     
     
-    
+    //---------------------------------------------
+    // MUSIC	
+    //---------------------------------------------
+    private Music mainMenuSceneEnvironment;
+    private Music gameSceneEnvironment;
     
     
     //---------------------------------------------
@@ -151,8 +157,11 @@ public class ResourcesManager {
     }
     
     private void loadMenuAudio(){
-   
-    	
+    	try{
+    		 this.mainMenuSceneEnvironment = MusicFactory.createMusicFromAsset(activity.getMusicManager(), activity,"music/gameMusic.mp3");	
+      	}catch (IOException e){
+      			e.printStackTrace();
+      	}
     }
 
     private void loadGameGraphics(){
@@ -479,9 +488,10 @@ public class ResourcesManager {
 	public void setContinueMenuButton(ITextureRegion continueMenuButton) {
 		this.continueMenuButton = continueMenuButton;
 	}
-	
-	
-	
+
+	public Music getMainMenuSceneEnvironment() {
+		return mainMenuSceneEnvironment;
+	}
 
 	
 	

@@ -1,5 +1,6 @@
 package com.example.managers;
 
+import org.andengine.audio.music.Music;
 import org.andengine.audio.sound.Sound;
 
 import android.content.SharedPreferences;
@@ -58,6 +59,7 @@ public class AudioManager {
     public synchronized void soundRemovePlayers(){
     	if(this.isSoundEnable()){
     		Sound sound = ResourcesManager.getInstance().getRemovePlayersSound();
+    		sound.setLooping(true);
     		sound.play();
     	}	
     }
@@ -76,4 +78,10 @@ public class AudioManager {
     	}	
     }
     
+    public synchronized void musicMainMenu(){
+    	if(this.isSoundEnable()){
+    		Music music = ResourcesManager.getInstance().getMainMenuSceneEnvironment();
+    		music.play();
+    	}
+    }
 }

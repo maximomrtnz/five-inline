@@ -19,6 +19,7 @@ import com.example.fivecircles.activities.HowToPlayActivity;
 import com.example.fivecircles.gamestates.LoadingNewGame;
 import com.example.fivecircles.gamestates.LoadingSavedGame;
 import com.example.fivecircles.utilities.MD5Manager;
+import com.example.managers.AudioManager;
 import com.example.managers.NotificationManager;
 import com.example.managers.ResourcesManager;
 import com.example.managers.SceneManager;
@@ -40,6 +41,7 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 		// TODO Auto-generated method stub
 		createBackground();
 		createMenuChildScene();
+		AudioManager.getInstance().musicMainMenu();
 	}
 
 	@Override
