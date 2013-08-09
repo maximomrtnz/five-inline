@@ -104,7 +104,6 @@ public abstract class GameState {
 		//If there isn't an empty game rectangle then We loose
 		if(gameRectangle == null){
 			//Game Over actions
-			AudioManager.getInstance().soundGameOver();
 			gameScene.setChildScene(new GameOverScene(), false, true, true);
 			
 			//Is there a highest score

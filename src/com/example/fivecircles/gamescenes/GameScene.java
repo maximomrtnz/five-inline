@@ -277,7 +277,6 @@ public class GameScene extends BaseScene implements IOnAreaTouchListener {
 	}
 	
 	public void displayGameOverScene(){
-		AudioManager.getInstance().soundGameOver();
 		setChildScene(new GameOverScene(), false, true, true);
 	}
 	
@@ -301,8 +300,11 @@ public class GameScene extends BaseScene implements IOnAreaTouchListener {
 		// TODO Auto-generated method stub
 		
 		if(pSceneTouchEvent.isActionDown()){
-			if(!this.longTouch)
+			if(!this.longTouch){
 				this.gameState.areaTouch(this, pTouchArea);
+				//Play Select Shape Sound
+				AudioManager.getInstance().playSound(AudioManager.SOUND_SELECT_PLAYER);
+			}
 			this.longTouch = true;
 		}
 		
@@ -312,7 +314,7 @@ public class GameScene extends BaseScene implements IOnAreaTouchListener {
 			}
 		}
 		
-		if(pSceneTouchEvent.isActionCancel()){
+		if(pSceneTouchEvent.isActionOutside()){
 			Log.d("Touch","3");
 		}
 		

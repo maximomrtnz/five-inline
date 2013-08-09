@@ -74,8 +74,6 @@ public class LoadingNewGame extends GameState{
 		ArrayList<GameRectangle> board = new ArrayList<GameRectangle>();
 		for(int i = 1 ; i < 9 ; i++){
 			for(int j = 1 ; j < 9 ; j++){
-				Log.d("Row", ""+i);
-				Log.d("Column", ""+j);
 				board.add(new GameRectangle(i, j));
 			}
 		}

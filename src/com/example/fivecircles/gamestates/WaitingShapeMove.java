@@ -25,6 +25,7 @@ import com.example.gamealgorithms.CheckSameShapeDiagonallyRight;
 import com.example.gamealgorithms.CheckSameShapeHorizontally;
 import com.example.gamealgorithms.CheckSameShapeVertically;
 import com.example.gamealgorithms.SearchAlgorithms;
+import com.example.managers.AudioManager;
 import com.example.managers.NotificationManager;
 import com.example.managers.ResourcesManager;
 
@@ -72,6 +73,8 @@ public class WaitingShapeMove extends GameState{
 				shape.sortChildren();
 				hideBadPath(gameScene);
 				if(!checkFive(gameScene, touchedGameRectangle.getRow(),touchedGameRectangle.getColumn(), touchedGameRectangle.getShape().getShapeType())){
+					//Play Appear Shape Sound
+					AudioManager.getInstance().playSound(AudioManager.SOUND_APPEAR_PLAYER);
 					//When you add a new shape you need to check five shape joined
 					ArrayList<GameRectangle> addedGameRecatngles = addNewShapes(gameScene, 2);
 					for(GameRectangle addedGameRectangle : addedGameRecatngles){
@@ -247,10 +250,12 @@ public class WaitingShapeMove extends GameState{
 			totalScore += 10*multiplyPointBy;
 		}
 		
-		if(totalScore != 0)
+		if(totalScore != 0){
+			//Play Remove Zombies Sound
+			AudioManager.getInstance().playSound(AudioManager.SOUND_REMOVE_PLAYER);
 			//Show Toast notification
 			NotificationManager.getInstance().showToastNotification("+"+totalScore, ResourcesManager.getInstance().getActivity());
-		
+		}
 		return isThereFive;
 	}
 	

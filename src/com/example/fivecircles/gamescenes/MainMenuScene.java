@@ -41,7 +41,6 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 		// TODO Auto-generated method stub
 		createBackground();
 		createMenuChildScene();
-		AudioManager.getInstance().musicMainMenu();
 	}
 
 	@Override
