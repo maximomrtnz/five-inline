@@ -147,6 +147,26 @@ protected static int MENUITEMS = 3;
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void onPause() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onResume() {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+
+	@Override
+	public void playMusicScene() {
+		// TODO Auto-generated method stub
+		
+	}
 	
 
 }

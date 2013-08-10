@@ -158,4 +158,24 @@ public class PauseScene extends BaseScene implements IOnMenuItemClickListener{
 		
 	}
 
+	@Override
+	public void onPause() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onResume() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	
+
+	@Override
+	public void playMusicScene() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

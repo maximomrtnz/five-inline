@@ -93,6 +93,11 @@ public class GameActivity extends BaseGameActivity {
 	protected void onPause() {
 		// TODO Auto-generated method stub
 		super.onPause();
+		
+		if(isGameLoaded()){
+			SceneManager.getInstance().getCurrentScene().onPause();
+		}
+		
 		try{
 			//Check if we have a game
 			if(this.game != null){
@@ -120,6 +125,9 @@ public class GameActivity extends BaseGameActivity {
 	protected synchronized void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
+		if(mEngine.isRunning()){
+			SceneManager.getInstance().getCurrentScene().onResume();
+		}
 		//If We don't have any game stored
 		try {	
 			if(this.game == null){

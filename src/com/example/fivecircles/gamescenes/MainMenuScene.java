@@ -41,6 +41,7 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 		// TODO Auto-generated method stub
 		createBackground();
 		createMenuChildScene();
+		playMusicScene();
 	}
 
 	@Override
@@ -165,6 +166,27 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 	public void updateScene() {
 		// TODO Auto-generated method stub
 		addContinueMenuItem();
+	}
+
+	@Override
+	public void onPause() {
+		// TODO Auto-generated method stub
+		//Pause Music
+		AudioManager.getInstance().pauseMusic(AudioManager.MUSIC_MAIN_MENU_SCENE);
+	}
+
+	@Override
+	public void onResume() {
+		// TODO Auto-generated method stub
+		//Resume Music
+		AudioManager.getInstance().resumeMusic(AudioManager.MUSIC_MAIN_MENU_SCENE);
+	}
+
+
+	@Override
+	public void playMusicScene() {
+		// TODO Auto-generated method stub
+		AudioManager.getInstance().playMusic(AudioManager.MUSIC_MAIN_MENU_SCENE);
 	}
 
 
