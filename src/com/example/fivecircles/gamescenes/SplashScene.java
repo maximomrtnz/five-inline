@@ -80,4 +80,10 @@ public class SplashScene extends BaseScene{
 		
 	}
 
+	@Override
+	public void stopMusicScene() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

@@ -22,6 +22,7 @@ import org.xml.sax.Attributes;
 
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.provider.MediaStore.Audio;
 import android.util.Log;
 import android.view.MotionEvent;
 
@@ -314,10 +315,6 @@ public class GameScene extends BaseScene implements IOnAreaTouchListener {
 			}
 		}
 		
-		if(pSceneTouchEvent.isActionOutside()){
-			Log.d("Touch","3");
-		}
-		
 		if(pSceneTouchEvent.isActionUp()) {
 			if(this.longTouch)
 				this.gameState.areaTouch(this, pTouchArea);
@@ -338,19 +335,27 @@ public class GameScene extends BaseScene implements IOnAreaTouchListener {
 	@Override
 	public void onPause() {
 		// TODO Auto-generated method stub
-		
+		AudioManager.getInstance().pauseMusic(AudioManager.MUSIC_GAME_SCENE);
 	}
 
 
 	@Override
 	public void onResume() {
 		// TODO Auto-generated method stub
-		
+		AudioManager.getInstance().resumeMusic(AudioManager.MUSIC_GAME_SCENE);
 	}
 
 	@Override
 	public void playMusicScene() {
 		// TODO Auto-generated method stub
+		AudioManager.getInstance().playMusic(AudioManager.MUSIC_GAME_SCENE);
+	}
+
+
+	@Override
+	public void stopMusicScene() {
+		// TODO Auto-generated method stub
+		AudioManager.getInstance().stopMusic(AudioManager.MUSIC_GAME_SCENE);
 	}
 	
 	

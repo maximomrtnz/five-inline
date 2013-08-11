@@ -9,6 +9,7 @@ import org.andengine.audio.sound.Sound;
 
 
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import com.example.fivecircles.activities.GameActivity;
 
@@ -37,9 +38,7 @@ public class AudioManager {
 	//Singleton Pattern
     private static final AudioManager instance = new AudioManager();
     
-    private AudioManager(){
-    	
-    }
+    private AudioManager(){}
     
     public static AudioManager getInstance(){
     	return instance;
@@ -91,7 +90,9 @@ public class AudioManager {
     	//TODO: check isMusicEnable
     	Music music = (Music)this.gameAudio.get(musicId);
     	if(music.isPlaying()){
-    		music.stop();
+    		//Because the stop method has a bug we must to simulate the stop method
+    		music.pause();
+    		music.seekTo(0);
     	}
     }
     

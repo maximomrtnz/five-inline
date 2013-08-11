@@ -125,7 +125,7 @@ public class GameActivity extends BaseGameActivity {
 	protected synchronized void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-		if(mEngine.isRunning()){
+		if(isGameLoaded()){
 			SceneManager.getInstance().getCurrentScene().onResume();
 		}
 		//If We don't have any game stored

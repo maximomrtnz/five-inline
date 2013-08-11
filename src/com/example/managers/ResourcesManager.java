@@ -142,8 +142,7 @@ public class ResourcesManager {
     
     private void loadMenuAudio(){
     	try{
-    		 MusicFactory.setAssetBasePath("music/");
-    		 AudioManager.getInstance().putAudio(AudioManager.MUSIC_MAIN_MENU_SCENE, MusicFactory.createMusicFromAsset(activity.getMusicManager(), activity,"gameMenuSceneMusic.wav"));	
+    		 AudioManager.getInstance().putAudio(AudioManager.MUSIC_MAIN_MENU_SCENE, MusicFactory.createMusicFromAsset(activity.getMusicManager(), activity,"music/gameMenuSceneMusic.wav"));	
       	}catch (IOException e){
       			e.printStackTrace();
       	}
@@ -185,10 +184,16 @@ public class ResourcesManager {
     
     private void loadGameAudio(){
     	try{
-    	 AudioManager.getInstance().putAudio(AudioManager.SOUND_SELECT_PLAYER, SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "sound/pick_up.wav"));	
-    	 AudioManager.getInstance().putAudio(AudioManager.SOUND_REMOVE_PLAYER, SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "sound/remove.wav"));	
-    	 AudioManager.getInstance().putAudio(AudioManager.SOUND_APPEAR_PLAYER, SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "sound/appear.wav"));	
-   		}catch (IOException e){
+    	 //Load Sounds
+    	 SoundFactory.setAssetBasePath("sound/");	
+    	 AudioManager.getInstance().putAudio(AudioManager.SOUND_SELECT_PLAYER, SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "pick_up.wav"));	
+    	 AudioManager.getInstance().putAudio(AudioManager.SOUND_REMOVE_PLAYER, SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "remove.wav"));	
+    	 AudioManager.getInstance().putAudio(AudioManager.SOUND_APPEAR_PLAYER, SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "appear.wav"));	
+   		
+    	 //Load Music 
+    	 AudioManager.getInstance().putAudio(AudioManager.MUSIC_GAME_SCENE, MusicFactory.createMusicFromAsset(activity.getMusicManager(), activity,"music/gameSceneMusic.wav"));
+    	 
+    	}catch (IOException e){
    			e.printStackTrace();
    		}
     }

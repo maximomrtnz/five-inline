@@ -75,4 +75,10 @@ public class LoadingScene extends BaseScene{
 		
 	}
 
+	@Override
+	public void stopMusicScene() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

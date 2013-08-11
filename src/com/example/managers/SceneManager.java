@@ -51,6 +51,7 @@ public class SceneManager {
     
     public void setScene(BaseScene scene){
     	scene.updateScene();
+    	scene.playMusicScene();
         engine.setScene(scene);
         currentScene = scene;
         currentSceneType = scene.getSceneType();
@@ -98,34 +99,19 @@ public class SceneManager {
     	ResourcesManager.getInstance().loadLoadingResources();
         menuScene = new MainMenuScene();
         loadingScene = new LoadingScene();
-        SceneManager.getInstance().setScene(menuScene);
+        setScene(menuScene);
         disposeSplashScene();
     }
     
     
-    //This method is responsible for displaying loading scene, 
-    //while initializing game scene and loading its resources, 
-    //and unloading menu texture.
-    public void loadHowToPlayScene(final Engine mEngine){
-    	ResourcesManager.getInstance().unloadMenuTextures();
-        mEngine.registerUpdateHandler(new TimerHandler(0.1f, new ITimerCallback(){
-            @Override
-			public void onTimePassed(final TimerHandler pTimerHandler){
-                mEngine.unregisterUpdateHandler(pTimerHandler);
-                ResourcesManager.getInstance().loadGameResources();
-                howToPlay = new HowToPlayScene();
-                setScene(howToPlay);
-            }
-        }));
-    }
-    
-    
+   
     //This method is responsible for displaying loading scene, 
     //while initializing game scene and loading its resources, 
     //and unloading menu texture.
     public void loadGameScene(final Engine mEngine, final GameState gameState){
     	ResourcesManager.getInstance().loadLoadingResources();
         setScene(loadingScene);
+        menuScene.stopMusicScene();
         ResourcesManager.getInstance().unloadMenuTextures();
         mEngine.registerUpdateHandler(new TimerHandler(0.1f, new ITimerCallback(){
             @Override
@@ -143,11 +129,13 @@ public class SceneManager {
     //This method is responsible for 
     //loading menu scene and displaying loading scene
     public void loadMenuScene(final Engine mEngine){
-    	ResourcesManager.getInstance().loadLoadingResources();
-        setScene(loadingScene);
-        if(gameScene != null)
+    	ResourcesManager.getInstance().loadLoadingResources();  	
+    	if(gameScene != null){
+    		gameScene.stopMusicScene();
         	gameScene.disposeScene();
-        ResourcesManager.getInstance().unloadGameTextures();
+        }
+    	setScene(loadingScene);
+    	ResourcesManager.getInstance().unloadGameTextures();
         mEngine.registerUpdateHandler(new TimerHandler(0.1f, new ITimerCallback(){
             @Override
 			public void onTimePassed(final TimerHandler pTimerHandler){
@@ -161,8 +149,9 @@ public class SceneManager {
     
     public void reloadGameScene(final Engine mEngine){
     	ResourcesManager.getInstance().loadLoadingResources();
-    	setScene(loadingScene);
+    	gameScene.stopMusicScene();
     	gameScene.disposeScene();
+    	setScene(loadingScene);
     	ResourcesManager.getInstance().unloadGameTextures();
     	mEngine.registerUpdateHandler(new TimerHandler(0.1f, new ITimerCallback(){
              @Override

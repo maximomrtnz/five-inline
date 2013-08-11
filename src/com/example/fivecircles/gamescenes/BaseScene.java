@@ -45,6 +45,8 @@ public abstract class BaseScene extends Scene{
     
     public abstract void playMusicScene();
     
+    public abstract void stopMusicScene();
+    
     public abstract SceneType getSceneType();
     
     public abstract void disposeScene();

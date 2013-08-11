@@ -167,6 +167,12 @@ protected static int MENUITEMS = 3;
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void stopMusicScene() {
+		// TODO Auto-generated method stub
+		
+	}
 	
 
 }

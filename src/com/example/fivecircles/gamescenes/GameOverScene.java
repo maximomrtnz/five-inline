@@ -135,4 +135,10 @@ public class GameOverScene extends BaseScene implements IOnMenuItemClickListener
 		
 	}
 
+	@Override
+	public void stopMusicScene() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
