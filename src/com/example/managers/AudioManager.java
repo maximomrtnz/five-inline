@@ -1,9 +1,15 @@
 package com.example.managers;
 
+
 import java.util.Hashtable;
+
+import org.andengine.audio.IAudioEntity;
+import org.andengine.audio.music.Music;
 import org.andengine.audio.sound.Sound;
 
+
 import android.content.SharedPreferences;
+
 
 import com.example.fivecircles.activities.GameActivity;
 
@@ -26,20 +32,13 @@ public class AudioManager {
 	public static Integer MUSIC_MAIN_MENU_SCENE = 4;
 	public static Integer MUSIC_GAME_SCENE = 5; 
 	
-	private Hashtable<Integer,Sound> gameAudio = new Hashtable<Integer,Sound>();
-	
-	
+	// Game's Sound and Music List
+	private Hashtable<Integer,IAudioEntity> gameAudio = new Hashtable<Integer,IAudioEntity>();
+
 	//Singleton Pattern
     private static final AudioManager instance = new AudioManager();
     
-    private AudioManager(){
-    	
-    	//Load Sounds
-    	this.gameAudio.put(SOUND_SELECT_PLAYER, ResourcesManager.getInstance().getSelectPlayerSound());
-    	this.gameAudio.put(SOUND_REMOVE_PLAYER, ResourcesManager.getInstance().getRemovePlayersSound());
-    	this.gameAudio.put(SOUND_APPEAR_PLAYER, ResourcesManager.getInstance().getAppearPlayersSound());
-  
-    }
+    private AudioManager(){}
     
     public static AudioManager getInstance(){
     	return instance;
@@ -77,5 +76,48 @@ public class AudioManager {
     	if(isSoundEnable()){
     		this.gameAudio.get(soundId).play();
     	}
+    }
+    
+    public void playMusic(Integer musicId){
+    	//TODO: check isMusicEnable
+    	Music music = (Music)this.gameAudio.get(musicId);
+    	if(!music.isPlaying()){
+    		music.play();
+    	}
+    }
+
+    public void stopMusic(Integer musicId){
+    	//TODO: check isMusicEnable
+    	Music music = (Music)this.gameAudio.get(musicId);
+    	if(music.isPlaying()){
+    		//Because the stop method has a bug we must to simulate the stop method
+    		music.pause();
+    		music.seekTo(0);
+    	}
+    }
+    
+    public void pauseMusic(Integer musicId){
+    	//TODO: check isMusicEnable
+    	Music music = (Music)this.gameAudio.get(musicId);
+    	if(music.isPlaying()){
+    		music.pause();
+    	}
+    }
+    
+    public void resumeMusic(Integer musicId){
+    	//TODO: check isMusicEnable
+    	Music music = (Music)this.gameAudio.get(musicId);
+    	if(!music.isPlaying()){
+    		music.resume();
+    	}
+    }
+    
+    public void putAudio(Integer audioId,Music music){
+    	this.gameAudio.put(audioId, music);
+    	music.setLooping(true);
+    }
+    
+    public void putAudio(Integer audioId,Sound sound){
+    	this.gameAudio.put(audioId, sound);
     }
 }

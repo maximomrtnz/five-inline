@@ -121,9 +121,9 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
         		 //Load Game Scene
                 SceneManager.getInstance().loadGameScene(super.getEngine(),new LoadingNewGame());
         		return true;
-        	case MENU_CONTINUE:
+        	case MENU_CONTINUE: 
        		 	//Load Game Scene
-               SceneManager.getInstance().loadGameScene(super.getEngine(),new LoadingSavedGame());
+        		SceneManager.getInstance().loadGameScene(super.getEngine(),new LoadingSavedGame());
        			return true;	
         	case MENU_HOWTOPLAY:
         		//Load How To Play Scene
@@ -165,6 +165,33 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 	public void updateScene() {
 		// TODO Auto-generated method stub
 		addContinueMenuItem();
+	}
+
+	@Override
+	public void onPause() {
+		// TODO Auto-generated method stub
+		//Pause Music
+		AudioManager.getInstance().pauseMusic(AudioManager.MUSIC_MAIN_MENU_SCENE);
+	}
+
+	@Override
+	public void onResume() {
+		// TODO Auto-generated method stub
+		//Resume Music
+		AudioManager.getInstance().resumeMusic(AudioManager.MUSIC_MAIN_MENU_SCENE);
+	}
+
+
+	@Override
+	public void playMusicScene() {
+		// TODO Auto-generated method stub
+		AudioManager.getInstance().playMusic(AudioManager.MUSIC_MAIN_MENU_SCENE);
+	}
+
+	@Override
+	public void stopMusicScene() {
+		// TODO Auto-generated method stub
+		AudioManager.getInstance().stopMusic(AudioManager.MUSIC_MAIN_MENU_SCENE);
 	}
 
 

@@ -21,7 +21,7 @@ import org.andengine.util.level.simple.SimpleLevelEntityLoaderData;
 import org.andengine.util.level.simple.SimpleLevelLoader;
 import org.xml.sax.Attributes;
 
-import android.content.SharedPreferences;
+
 import android.graphics.Color;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -29,7 +29,6 @@ import android.view.MotionEvent;
 import com.example.entities.GameRectangle;
 import com.example.fivecircles.ShapeFactory;
 import com.example.fivecircles.ShapeFactoryTypeOne;
-import com.example.fivecircles.activities.GameActivity;
 import com.example.fivecircles.gamestates.GameState;
 import com.example.gamealgorithms.SearchAlgorithms;
 import com.example.managers.AudioManager;
@@ -334,6 +333,34 @@ public class GameScene extends BaseScene implements IOnAreaTouchListener {
 	public void updateScene() {
 		// TODO Auto-generated method stub
 		
+	}
+
+
+	@Override
+	public void playMusicScene() {
+		// TODO Auto-generated method stub
+		AudioManager.getInstance().playMusic(AudioManager.MUSIC_GAME_SCENE);
+	}
+
+
+	@Override
+	public void stopMusicScene() {
+		// TODO Auto-generated method stub
+		AudioManager.getInstance().stopMusic(AudioManager.MUSIC_GAME_SCENE);
+	}
+
+
+	@Override
+	public void onPause() {
+		// TODO Auto-generated method stub
+		AudioManager.getInstance().pauseMusic(AudioManager.MUSIC_GAME_SCENE);
+	}
+
+
+	@Override
+	public void onResume() {
+		// TODO Auto-generated method stub
+		AudioManager.getInstance().resumeMusic(AudioManager.MUSIC_GAME_SCENE);
 	}
 	
 	

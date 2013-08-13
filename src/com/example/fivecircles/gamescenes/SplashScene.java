@@ -62,4 +62,28 @@ public class SplashScene extends BaseScene{
 		
 	}
 
+	@Override
+	public void onPause() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onResume() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void playMusicScene() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void stopMusicScene() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

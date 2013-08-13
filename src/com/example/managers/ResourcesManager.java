@@ -39,23 +39,7 @@ public class ResourcesManager {
     private GameActivity activity;
     private Camera camera;
     private VertexBufferObjectManager vbom;
-    
-    //---------------------------------------------
-    // SOUND
-    //---------------------------------------------
-    
-    private Sound selectPlayerSound; 
-    private Sound removePlayersSound; 
-    private Sound appearPlayersSound; 
-    private Sound gameOverPlayersSound; 
-    
-    
-    //---------------------------------------------
-    // MUSIC	
-    //---------------------------------------------
-    private Music mainMenuSceneEnvironment;
-    private Music gameSceneEnvironment;
-    
+
     
     //---------------------------------------------
     // FONTS
@@ -158,7 +142,7 @@ public class ResourcesManager {
     
     private void loadMenuAudio(){
     	try{
-    		 this.mainMenuSceneEnvironment = MusicFactory.createMusicFromAsset(activity.getMusicManager(), activity,"music/gameMusic.mp3");	
+    		 AudioManager.getInstance().putAudio(AudioManager.MUSIC_MAIN_MENU_SCENE, MusicFactory.createMusicFromAsset(activity.getMusicManager(), activity,"music/gameMenuSceneMusic.wav"));	
       	}catch (IOException e){
       			e.printStackTrace();
       	}
@@ -200,10 +184,15 @@ public class ResourcesManager {
     
     private void loadGameAudio(){
     	try{
-   		 this.selectPlayerSound = SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "sound/pick_up.wav");
-   		 this.removePlayersSound = SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "sound/remove.wav");
-   		 this.appearPlayersSound = SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "sound/appear.wav");
-   		 this.gameOverPlayersSound = SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "sound/game_over.wav");
+    	 //Load Sounds
+    	 SoundFactory.setAssetBasePath("sound/");	
+    	 AudioManager.getInstance().putAudio(AudioManager.SOUND_SELECT_PLAYER, SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "pick_up.wav"));	
+    	 AudioManager.getInstance().putAudio(AudioManager.SOUND_REMOVE_PLAYER, SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "remove.wav"));	
+    	 AudioManager.getInstance().putAudio(AudioManager.SOUND_APPEAR_PLAYER, SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "appear.wav"));	
+   		
+    	 //Load Music 
+    	 AudioManager.getInstance().putAudio(AudioManager.MUSIC_GAME_SCENE, MusicFactory.createMusicFromAsset(activity.getMusicManager(), activity,"music/gameSceneMusic.wav"));
+    	 
     	}catch (IOException e){
    			e.printStackTrace();
    		}
@@ -438,24 +427,6 @@ public class ResourcesManager {
 		return sound;
 	}
 
-	public Sound getSelectPlayerSound() {
-		return selectPlayerSound;
-	}
-
-	public Sound getRemovePlayersSound() {
-		return removePlayersSound;
-	}
-	
-
-	public Sound getAppearPlayersSound() {
-		return appearPlayersSound;
-	}
-	
-	
-	
-	public Sound getGameOverPlayersSound() {
-		return gameOverPlayersSound;
-	}
 
 	public ITextureRegion getKindOneNeighborOne() {
 		return kindOneNeighborOne;
@@ -489,11 +460,7 @@ public class ResourcesManager {
 		this.continueMenuButton = continueMenuButton;
 	}
 
-	public Music getMainMenuSceneEnvironment() {
-		return mainMenuSceneEnvironment;
-	}
 
-	
 	
 	
 }

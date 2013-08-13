@@ -43,11 +43,19 @@ public abstract class BaseScene extends Scene{
     
     public abstract void onBackKeyPressed();
     
+    public abstract void playMusicScene();
+    
+    public abstract void stopMusicScene();
+    
     public abstract SceneType getSceneType();
     
     public abstract void disposeScene();
     
     public abstract void updateScene();
+    
+    public abstract void onPause();
+    
+    public abstract void onResume();
     
     //---------------------------------------------
     //	COMMON METHOD

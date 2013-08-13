@@ -30,8 +30,6 @@ public class LoadingSavedGame extends GameState{
 	public void loadGame(GameScene gameScene) {
 		// TODO Auto-generated method stub
 		try{
-			
-		
 			instantiateGameEntity();
 			gameScene.drawBackgroundGame();
 			gameScene.drawHUD();
@@ -43,7 +41,6 @@ public class LoadingSavedGame extends GameState{
 			gameScene.setOnAreaTouchListener(gameScene);
 			gameScene.setTouchAreaBindingOnActionDownEnabled(true);
 			gameScene.setGameState(new WaitingShapeSelection());
-		
 		}catch(Exception exception){
 			//Unable to load game for any reason
 			NotificationManager.getInstance().showToastNotification(R.string.error_unable_to_load_game, ResourcesManager.getInstance().getActivity());

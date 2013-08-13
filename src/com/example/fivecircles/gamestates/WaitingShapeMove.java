@@ -5,19 +5,22 @@ import java.util.Stack;
 
 import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.AlphaModifier;
-import org.andengine.entity.modifier.ScaleAtModifier;
+import org.andengine.entity.modifier.FadeOutModifier;
+import org.andengine.entity.modifier.SingleValueChangeEntityModifier;
+
 import org.andengine.entity.modifier.ScaleModifier;
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.ITouchArea;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
+import org.andengine.util.adt.color.Color;
+import org.andengine.util.modifier.IModifier;
+import org.andengine.util.modifier.IModifier.DeepCopyNotSupportedException;
 
 import android.util.Log;
 
 import com.example.entities.Game;
 import com.example.entities.GameRectangle;
-import com.example.fivecircles.ShapeFactory;
-import com.example.fivecircles.ShapeFactoryTypeOne;
 import com.example.fivecircles.gamescenes.GameScene;
 import com.example.gamealgorithms.CheckSameShapeAlgorithm;
 import com.example.gamealgorithms.CheckSameShapeDiagonallyLeft;
@@ -26,7 +29,6 @@ import com.example.gamealgorithms.CheckSameShapeHorizontally;
 import com.example.gamealgorithms.CheckSameShapeVertically;
 import com.example.gamealgorithms.SearchAlgorithms;
 import com.example.managers.AudioManager;
-import com.example.managers.NotificationManager;
 import com.example.managers.ResourcesManager;
 
 public class WaitingShapeMove extends GameState{
@@ -210,7 +212,7 @@ public class WaitingShapeMove extends GameState{
 						@Override
 						public void run() {
 							
-							//Delete Shape
+							//Delete Text
 					
 							pItem.detachSelf();
 							
@@ -245,18 +247,46 @@ public class WaitingShapeMove extends GameState{
 
 			shape.registerEntityModifier(alphaModifier);
 			
-			game.setCurrentScore(game.getCurrentScore()+10*multiplyPointBy);
+			
 			
 			totalScore += 10*multiplyPointBy;
 		}
 		
 		if(stack.size() != 0){
+			
+			//Add Score To Total Score
+			game.setCurrentScore(game.getCurrentScore()+10*multiplyPointBy);
+			
+			
 			//Play Remove Zombies Sound
 			AudioManager.getInstance().playSound(AudioManager.SOUND_REMOVE_PLAYER);
 			
 			//Show number with total zombies removed
-			Text text = gameScene.drawPointText(ResourcesManager.getInstance().getCamera().getCenterX()+200,ResourcesManager.getInstance().getCamera().getCenterY()+300, "x"+stack.size(),ResourcesManager.getInstance().getFreckleFaceRegular());
+			final Text text = gameScene.drawPointText(ResourcesManager.getInstance().getCamera().getCenterX()+200,ResourcesManager.getInstance().getCamera().getCenterY()+300, "x"+stack.size(),ResourcesManager.getInstance().getFreckleFaceRegular());
 			
+			text.setRotation(-15f);
+			
+			text.setColor(Color.GREEN);
+			
+			FadeOutModifier fadeOutModifier = new FadeOutModifier(4f){
+				@Override
+				protected void onModifierFinished(final IEntity pItem) {
+					super.onModifierFinished(pItem);
+					// Your action after finishing modifier
+					ResourcesManager.getInstance().getEngine()
+							.runOnUpdateThread(new Runnable() {
+								@Override
+								public void run() {
+									
+									//Delete Text
+									
+									pItem.detachSelf();
+								}
+							});
+				}
+			};
+			
+			text.registerEntityModifier(fadeOutModifier);
 		}
 		return isThereFive;
 	}
