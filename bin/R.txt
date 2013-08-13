@@ -244,10 +244,9 @@ int drawable abs__textfield_searchview_right_holo_light 0x7f02006e
 int drawable abs__toast_frame 0x7f02006f
 int drawable actionbar_background 0x7f020070
 int drawable howtoplay_movements 0x7f020071
-int drawable howtoplay_movements_1 0x7f020072
-int drawable howtoplay_shape_cancelmovement 0x7f020073
-int drawable howtoplay_shape_movement 0x7f020074
-int drawable ic_launcher 0x7f020075
+int drawable howtoplay_shape_cancelmovement 0x7f020072
+int drawable howtoplay_shape_movement 0x7f020073
+int drawable ic_launcher 0x7f020074
 int id abs__action_bar 0x7f040020
 int id abs__action_bar_container 0x7f04001f
 int id abs__action_bar_subtitle 0x7f040011

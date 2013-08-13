@@ -198,7 +198,7 @@ public class WaitingShapeMove extends GameState{
 			
 
 			//Add number to show the points that player wins
-			Text text = gameScene.drawPointText(rectangle.getX(),rectangle.getY(), "+10");
+			Text text = gameScene.drawPointText(rectangle.getX(),rectangle.getY(), "+1",ResourcesManager.getInstance().getFreckleFaceRegular());
 			
 			ScaleModifier scaleModifier = new ScaleModifier(2, 2f, 0f){
 				@Override
@@ -250,11 +250,13 @@ public class WaitingShapeMove extends GameState{
 			totalScore += 10*multiplyPointBy;
 		}
 		
-		if(totalScore != 0){
+		if(stack.size() != 0){
 			//Play Remove Zombies Sound
 			AudioManager.getInstance().playSound(AudioManager.SOUND_REMOVE_PLAYER);
-			//Show Toast notification
-			NotificationManager.getInstance().showToastNotification("+"+totalScore, ResourcesManager.getInstance().getActivity());
+			
+			//Show number with total zombies removed
+			Text text = gameScene.drawPointText(ResourcesManager.getInstance().getCamera().getCenterX()+200,ResourcesManager.getInstance().getCamera().getCenterY()+300, "x"+stack.size(),ResourcesManager.getInstance().getFreckleFaceRegular());
+			
 		}
 		return isThereFive;
 	}

@@ -11,6 +11,7 @@ import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 import org.andengine.entity.text.TextOptions;
 import org.andengine.input.touch.TouchEvent;
+import org.andengine.opengl.font.Font;
 import org.andengine.opengl.util.GLState;
 import org.andengine.util.SAXUtils;
 import org.andengine.util.adt.align.HorizontalAlign;
@@ -280,11 +281,12 @@ public class GameScene extends BaseScene implements IOnAreaTouchListener {
 		setChildScene(new GameOverScene(), false, true, true);
 	}
 	
-	public Text drawPointText(float posX, float posY, String pText){
+	public Text drawPointText(float posX, float posY, String pText, Font font){
 		Text text = new Text(posX, posY, ResourcesManager.getInstance().getFreckleFaceRegular(), pText, super.getVbom());
 		attachChild(text);
 		return text;
 	}
+	
 	
 	public void setGameState(GameState gameState) {
 		this.gameState = gameState;
