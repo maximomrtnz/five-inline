@@ -270,6 +270,10 @@ public class GameScene extends BaseScene implements IOnAreaTouchListener {
 		return shape;
 	}
 	
+	public IEntity drawSuperPower(){
+		
+	}
+	
 	public IEntity drawCross(Rectangle rectangle){
 		Sprite cross = new Sprite(rectangle.getWidth()/2, rectangle.getHeight()/2, ResourcesManager.getInstance().getCross(), super.getVbom());
 		rectangle.attachChild(cross);

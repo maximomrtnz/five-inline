@@ -89,6 +89,7 @@ public class ResourcesManager {
     private ITextureRegion kindOneNeighborFive;
     private ITextureRegion cross;
     private ITextureRegion gameScreenBackground;
+    private ITextureRegion superPowerI;
     
         
     private BuildableBitmapTextureAtlas menuTextureAtlas;
@@ -173,6 +174,8 @@ public class ResourcesManager {
         
         cross = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "cross.png");
         
+        //Game Super Powers
+        superPowerI = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "superPower-1.png");
         
         try{
             this.gameTextureAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 1, 0));
@@ -450,6 +453,10 @@ public class ResourcesManager {
 
 	public ITextureRegion getCross() {
 		return cross;
+	}
+
+	public ITextureRegion getSuperPowerI() {
+		return superPowerI;
 	}
 
 	public ITextureRegion getContinueMenuButton() {

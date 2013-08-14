@@ -35,6 +35,22 @@ public class SearchAlgorithms {
 		return returnGameRectangle;
 	}
 	
+	public static ArrayList<GameRectangle> getTakenGameRectangles(GameScene gameScene){
+		ArrayList<GameRectangle> takenGameRectangles = new ArrayList<GameRectangle>(); 
+		
+		//Found taken game rectangles
+		for(int i = 0 ;i < gameScene.getChildCount();i++){
+		     if(gameScene.getChildByIndex(i).getTag() == 1){
+		    	 GameRectangle gameRectangle = (GameRectangle)gameScene.getChildByIndex(i).getUserData();
+		    	 if(gameRectangle.getShape()!=null){
+		    		 takenGameRectangles.add(gameRectangle);
+		    	 }
+		     }
+		}
+						
+		return takenGameRectangles;
+	}
+	
 	
 	public static Rectangle getRectangleFromGameRectangle(GameScene gameScene,GameRectangle gameRectangle){
 		Rectangle rectangle = null;

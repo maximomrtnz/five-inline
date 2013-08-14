@@ -21,6 +21,7 @@ import android.util.Log;
 
 import com.example.entities.Game;
 import com.example.entities.GameRectangle;
+import com.example.entities.SuperPowerRemoveZombies;
 import com.example.fivecircles.gamescenes.GameScene;
 import com.example.gamealgorithms.CheckSameShapeAlgorithm;
 import com.example.gamealgorithms.CheckSameShapeDiagonallyLeft;
@@ -28,6 +29,7 @@ import com.example.gamealgorithms.CheckSameShapeDiagonallyRight;
 import com.example.gamealgorithms.CheckSameShapeHorizontally;
 import com.example.gamealgorithms.CheckSameShapeVertically;
 import com.example.gamealgorithms.SearchAlgorithms;
+import com.example.gamealgorithms.ZombiesRemover;
 import com.example.managers.AudioManager;
 import com.example.managers.ResourcesManager;
 
@@ -148,18 +150,13 @@ public class WaitingShapeMove extends GameState{
 		
 	private boolean checkFive(final GameScene gameScene, int row, int column, int type){
 		
-		Game game = ResourcesManager.getInstance().getActivity().getGame();
-		
-		boolean isThereFive = false;
-		
 		CheckSameShapeAlgorithm checkSameShapeAlgorithm = null;
 		
-		Stack<GameRectangle> stack 				= new Stack<GameRectangle>();
+		ArrayList<GameRectangle> gameRectanglesToClear	= new ArrayList<GameRectangle>();
 		
 		ArrayList<GameRectangle> gameRectangles = null;
 		
 		int multiplyPointBy						= 0;
-		int totalScore							= 0;
 		
 		for(int i = 0; i < 4;i++){
 			//Erase ArraList
@@ -181,114 +178,19 @@ public class WaitingShapeMove extends GameState{
 			gameRectangles	= checkSameShapeAlgorithm.checkSameShape(gameScene, row, column, type);
 			if(gameRectangles != null){
 				multiplyPointBy++;
-				stack.addAll(gameRectangles);
+				gameRectanglesToClear.addAll(gameRectangles);
 			}	
 		}
 		
-		if(!stack.isEmpty()){
+		if(!gameRectanglesToClear.isEmpty()){
+			Game game = ResourcesManager.getInstance().getActivity().getGame();
 			GameRectangle gameRectangle = SearchAlgorithms.getGameRectangleByRowAndColumn(gameScene, row, column);
-			stack.push(gameRectangle);
-			isThereFive = true;
+			gameRectanglesToClear.add(gameRectangle);
+			ZombiesRemover.removeZombies(gameScene, gameRectanglesToClear, multiplyPointBy);
+			if(game.getCurrentScore() % 10 = 0)
 		}
-		
-		
-		
-		for(GameRectangle gameRectangleToDelete : stack){
-			gameRectangleToDelete.setShape(null);
-			final Rectangle rectangle = SearchAlgorithms.getRectangleFromGameRectangle(gameScene, gameRectangleToDelete);
-			final Sprite shape = SearchAlgorithms.getShapeByRectangle(gameScene, rectangle);
-			
 
-			//Add number to show the points that player wins
-			Text text = gameScene.drawPointText(rectangle.getX(),rectangle.getY(), "+1",ResourcesManager.getInstance().getFreckleFaceRegular());
-			
-			ScaleModifier scaleModifier = new ScaleModifier(2, 2f, 0f){
-				@Override
-				protected void onModifierFinished(final IEntity pItem) {
-					// TODO Auto-generated method stub
-					super.onModifierFinished(pItem);
-					ResourcesManager.getInstance().getEngine()
-					.runOnUpdateThread(new Runnable() {
-						@Override
-						public void run() {
-							
-							//Delete Text
-					
-							pItem.detachSelf();
-							
-						}
-					});
-				}
-			};
-			
-			text.registerEntityModifier(scaleModifier);
-			
-			AlphaModifier alphaModifier = new AlphaModifier(1, 1f, 0f) {
-				@Override
-				protected void onModifierFinished(final IEntity pItem) {
-					super.onModifierFinished(pItem);
-					// Your action after finishing modifier
-					ResourcesManager.getInstance().getEngine()
-							.runOnUpdateThread(new Runnable() {
-								@Override
-								public void run() {
-									
-									//Delete Shape
-									gameScene.unregisterTouchArea(pItem);
-									pItem.detachSelf();
-									
-									//Restore Rectangle Properties
-									gameScene.registerTouchArea(rectangle);
-									rectangle.setTag(1);
-								}
-							});
-				}
-			};
-
-			shape.registerEntityModifier(alphaModifier);
-			
-			
-			
-			totalScore += 10*multiplyPointBy;
-		}
-		
-		if(stack.size() != 0){
-			
-			//Add Score To Total Score
-			game.setCurrentScore(game.getCurrentScore()+10*multiplyPointBy);
-			
-			
-			//Play Remove Zombies Sound
-			AudioManager.getInstance().playSound(AudioManager.SOUND_REMOVE_PLAYER);
-			
-			//Show number with total zombies removed
-			final Text text = gameScene.drawPointText(ResourcesManager.getInstance().getCamera().getCenterX()+200,ResourcesManager.getInstance().getCamera().getCenterY()+300, "x"+stack.size(),ResourcesManager.getInstance().getFreckleFaceRegular());
-			
-			text.setRotation(-15f);
-			
-			text.setColor(Color.GREEN);
-			
-			FadeOutModifier fadeOutModifier = new FadeOutModifier(4f){
-				@Override
-				protected void onModifierFinished(final IEntity pItem) {
-					super.onModifierFinished(pItem);
-					// Your action after finishing modifier
-					ResourcesManager.getInstance().getEngine()
-							.runOnUpdateThread(new Runnable() {
-								@Override
-								public void run() {
-									
-									//Delete Text
-									
-									pItem.detachSelf();
-								}
-							});
-				}
-			};
-			
-			text.registerEntityModifier(fadeOutModifier);
-		}
-		return isThereFive;
+		return !gameRectanglesToClear.isEmpty();
 	}
 	
 
