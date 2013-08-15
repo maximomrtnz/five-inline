@@ -27,8 +27,11 @@ import android.util.Log;
 import android.view.MotionEvent;
 
 import com.example.entities.GameRectangle;
-import com.example.fivecircles.ShapeFactory;
-import com.example.fivecircles.ShapeFactoryTypeOne;
+import com.example.entities.SuperPower;
+import com.example.entities.creators.ISuperPowerFactory;
+import com.example.entities.creators.ShapeFactory;
+import com.example.entities.creators.ShapeFactoryTypeOne;
+import com.example.entities.creators.SuperPowerRemoveZombiesFactory;
 import com.example.fivecircles.gamestates.GameState;
 import com.example.gamealgorithms.SearchAlgorithms;
 import com.example.managers.AudioManager;
@@ -270,8 +273,14 @@ public class GameScene extends BaseScene implements IOnAreaTouchListener {
 		return shape;
 	}
 	
-	public IEntity drawSuperPower(){
-		
+	public IEntity drawSuperPower(ISuperPowerFactory iSuperPowerFactory){
+		IEntity superPowerDraw = iSuperPowerFactory.createSuperPowerDraw();
+		SuperPower superPower = iSuperPowerFactory.createSuperPower();
+		superPowerDraw.setUserData(superPower);
+		superPowerDraw.setTag(5);
+		attachChild(superPowerDraw);
+		registerTouchArea(superPowerDraw);
+		return superPowerDraw;
 	}
 	
 	public IEntity drawCross(Rectangle rectangle){

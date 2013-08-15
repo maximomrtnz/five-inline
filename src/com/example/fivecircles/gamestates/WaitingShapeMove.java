@@ -22,6 +22,7 @@ import android.util.Log;
 import com.example.entities.Game;
 import com.example.entities.GameRectangle;
 import com.example.entities.SuperPowerRemoveZombies;
+import com.example.entities.creators.SuperPowerRemoveZombiesFactory;
 import com.example.fivecircles.gamescenes.GameScene;
 import com.example.gamealgorithms.CheckSameShapeAlgorithm;
 import com.example.gamealgorithms.CheckSameShapeDiagonallyLeft;
@@ -187,7 +188,8 @@ public class WaitingShapeMove extends GameState{
 			GameRectangle gameRectangle = SearchAlgorithms.getGameRectangleByRowAndColumn(gameScene, row, column);
 			gameRectanglesToClear.add(gameRectangle);
 			ZombiesRemover.removeZombies(gameScene, gameRectanglesToClear, multiplyPointBy);
-			if(game.getCurrentScore() % 10 = 0)
+			if(game.getCurrentScore() % 10 == 0)
+				gameScene.drawSuperPower(new SuperPowerRemoveZombiesFactory());
 		}
 
 		return !gameRectanglesToClear.isEmpty();

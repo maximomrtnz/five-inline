@@ -9,6 +9,7 @@ import org.andengine.entity.scene.ITouchArea;
 import org.andengine.entity.sprite.Sprite;
 
 import com.example.entities.GameRectangle;
+import com.example.entities.SuperPower;
 import com.example.fivecircles.gamescenes.GameScene;
 import com.example.gamealgorithms.SearchAlgorithms;
 
@@ -24,24 +25,34 @@ public class WaitingShapeSelection extends GameState{
 	public void areaTouch(GameScene gameScene, ITouchArea iTouchArea) {
 		// TODO Auto-generated method stub
 		//Check if player was touch
-		if(((IEntity)iTouchArea).getTag()==2){
+		switch (((IEntity)iTouchArea).getTag()) {
+			case 2:
+				Sprite shape = (Sprite)iTouchArea;
+				Rectangle rectangle = (Rectangle)shape.getUserData();
+				GameRectangle gameRectangle = (GameRectangle)rectangle.getUserData();
+				shape.setZIndex(3);
+				gameScene.sortChildren();
+				
+				//This is important becouse we need to know
+				//when shape is touch again
+				shape.setTag(3);
 			
-			Sprite shape = (Sprite)iTouchArea;
-			Rectangle rectangle = (Rectangle)shape.getUserData();
-			GameRectangle gameRectangle = (GameRectangle)rectangle.getUserData();
-			shape.setZIndex(3);
-			gameScene.sortChildren();
-			
-			//This is important becouse we need to know
-			//when shape is touch again
-			shape.setTag(3);
-		
-			//Show bad path
-			showBadPath(gameScene,getGoodPath(gameScene, gameRectangle.getRow(),gameRectangle.getColumn()));
-			
-			//Pass to the next state
-			gameScene.setGameState(new WaitingShapeMove());
-		}
+				//Show bad path
+				showBadPath(gameScene,getGoodPath(gameScene, gameRectangle.getRow(),gameRectangle.getColumn()));
+				
+				//Pass to the next state
+				gameScene.setGameState(new WaitingShapeMove());
+				break;
+	
+			case 5:
+				//A super power was touched
+				Sprite superPowerDraw = (Sprite)iTouchArea;
+				SuperPower superPower = (SuperPower)superPowerDraw.getUserData();
+				//Execute super power
+				superPower.executePower(gameScene);
+				break;
+			}
+
 	}
 
 	
