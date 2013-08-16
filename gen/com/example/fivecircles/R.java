@@ -1053,6 +1053,7 @@ containing a value of this type.
         public static final int abs__shareactionprovider_share_with_application=0x7f090007;
         public static final int app_name=0x7f09000d;
         public static final int error_unable_to_load_game=0x7f090010;
+        public static final int game_message_one=0x7f090011;
         public static final int hello_world=0x7f09000e;
         public static final int menu_settings=0x7f09000f;
     }

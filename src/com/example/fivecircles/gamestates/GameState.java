@@ -39,33 +39,6 @@ public abstract class GameState {
 		return column<=8 && 1<=column;
 	}
 	
-	protected ArrayList<GameRectangle> addNewShapes(final GameScene gameScene, int quantity){
-		ArrayList<GameRectangle> gameRectangles = new ArrayList<GameRectangle>();
-		for(int i = 0; i < quantity ; i++){
-			GameRectangle gameRectangle= SearchAlgorithms.getEmptyGameRectangle(gameScene);
-			if(gameRectangle != null){
-				
-				final Rectangle rectangle = SearchAlgorithms.getRectangleFromGameRectangle(gameScene,gameRectangle);
-				int type = MathUtils.random(1, 5);
-				Sprite shape = (Sprite) gameScene.drawShape(rectangle.getX(),rectangle.getY(), rectangle.getWidth(), rectangle.getWidth(), type);
-				gameRectangle.setShape(new GameShape(type));
-				//Storage rectangle because We need it then
-				shape.setUserData(rectangle);
-				
-				ResourcesManager.getInstance().getEngine().runOnUpdateThread(new Runnable(){
-	                @Override
-	                public void run(){
-	                	try{
-	                        gameScene.unregisterTouchArea(rectangle);
-	                	}catch(Exception exception){
-	                		Log.d("Error On Remove Player", exception.getMessage());
-	                	}
-	                }});
-				gameRectangles.add(gameRectangle);
-			}
-		}
-		return gameRectangles;
-	}
 	
 	public int getHighScore() {
 		GameActivity gameActivity = ResourcesManager.getInstance()

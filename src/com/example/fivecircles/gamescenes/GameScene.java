@@ -277,7 +277,7 @@ public class GameScene extends BaseScene implements IOnAreaTouchListener {
 		IEntity superPowerDraw = iSuperPowerFactory.createSuperPowerDraw();
 		SuperPower superPower = iSuperPowerFactory.createSuperPower();
 		superPowerDraw.setUserData(superPower);
-		superPowerDraw.setTag(5);
+		superPowerDraw.setTag(6);
 		attachChild(superPowerDraw);
 		registerTouchArea(superPowerDraw);
 		return superPowerDraw;

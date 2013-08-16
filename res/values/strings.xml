@@ -5,5 +5,6 @@
     <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
     <string name="error_unable_to_load_game">Unable to load game</string>
-
+	<string name="game_message_one">Fucking Samurai!</string>
+	
 </resources>

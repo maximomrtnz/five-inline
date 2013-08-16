@@ -8,10 +8,13 @@ import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.ITouchArea;
 import org.andengine.entity.sprite.Sprite;
 
+import android.util.Log;
+
 import com.example.entities.GameRectangle;
 import com.example.entities.SuperPower;
 import com.example.fivecircles.gamescenes.GameScene;
 import com.example.gamealgorithms.SearchAlgorithms;
+import com.example.managers.ResourcesManager;
 
 public class WaitingShapeSelection extends GameState{
 
@@ -22,7 +25,7 @@ public class WaitingShapeSelection extends GameState{
 	}
 
 	@Override
-	public void areaTouch(GameScene gameScene, ITouchArea iTouchArea) {
+	public void areaTouch(final GameScene gameScene, ITouchArea iTouchArea) {
 		// TODO Auto-generated method stub
 		//Check if player was touch
 		switch (((IEntity)iTouchArea).getTag()) {
@@ -33,23 +36,28 @@ public class WaitingShapeSelection extends GameState{
 				shape.setZIndex(3);
 				gameScene.sortChildren();
 				
-				//This is important becouse we need to know
+				//This is important because we need to know
 				//when shape is touch again
 				shape.setTag(3);
-			
 				//Show bad path
 				showBadPath(gameScene,getGoodPath(gameScene, gameRectangle.getRow(),gameRectangle.getColumn()));
-				
 				//Pass to the next state
 				gameScene.setGameState(new WaitingShapeMove());
 				break;
 	
-			case 5:
+			case 6:
 				//A super power was touched
-				Sprite superPowerDraw = (Sprite)iTouchArea;
+				final Sprite superPowerDraw = (Sprite)iTouchArea;
 				SuperPower superPower = (SuperPower)superPowerDraw.getUserData();
 				//Execute super power
 				superPower.executePower(gameScene);
+				//Remove super power draw
+				ResourcesManager.getInstance().getEngine().runOnUpdateThread(new Runnable(){
+		            @Override
+		            public void run(){
+		            	gameScene.unregisterTouchArea(superPowerDraw);
+		            	superPowerDraw.detachSelf();
+		            }});
 				break;
 			}
 

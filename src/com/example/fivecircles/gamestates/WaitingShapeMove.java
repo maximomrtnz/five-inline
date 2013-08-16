@@ -27,10 +27,11 @@ import com.example.fivecircles.gamescenes.GameScene;
 import com.example.gamealgorithms.CheckSameShapeAlgorithm;
 import com.example.gamealgorithms.CheckSameShapeDiagonallyLeft;
 import com.example.gamealgorithms.CheckSameShapeDiagonallyRight;
+import com.example.gamealgorithms.CheckSameShapeFive;
 import com.example.gamealgorithms.CheckSameShapeHorizontally;
 import com.example.gamealgorithms.CheckSameShapeVertically;
 import com.example.gamealgorithms.SearchAlgorithms;
-import com.example.gamealgorithms.ZombiesRemover;
+import com.example.gamealgorithms.ShapeABM;
 import com.example.managers.AudioManager;
 import com.example.managers.ResourcesManager;
 
@@ -77,19 +78,11 @@ public class WaitingShapeMove extends GameState{
 				shape.setZIndex(2);
 				shape.sortChildren();
 				hideBadPath(gameScene);
-				if(!checkFive(gameScene, touchedGameRectangle.getRow(),touchedGameRectangle.getColumn(), touchedGameRectangle.getShape().getShapeType())){
-					//Play Appear Shape Sound
-					AudioManager.getInstance().playSound(AudioManager.SOUND_APPEAR_PLAYER);
-					//When you add a new shape you need to check five shape joined
-					ArrayList<GameRectangle> addedGameRecatngles = addNewShapes(gameScene, 2);
-					for(GameRectangle addedGameRectangle : addedGameRecatngles){
-						checkFive(gameScene, addedGameRectangle.getRow(),  addedGameRectangle.getColumn(), addedGameRectangle.getShape().getShapeType());
-					}
+				CheckSameShapeAlgorithm checkFive = new CheckSameShapeFive();
+				if(checkFive.checkSameShape(gameScene, touchedGameRectangle.getRow(),touchedGameRectangle.getColumn(), touchedGameRectangle.getShape().getShapeType()).isEmpty()){
 					//After that you need to check game over below
-					
-					/*
-					 * Code For Check Game Over
-					 */
+					ShapeABM.add(gameScene, 2);
+					// Code For Check Game Over
 					checkGameOver(gameScene);
 				}
 				setScore();
@@ -146,53 +139,6 @@ public class WaitingShapeMove extends GameState{
 				rectangle.setTag(1);
 			}
 		}
-	}
-	
-		
-	private boolean checkFive(final GameScene gameScene, int row, int column, int type){
-		
-		CheckSameShapeAlgorithm checkSameShapeAlgorithm = null;
-		
-		ArrayList<GameRectangle> gameRectanglesToClear	= new ArrayList<GameRectangle>();
-		
-		ArrayList<GameRectangle> gameRectangles = null;
-		
-		int multiplyPointBy						= 0;
-		
-		for(int i = 0; i < 4;i++){
-			//Erase ArraList
-			gameRectangles							= null;
-			switch (i) {
-				case 0:
-					checkSameShapeAlgorithm 				= new CheckSameShapeVertically();
-					break;
-					case 1:
-					checkSameShapeAlgorithm 				= new CheckSameShapeHorizontally();
-					break;
-				case 2:
-					checkSameShapeAlgorithm					= new CheckSameShapeDiagonallyLeft();
-					break;		
-				default:
-					checkSameShapeAlgorithm					= new CheckSameShapeDiagonallyRight();
-					break;
-			}
-			gameRectangles	= checkSameShapeAlgorithm.checkSameShape(gameScene, row, column, type);
-			if(gameRectangles != null){
-				multiplyPointBy++;
-				gameRectanglesToClear.addAll(gameRectangles);
-			}	
-		}
-		
-		if(!gameRectanglesToClear.isEmpty()){
-			Game game = ResourcesManager.getInstance().getActivity().getGame();
-			GameRectangle gameRectangle = SearchAlgorithms.getGameRectangleByRowAndColumn(gameScene, row, column);
-			gameRectanglesToClear.add(gameRectangle);
-			ZombiesRemover.removeZombies(gameScene, gameRectanglesToClear, multiplyPointBy);
-			if(game.getCurrentScore() % 10 == 0)
-				gameScene.drawSuperPower(new SuperPowerRemoveZombiesFactory());
-		}
-
-		return !gameRectanglesToClear.isEmpty();
 	}
 	
 

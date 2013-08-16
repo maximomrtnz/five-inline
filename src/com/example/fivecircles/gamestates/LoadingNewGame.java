@@ -11,6 +11,7 @@ import com.example.entities.GameRectangle;
 import com.example.fivecircles.R;
 import com.example.fivecircles.activities.GameActivity;
 import com.example.fivecircles.gamescenes.GameScene;
+import com.example.gamealgorithms.ShapeABM;
 import com.example.managers.NotificationManager;
 import com.example.managers.ResourcesManager;
 import com.example.storage.DataBaseMapper;
@@ -27,7 +28,7 @@ public class LoadingNewGame extends GameState{
 			setScore();
 			setHighScore();
 			gameScene.loadNewLevel();
-			addNewShapes(gameScene, 3);
+			ShapeABM.add(gameScene, 3);
 			gameScene.setOnAreaTouchListener(gameScene);
 			gameScene.setTouchAreaBindingOnActionDownEnabled(true);
 			gameScene.setGameState(new WaitingShapeSelection());
