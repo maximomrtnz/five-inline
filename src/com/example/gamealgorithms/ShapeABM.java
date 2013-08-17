@@ -35,7 +35,7 @@ public class ShapeABM {
 			
 
 			//Add number to show the points that player wins
-			Text text = gameScene.drawPointText(rectangle.getX(),rectangle.getY(), "+1",ResourcesManager.getInstance().getFreckleFaceRegular());
+			Text text = gameScene.drawText(rectangle.getX(),rectangle.getY(), "+1",ResourcesManager.getInstance().getFreckleFaceRegular());
 			
 			ScaleModifier scaleModifier = new ScaleModifier(2, 2f, 0f){
 				@Override
@@ -92,7 +92,7 @@ public class ShapeABM {
 			AudioManager.getInstance().playSound(AudioManager.SOUND_REMOVE_PLAYER);
 			
 			//Show number with total zombies removed
-			final Text text = gameScene.drawPointText(ResourcesManager.getInstance().getCamera().getCenterX()+200,ResourcesManager.getInstance().getCamera().getCenterY()+300, "x"+gameRectanglesToClear.size(),ResourcesManager.getInstance().getFreckleFaceRegular());
+			final Text text = gameScene.drawText(ResourcesManager.getInstance().getCamera().getCenterX()+200,ResourcesManager.getInstance().getCamera().getCenterY()+300, "x"+gameRectanglesToClear.size(),ResourcesManager.getInstance().getFreckleFaceRegular());
 			
 			text.setRotation(-15f);
 			

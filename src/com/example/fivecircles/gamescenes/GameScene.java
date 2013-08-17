@@ -257,17 +257,11 @@ public class GameScene extends BaseScene implements IOnAreaTouchListener {
 	public IEntity drawShape(float posX, float posY,float width, float height, int type){
 		
 		ShapeFactory shapeFactory = new ShapeFactoryTypeOne();
-		
 		Sprite shape = shapeFactory.createShape(posX, posY, width, height, getVbom(), type);
-		
 		attachChild(shape);
-		
 		registerTouchArea(shape);
-		
 		shape.setTag(2);
-		
 		shape.setZIndex(2);
-		
 		sortChildren();
 		
 		return shape;
@@ -293,9 +287,11 @@ public class GameScene extends BaseScene implements IOnAreaTouchListener {
 		setChildScene(new GameOverScene(), false, true, true);
 	}
 	
-	public Text drawPointText(float posX, float posY, String pText, Font font){
+	public Text drawText(float posX, float posY, String pText, Font font){
 		Text text = new Text(posX, posY, ResourcesManager.getInstance().getFreckleFaceRegular(), pText, super.getVbom());
 		attachChild(text);
+		text.setZIndex(3);
+		sortChildren(true);
 		return text;
 	}
 	

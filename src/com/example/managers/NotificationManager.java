@@ -7,6 +7,7 @@ import org.andengine.opengl.font.Font;
 import org.andengine.util.adt.color.Color;
 
 import com.example.fivecircles.gamescenes.BaseScene;
+import com.example.fivecircles.gamescenes.GameScene;
 
 import android.content.Context;
 import android.widget.Toast;
@@ -57,10 +58,9 @@ public class NotificationManager {
 		 toast.show();
 	 }
 	 
-	 public void showGameMessage(float posX, float posY,BaseScene baseScene, int messageId, Font font, Context context,float duration){
+	 public void showGameMessage(float posX, float posY,GameScene gameScene, int messageId, Font font, Context context,float duration){
 		 String message = context.getResources().getString(messageId);
-		 Text text = new Text(posX, posY, font, message, ResourcesManager.getInstance().getVbom());
-		 baseScene.attachChild(text);
+		 Text text = gameScene.drawText(posX, posY, message, ResourcesManager.getInstance().getFreckleFaceRegular());
 		 FadeOutModifier fadeOutModifier = new FadeOutModifier(duration){
 				@Override
 				protected void onModifierFinished(final IEntity pItem) {
@@ -76,9 +76,7 @@ public class NotificationManager {
 							});
 				}
 		  };
-		
 		  text.registerEntityModifier(fadeOutModifier);
-		 
 	 }
 	 
 }
