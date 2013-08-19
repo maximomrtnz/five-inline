@@ -25,10 +25,10 @@ public class LoadingNewGame extends GameState{
 			instantiateGameEntity();
 			gameScene.drawBackgroundGame();
 			gameScene.drawHUD();
-			setScore();
-			setHighScore();
+			gameScene.drawScore();
+			gameScene.drawHighScore();
 			gameScene.loadNewLevel();
-			ShapeABM.add(gameScene, 3);
+			ShapeABM.getInstance().add(gameScene, 3);
 			gameScene.setOnAreaTouchListener(gameScene);
 			gameScene.setTouchAreaBindingOnActionDownEnabled(true);
 			gameScene.setGameState(new WaitingShapeSelection());

@@ -81,11 +81,11 @@ public class WaitingShapeMove extends GameState{
 				CheckSameShapeAlgorithm checkFive = new CheckSameShapeFive();
 				if(checkFive.checkSameShape(gameScene, touchedGameRectangle.getRow(),touchedGameRectangle.getColumn(), touchedGameRectangle.getShape().getShapeType()).isEmpty()){
 					//After that you need to check game over below
-					ShapeABM.add(gameScene, 2);
+					ShapeABM.getInstance().add(gameScene, 2);
 					// Code For Check Game Over
 					checkGameOver(gameScene);
 				}
-				setScore();
+				gameScene.drawScore();
 				gameScene.setGameState(new WaitingShapeSelection());
 				break;	
 			case 2:

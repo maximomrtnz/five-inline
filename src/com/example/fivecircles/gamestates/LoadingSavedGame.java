@@ -33,8 +33,8 @@ public class LoadingSavedGame extends GameState{
 			instantiateGameEntity();
 			gameScene.drawBackgroundGame();
 			gameScene.drawHUD();
-			setScore();
-			setHighScore();
+			gameScene.drawScore();
+			gameScene.drawHighScore();
 			gameScene.loadNewLevel();
 			//Draw Shape From Store Data
 			drawSavedSahpes(gameScene);

@@ -50,7 +50,7 @@ public class CheckSameShapeFive implements CheckSameShapeAlgorithm{
 			Game game = ResourcesManager.getInstance().getActivity().getGame();
 			GameRectangle gameRectangle = SearchAlgorithms.getGameRectangleByRowAndColumn(gameScene, row, column);
 			gameRectanglesToClear.add(gameRectangle);
-			ShapeABM.removeZombies(gameScene, gameRectanglesToClear, multiplyPointBy);
+			ShapeABM.getInstance().removeZombies(gameScene, gameRectanglesToClear, multiplyPointBy);
 			if(game.getCurrentScore() % 10 == 0)
 				gameScene.drawSuperPower(new SuperPowerRemoveZombiesFactory());
 		}

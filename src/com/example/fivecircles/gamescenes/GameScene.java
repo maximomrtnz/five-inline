@@ -26,6 +26,7 @@ import android.graphics.Color;
 import android.util.Log;
 import android.view.MotionEvent;
 
+import com.example.entities.Game;
 import com.example.entities.GameRectangle;
 import com.example.entities.SuperPower;
 import com.example.entities.creators.ISuperPowerFactory;
@@ -295,6 +296,19 @@ public class GameScene extends BaseScene implements IOnAreaTouchListener {
 		return text;
 	}
 	
+	public void drawScore(){
+		HUD hud = ResourcesManager.getInstance().getCamera().getHUD();
+		Game game = ResourcesManager.getInstance().getActivity().getGame();
+		Text score = (Text)hud.getChildByTag(1);
+		score.setText(Integer.toString(game.getCurrentScore()));
+	}
+	
+	public void drawHighScore(){
+		HUD hud = ResourcesManager.getInstance().getCamera().getHUD();
+		Game game = ResourcesManager.getInstance().getActivity().getGame();
+		Text score = (Text)hud.getChildByTag(2);
+		score.setText(Integer.toString(game.getHighScore()));
+	}
 	
 	public void setGameState(GameState gameState) {
 		this.gameState = gameState;
@@ -312,8 +326,7 @@ public class GameScene extends BaseScene implements IOnAreaTouchListener {
 		if(pSceneTouchEvent.isActionDown()){
 			if(!this.longTouch){
 				this.gameState.areaTouch(this, pTouchArea);
-				//Play Select Shape Sound
-				AudioManager.getInstance().playSound(AudioManager.SOUND_SELECT_PLAYER);
+
 			}
 			this.longTouch = true;
 		}

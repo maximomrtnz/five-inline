@@ -23,11 +23,19 @@ import com.example.managers.ResourcesManager;
 
 public class ShapeABM {
 	
+	private static ShapeABM instance = new ShapeABM();
+	
+	private ShapeABM(){}
+	
+	public static ShapeABM getInstance(){
+		return instance;
+	}
+	
 	/*
 	 * Algorithm which contains the functionality that we need to remove shapes from board
 	 */
 	
-	public static void removeZombies(final GameScene gameScene, ArrayList<GameRectangle> gameRectanglesToClear,int multiplyPointBy){
+	public synchronized void removeZombies(final GameScene gameScene, ArrayList<GameRectangle> gameRectanglesToClear,int multiplyPointBy){
 		for(GameRectangle gameRectangleToDelete : gameRectanglesToClear){
 			gameRectangleToDelete.setShape(null);
 			final Rectangle rectangle = SearchAlgorithms.getRectangleFromGameRectangle(gameScene, gameRectangleToDelete);
@@ -124,7 +132,7 @@ public class ShapeABM {
 	 * Algorithm which contains the functionality that we need to add on board
 	 */
 	
-	public static GameRectangle add(final GameScene gameScene){
+	public synchronized static GameRectangle add(final GameScene gameScene){
 		GameRectangle gameRectangle= SearchAlgorithms.getEmptyGameRectangle(gameScene);
 		if(gameRectangle != null){
 			
@@ -154,7 +162,7 @@ public class ShapeABM {
 	 * we need to add one or more than one shape on board
 	 */
 	
-	public static void add(GameScene gameScene, int quantity){
+	public synchronized void add(GameScene gameScene, int quantity){
 		//Steps to add new zombies after remove
 		
 		//Play Appear Shape Sound

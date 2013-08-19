@@ -14,6 +14,7 @@ import com.example.entities.GameRectangle;
 import com.example.entities.SuperPower;
 import com.example.fivecircles.gamescenes.GameScene;
 import com.example.gamealgorithms.SearchAlgorithms;
+import com.example.managers.AudioManager;
 import com.example.managers.ResourcesManager;
 
 public class WaitingShapeSelection extends GameState{
@@ -30,6 +31,9 @@ public class WaitingShapeSelection extends GameState{
 		//Check if player was touch
 		switch (((IEntity)iTouchArea).getTag()) {
 			case 2:
+				//Play Select Shape Sound
+				AudioManager.getInstance().playSound(AudioManager.SOUND_SELECT_PLAYER);
+				
 				Sprite shape = (Sprite)iTouchArea;
 				Rectangle rectangle = (Rectangle)shape.getUserData();
 				GameRectangle gameRectangle = (GameRectangle)rectangle.getUserData();

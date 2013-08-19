@@ -6,15 +6,12 @@ import org.andengine.engine.camera.Camera;
 import org.andengine.util.math.MathUtils;
 
 
-import android.app.Notification;
+
 
 import com.example.fivecircles.R;
 import com.example.fivecircles.gamescenes.GameScene;
-import com.example.gamealgorithms.CheckSameShapeAlgorithm;
-import com.example.gamealgorithms.CheckSameShapeFive;
 import com.example.gamealgorithms.SearchAlgorithms;
 import com.example.gamealgorithms.ShapeABM;
-import com.example.managers.AudioManager;
 import com.example.managers.NotificationManager;
 import com.example.managers.ResourcesManager;
 
@@ -44,14 +41,17 @@ public class SuperPowerRemoveZombies implements SuperPower{
 		}
 		
 		//Pass Zombies to the remover algorithm
-		ShapeABM.removeZombies(gameScene, gameRectanglesToClear, 1);
+		ShapeABM.getInstance().removeZombies(gameScene, gameRectanglesToClear, 1);
 		
 		//Show a message after remove
 		Camera camera = ResourcesManager.getInstance().getCamera();
 		NotificationManager.getInstance().showGameMessage(camera.getCenterX(),camera.getCenterY(), gameScene,R.string.game_message_one, ResourcesManager.getInstance().getFreckleFaceRegular(), ResourcesManager.getInstance().getActivity(), 3f);
 		
 		//Add new zombies
-		ShapeABM.add(gameScene, 2);
+		ShapeABM.getInstance().add(gameScene, 2);
+		
+		//Draw Score
+		gameScene.drawScore();
 		
 	}
 	
